@@ -3,41 +3,72 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Targetcom</title>
+    <title>@ViewData["Title"] - Target</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/ThemeColors.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap" rel="stylesheet">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Targetcom</a>
+<body class="day_back_default">
+    <header class="position-fixed w-100">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light day_back_head border-bottom box-shadow p-0 day_color_font" style="font-family: 'Montserrat', sans-serif; height: 54px;">
+            <div class="container pt-2 pb-1 m-auto" style="max-width: 75%;">
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 800; font-size: 18px;">
+                    <i class="fas fa-tenge day_color_main mr-2" style="font-size: 25px;"></i> TARGET
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li>
+                                <partial name="_LoginPartial" />
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link text-dark d-flex align-items-center">Welcome <i class="fas fa-grin ml-2 day_color_main" style="font-size: 25px;"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container m-auto" style="max-width: 75%; padding-top: 1rem; padding-bottom: 1rem;">
+        <div style="height: 54px;"></div>
+        <div>
             @RenderBody()
-        </main>
+            @if (User.Identity.IsAuthenticated)
+            {
+                
+            }
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - Targetcom - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer text-muted bg-transparent">
+        <div class="container m-auto d-flex justify-content-between" style="max-width: 75%;">
+            <p class="m-0">TARGET.COM <span style="font-size: 14px;">&copy;</span> 2021 - More...</p>
+            <p class="m-0">SOCIAL WEB-SITE</p>
+            <p class="m-0">PRIMARY 30 DAYS - FREE ALL</p>
+            <p class="m-0">ASP.NET DEVELOPMENT</p>
+            <p class="m-0">API IN FUTURE TIME</p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

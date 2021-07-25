@@ -1,0 +1,26 @@
+﻿
+.day_color_head {
+    color: #ffffff;
+}
+.day_back_head {
+    background-color: #ffffff;
+}
+
+.day_color_default {
+    color: #eeeeee;
+}
+.day_back_default {
+    background-color: #eeeeee;
+}
+
+.day_color_main {
+    color: #5181b8;
+}
+.day_back_main {
+    background-color: #5181b8;
+}
+
+.day_color_font {
+    color: #2a3036;
+}
+
