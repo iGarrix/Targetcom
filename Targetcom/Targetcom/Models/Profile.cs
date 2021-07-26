@@ -26,6 +26,8 @@ namespace Targetcom.Models
         public string Hobbies { get; set; }
         [MaxLength(100, ErrorMessage = "Your status is overflowed limit")]
         public string Quote { get; set; }
+        [MaxLength(100, ErrorMessage = "Your status is overflowed limit")]
+        public string StudyGeoplace { get; set; }
         [Required]
         public string Gender { get; set; }
         public string UrlImage { get; set; }

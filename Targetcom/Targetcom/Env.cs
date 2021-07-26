@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Targetcom
 {
-    public static class Env
+    public class Env
     {
         /* Roles */
         public static string UserRole = "DefaultUser";

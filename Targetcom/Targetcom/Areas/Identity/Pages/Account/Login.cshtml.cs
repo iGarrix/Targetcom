@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Targetcom.Models;
 
 namespace Targetcom.Areas.Identity.Pages.Account
 {
@@ -82,6 +83,22 @@ namespace Targetcom.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                //var user = await _userManager.FindByEmailAsync(Input.Email) as Profile;
+                //try
+                //{
+                //    if (user.IsVerify)
+                //    {
+                //        ModelState.AddModelError(string.Empty, "This user is banned.");
+                //        return Page();
+                //    }
+                //}
+                //catch (Exception)
+                //{
+                //    ModelState.AddModelError(string.Empty, "Please entry again...");
+                //    return Page();
+                //}
+                /* Banned */
+
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {

@@ -1,35 +1,87 @@
 ﻿@{
     ViewData["Title"] = "News";
 }
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{ Profile profile = await UserManager.GetUserAsync(User) as Profile; }
 
+<style>
+    #summernote {
+        font-size: 14px;
+        outline: 0 !important;
+        border: 0;
+    }
+
+    #settingpost {
+        font-size: 16px;
+        color: gray;
+    }
+
+        #settingpost:hover {
+            color: #3389dc;
+        }
+</style>
 <div class="gap d-flex gap day_color_font" style="font-family: 'Roboto', sans-serif;">
-    <partial name="SideBar"/>
+    <partial name="SideBar" />
 
-    <div style="width: 80%" class="gap d-flex flex-column">
-        <div class="border p-4 day_back_head overflow-auto rounded">
-            <h4 class="m-0 day_color_font font-weight-normal">Add new friends</h4>
-            <hr />
-            <div class="d-flex justify-content-between">
-                <img src="https://img.icons8.com/bubbles/2x/friends.png" alt="Friends" class="m-0" width="128" height="128" />
-                <img src="https://img.icons8.com/bubbles/2x/connected-people.png" alt="Friends" class="m-0" width="128" height="128" />
-                <img src="https://img.icons8.com/bubbles/2x/people-group-bill.png" alt="Friends" class="m-0" width="128" height="128" />
-                <img src="https://img.icons8.com/bubbles/2x/meeting-room.png" alt="Friends" class="m-0" width="128" height="128" />
+    <div style="width: 57%" class="gap d-flex flex-column">
+        <div class="card border day_back_head overflow-auto rounded">
+            <div class="card-body p-2">
+                <textarea class="form-control item-font m-0 rounded-0" id="summernote" placeholder="Tell us what's new?"></textarea>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                    <div class="d-flex flex-column ml-2">
+                        <p class="m-0 day_color_main" style="font-size: 14px;">
+                            @profile.Name
+                            @profile.Surname
+                            @if (profile.IsVerify)
+                            {
+                                <i class="fas fa-check" style="font-size: 13px;"></i>
+                            }
+                            @if (profile.IsPremium)
+                            {
+                                <i class="fas fa-crown" style="font-size: 13px;"></i>
+                            }
+                            else if (User.IsInRole(Env.AdminRole))
+                            {
+                                <i class="fas fa-code" style="font-size: 13px;"></i>
+                            }
+                            else if (User.IsInRole(Env.ModerRole))
+                            {
+                                <i class="fas fa-glasses" style="font-size: 13px;"></i>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Publish</button>
+                </div>
             </div>
         </div>
-        <div class="border p-4 day_back_head overflow-auto rounded">
-            <h4 class="m-0 day_color_font font-weight-normal">Chat with friends</h4>
-            <hr />
-            <div class="d-flex justify-content-between">
-                <img src="https://png.pngtree.com/png-vector/20191026/ourlarge/pngtree-talking-men-vector-laughing-friends-office-colleagues-communicating-male-meeting-conversation-png-image_1847191.jpg" alt="Chat" class="m-0" width="128" height="128" />
-                <img src="https://i.pinimg.com/564x/b3/70/1f/b3701fa4e516a5e6a7944a63ffff781c.jpg" alt="Chat" class="m-0" width="128" height="128" />
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD-EejwYPjz0gsLq16-4ReNPuyjddALE-KDg&usqp=CAU" alt="Chat" class="m-0" width="128" height="128" />
-                <img src="https://i.pinimg.com/736x/c0/56/ab/c056abd5fc67bcfa9ceb42054605ff4e.jpg" alt="Chat" class="m-0" width="128" height="128" />
+    </div>
+    <div style="width: 23%;" class="gap d-flex flex-column">
+        <div class="card border day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
+            <div class="card-body pt-2 pb-2 pr-0 pl-0">
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">All post</a>
+                <hr class="m-0 p-1" />
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">People postage</a>
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Public postage</a>
+                <hr class="m-0 p-1" />
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">People updated</a>
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Public updated</a>
             </div>
-        </div>
-        <div class="border p-4 day_back_head overflow-auto rounded">
-            <h4 class="m-0 day_color_font font-weight-normal">Rules platform</h4>
-            <hr />
-            <p class="font-weight-normal">Before you start working on this platform, please read and learn the rules of the site!</p>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $('#summernote').summernote({
+            tabsize: 2,
+            height: 120,
+        });
+    </script>
+}

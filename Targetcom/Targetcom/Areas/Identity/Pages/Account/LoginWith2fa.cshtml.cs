@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Targetcom.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Administrator")]
     public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
