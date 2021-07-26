@@ -42,5 +42,19 @@ namespace Targetcom.Models
         public string MusicListening { get; set; }
         [NotMapped]
         public string AfkStatus { get; set; } = "offline";
+
+
+        /*Privacy*/
+
+        public string Privacy { get; set; } = Env.PublicProfile;
+        public bool IsShortDate { get; set; } = true;
+        public bool VisibilityQuote { get; set; } = true;
+        public bool VisibilityAboutMe { get; set; } = true;
+        public bool VisibilityCommerceData { get; set; } = true;
+        public bool VisibilityPostage { get; set; } = true;
+        public bool VisibilityPlaylist { get; set; } = true;
+        public bool VisibilityFriends { get; set; } = true;
+        public bool VisibilityImages { get; set; } = true;
+        public bool VisibilityCommunity { get; set; } = true;
     }
 }

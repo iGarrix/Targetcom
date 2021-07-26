@@ -31,5 +31,10 @@ namespace Targetcom
         public static string Loose = "Loose!";
         public static string Loves = "In love with";
         public static string Married = "Married with";
+
+        /* Privacy */
+
+        public static string PrivateProfile = "Private";
+        public static string PublicProfile = "Public";
     }
 }
