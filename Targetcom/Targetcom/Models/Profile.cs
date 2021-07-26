@@ -32,12 +32,12 @@ namespace Targetcom.Models
         public string Gender { get; set; }
         public string UrlImage { get; set; }
         [Required]
-        public DateTime CreateStamp { get; set; }
+        public DateTime CreateStamp { get; set; } = DateTime.Now;
         [Required]
         public DateTime Age { get; set; }
-        public bool IsVerify { get; set; }
-        public bool IsPremium { get; set; }
-        public int TargetCoins { get; set; }
+        public bool IsVerify { get; set; } = false;
+        public bool IsPremium { get; set; } = false;
+        public int TargetCoins { get; set; } = 0;
         [NotMapped]
         public string MusicListening { get; set; }
         [NotMapped]

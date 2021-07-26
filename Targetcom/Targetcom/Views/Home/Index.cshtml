@@ -12,17 +12,8 @@
         outline: 0 !important;
         border: 0;
     }
-
-    #settingpost {
-        font-size: 16px;
-        color: gray;
-    }
-
-        #settingpost:hover {
-            color: #3389dc;
-        }
 </style>
-<div class="gap d-flex gap day_color_font" style="font-family: 'Roboto', sans-serif;">
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
 
     <div style="width: 57%" class="gap d-flex flex-column">
@@ -41,11 +32,7 @@
                             {
                                 <i class="fas fa-check" style="font-size: 13px;"></i>
                             }
-                            @if (profile.IsPremium)
-                            {
-                                <i class="fas fa-crown" style="font-size: 13px;"></i>
-                            }
-                            else if (User.IsInRole(Env.AdminRole))
+                            @if (User.IsInRole(Env.AdminRole))
                             {
                                 <i class="fas fa-code" style="font-size: 13px;"></i>
                             }

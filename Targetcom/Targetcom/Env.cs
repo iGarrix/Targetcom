@@ -7,6 +7,8 @@ namespace Targetcom
 {
     public class Env
     {
+        public static string WebName = "Target";
+
         /* Roles */
         public static string UserRole = "DefaultUser";
         public static string ModerRole = "Moderator";
