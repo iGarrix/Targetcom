@@ -1,10 +1,4 @@
-﻿
-@{
-    ViewData["Title"] = $"{Model.IdentityProfile.Name} {Model.IdentityProfile.Surname}";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@model Targetcom.Models.ViewModels.ProfileVM;
-
+﻿@model Targetcom.Models.ViewModels.ViewProfileVM;
 <style>
     .gap {
         gap: 1rem;
@@ -74,7 +68,8 @@
         <div style="width: 25%;" class="gap d-flex flex-column">
             <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden">
                 <div class="bg-dark" style="width: 200px; height: 200px;"></div>
-                <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Update</a>
+                <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add to friend</a>
+                <a href="#" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Add to blacklist</a>
             </div>
             <div class="border-0 rounded day_back_head">
                 <div class="p-3 overflow-hidden">
@@ -138,28 +133,28 @@
                     <div class="d-flex flex-column">
                         <div class="d-flex justify-content-between">
                             <h4 class="m-0 font-weight-normal d-flex align-items-center" style="font-family: Poppins, sans-serif;">
-                                @Model.IdentityProfile.Name @Model.IdentityProfile.Surname
-                                @if (Model.IdentityProfile.IsVerify)
+                                @Model.FindedProfile.Name @Model.FindedProfile.Surname
+                                @if (Model.FindedProfile.IsVerify)
                                 {<i class="fas fa-check day_color_main ml-2" style="font-size: 13px;"></i>}
                             </h4>
-                            <p class="m-0 text-muted font-weight-normal" style="font-size: 14px;">@Model.IdentityProfile.AfkStatus</p>
+                            <p class="m-0 text-muted font-weight-normal" style="font-size: 14px;">@Model.FindedProfile.AfkStatus</p>
                         </div>
-                        <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.IdentityProfile.Quote</p>
+                        <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.FindedProfile.Quote</p>
                     </div>
                     <hr style="height: 2px; width: 100%;" />
-                    @if (User.IsInRole(Env.AdminRole))
+                    @if (Model.Role == Env.AdminRole)
                     {
                         <div class="alert alert-danger p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
                             <p class="m-0">This user is Admin <i class="fas fa-code" style="font-size: 13px;"></i></p>
                         </div>
                     }
-                    @if (User.IsInRole(Env.ModerRole))
+                    @if (Model.Role == Env.ModerRole)
                     {
                         <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
                             <p class="m-0">This user is Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
                         </div>
                     }
-                    @if (Model.IdentityProfile.IsPremium)
+                    @if (Model.FindedProfile.IsPremium)
                     {
                         <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
                             <p class="m-0">Premium plan (Permanent) <i class="fas fa-crown" style="font-size: 13px;"></i></p>
@@ -167,81 +162,81 @@
                     }
                     else
                     {
-                        <a asp-controller="Vip" asp-action="Index" class="alert middletabbtn1 border-0 p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                            <p class="m-0">Buy premium plan, 30 starter days - free!</p>
+                        <a class="alert middletabbtn1 border-0 p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
+                            <p class="m-0">Doesnt plan</p>
                         </a>
                     }
                     <hr class="mt-0" style="height: 2px; width: 100%;" />
                     <div class="d-flex">
                         <p class="text-muted m-0" style="width: 12rem;">Birthday:</p>
-                        <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Age.ToShortDateString()</p>
+                        <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Age.ToShortDateString()</p>
                     </div>
-                    @if (Model.IdentityProfile.JobGeoplace != null)
+                    @if (Model.FindedProfile.JobGeoplace != null)
                     {
-                        @if (Model.IdentityProfile.JobGeoplace.Length > 0)
+                        @if (Model.FindedProfile.JobGeoplace.Length > 0)
                         {
                             <div class="d-flex">
                                 <p class="text-muted m-0" style="width: 12rem;">Job place:</p>
-                                <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.JobGeoplace</p>
+                                <p class="day_color_main ml-2 m-0">@Model.FindedProfile.JobGeoplace</p>
                             </div>
                         }
                     }
                     <hr style="height: 2px; width: 100%;" />
                     <div class="viewalldata disable">
-                        @if (Model.IdentityProfile.Status != null)
+                        @if (Model.FindedProfile.Status != null)
                         {
-                            @if (Model.IdentityProfile.Status.Length > 0)
+                            @if (Model.FindedProfile.Status.Length > 0)
                             {
                                 <div class="d-flex">
                                     <p class="text-muted m-0" style="width: 12rem;">Status:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Status</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Status</p>
                                 </div>
                             }
                         }
-                        @if (Model.IdentityProfile.StudyGeoplace != null)
+                        @if (Model.FindedProfile.StudyGeoplace != null)
                         {
-                            @if (Model.IdentityProfile.StudyGeoplace.Length > 0)
+                            @if (Model.FindedProfile.StudyGeoplace.Length > 0)
                             {
                                 <div class="d-flex">
                                     <p class="text-muted m-0" style="width: 12rem;">Study place:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.StudyGeoplace</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.StudyGeoplace</p>
                                 </div>
                                 <br />
                             }
                         }
                         <div class="d-flex">
                             <p class="text-muted m-0" style="width: 12rem;">Coins:</p>
-                            <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.TargetCoins</p>
+                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.TargetCoins</p>
                         </div>
                         <br />
                         <div class="d-flex">
                             <p class="text-muted m-0" style="width: 12rem;">Genger:</p>
-                            <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Gender</p>
+                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Gender</p>
                         </div>
-                        @if (Model.IdentityProfile.Hobbies != null)
+                        @if (Model.FindedProfile.Hobbies != null)
                         {
-                            @if (Model.IdentityProfile.Hobbies.Length > 0)
+                            @if (Model.FindedProfile.Hobbies.Length > 0)
                             {
                                 <div class="d-flex">
                                     <p class="text-muted m-0" style="width: 12rem;">Hobbies:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Hobbies</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Hobbies</p>
                                 </div>
                             }
                         }
                         <br />
-                        @if (Model.IdentityProfile.PhoneNumber != null)
+                        @if (Model.FindedProfile.PhoneNumber != null)
                         {
-                            @if (Model.IdentityProfile.PhoneNumber.Length > 0)
+                            @if (Model.FindedProfile.PhoneNumber.Length > 0)
                             {
                                 <div class="d-flex">
                                     <p class="text-muted m-0" style="width: 12rem;">Number:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.PhoneNumber</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.PhoneNumber</p>
                                 </div>
                             }
                         }
                         <div class="d-flex">
                             <p class="text-muted m-0" style="width: 12rem;">Email:</p>
-                            <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Email</p>
+                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Email</p>
                         </div>
                         <hr style="height: 2px; width: 100%;" />
                     </div>
@@ -263,7 +258,7 @@
             </div>
             <div class="card border day_back_head overflow-auto rounded">
                 <div class="card-body p-2">
-                    <textarea class="form-control item-font m-0 rounded-0" id="summernote" placeholder="Tell us what's new?"></textarea>
+                    <textarea class="form-control item-font m-0 rounded-0" id="summernote" placeholder="Write something?"></textarea>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
@@ -304,4 +299,3 @@
         });
     </script>
 }
-

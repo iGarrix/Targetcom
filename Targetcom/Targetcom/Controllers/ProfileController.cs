@@ -13,7 +13,7 @@ namespace Targetcom.Controllers
     [Authorize]
     public class ProfileController : Controller
     {
-        public UserManager<IdentityUser> _userManager { get; set; }
+        private readonly UserManager<IdentityUser> _userManager;
         public ProfileController(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;

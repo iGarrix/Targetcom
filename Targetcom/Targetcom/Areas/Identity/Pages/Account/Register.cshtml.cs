@@ -76,7 +76,7 @@ namespace Targetcom.Areas.Identity.Pages.Account
             {
                 await _roleManager.CreateAsync(new IdentityRole(Env.UserRole));
                 await _roleManager.CreateAsync(new IdentityRole(Env.ModerRole));
-                await _roleManager.CreateAsync(new IdentityRole(Env.AdminRole));
+                await _roleManager.CreateAsync(new IdentityRole(Env.AdminRole));                
             }
 
             ReturnUrl = returnUrl;

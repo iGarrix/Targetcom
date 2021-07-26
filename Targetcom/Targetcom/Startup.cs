@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Targetcom.Data;
+using Targetcom.Models;
 using Targetcom.Services;
 
 namespace Targetcom
@@ -39,6 +40,7 @@ namespace Targetcom
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<TargetDbContext>();
+
 
             services.AddTransient<IEmailSender, MailJetSender>();
         }

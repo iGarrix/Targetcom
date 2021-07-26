@@ -8,6 +8,5 @@ namespace Targetcom.Models.ViewModels
     public class ProfileVM
     {
         public Profile IdentityProfile { get; set; }
-        public IEnumerable<Profile> Friends { get; set; }
     }
 }

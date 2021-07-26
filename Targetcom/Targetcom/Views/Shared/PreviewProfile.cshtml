@@ -1,0 +1,13 @@
+﻿@model Profile;
+
+<div class="d-flex p-3">
+    <div class="bg-dark rounded-circle" style="width: 70px; height: 70px;"></div>
+    <div class="d-flex flex-column ml-3">
+        <a href="#" class="m-0 font-weight-normal day_color_main">@Model.Name @Model.Surname</a>
+        <div class="d-flex gap">
+            <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
+            <a href="#" class="day_color_main" style="font-size: 14px;">Add friends</a>
+        </div>
+    </div>
+    <a href="#" class="day_color_font ml-auto"><i class="fas fa-ellipsis-h day_color_font settingsbtn"></i></a>
+</div>

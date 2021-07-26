@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Friends";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<Profile>;
+@inject UserManager<IdentityUser> UserManager
+@{ Profile me = await UserManager.GetUserAsync(User) as Profile; }
+
+<style>
+    .gap {
+        gap: 1rem;
+    }
+
+    input[type=text] {
+        border: 0;
+        background-color: transparent;
+        outline: 0 !important;
+        font-size: 14px;
+    }
+
+    .settingsbtn:hover {
+        text-decoration: none;
+    }
+</style>
+
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+    <partial name="SideBar" />
+
+    <div style="width: 57%;" class="d-flex flex-column rounded">
+        <div class="day_back_default d-flex align-items-center p-3" style="background-color: #e8e8e8;">
+            <i class="fas fa-search text-muted" style="font-size: 14px;"></i>
+            <input type="text" placeholder="Enter name" style="width: 100%;" />
+        </div>
+        <div class="day_back_head">
+            @foreach (var item in Model)
+            {
+                if (item.Id != me.Id)
+                {
+                    <partial name="PreviewProfile" model="item" />
+                    <hr class="m-0" />
+                }
+            }
+        </div>
+    </div>
+    <div style="width: 23%;" class="gap d-flex flex-column">
+        <div class="card border-0 day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
+            <div class="card-body pt-2 pb-2 pr-0 pl-0">
+                <a asp-controller="Friends" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Friends</a>
+                <hr class="m-0 p-1" />
+                <a asp-controller="Friends" asp-action="Newfriend" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">New friens</a>
+                <a asp-controller="Subscribers" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Subscribers</a>
+                <hr class="m-0 p-1" />
+                <a asp-controller="Friends" asp-action="Invates" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Invite to friends</a>
+                <a asp-controller="Friends" asp-action="Blacklist" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Blacklist</a>
+            </div>
+        </div>
+    </div>
+</div>
+
