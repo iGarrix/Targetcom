@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 namespace Targetcom.Models
@@ -33,5 +34,11 @@ namespace Targetcom.Models
         [Required]
         public DateTime Age { get; set; }
         public bool IsVerify { get; set; }
+        public bool IsPremium { get; set; }
+        public int TargetCoins { get; set; }
+        [NotMapped]
+        public string MusicListening { get; set; }
+        [NotMapped]
+        public string AfkStatus { get; set; } = "offline";
     }
 }

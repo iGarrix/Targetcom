@@ -2,16 +2,54 @@
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@{ Profile profile = await UserManager.GetUserAsync(User) as Profile; }
 
-<ul class="navbar-nav">
+<style>
+ button[type=button], .dropdown-menu a, .dropdown-menu button[type=submit] {
+     font-family: 'Roboto', sans-serif;
+     letter-spacing: .3px;
+     outline: 0!important;
+ }
+ .dropdown-item:hover {
+     background-color: #f6f6f6;
+ }
+ .dropdown-item:active {
+     background-color:#e6e6e6;
+ }
+</style>
+<div class="btn-group">
+    <button type="button" class="bg-transparent dropdown-toggle border-0 day_color_main d-inline-flex align-items-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; height: 54px;">
+        <span class="align-items-center">@profile.Name</span>
+        <div class="rounded-circle border bg-dark d-inline-block ml-2 mr-1" style="height: 32px; width: 32px;"></div>
+    </button>
+    <div class="dropdown-menu" style="font-size: 14px; min-width: 13rem;">
+        <a class="dropdown-item" asp-action="Index" asp-controller="Home">
+            <div class="d-flex">
+                <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                <div class="ml-2">
+                    <p class="day_color_main m-0">@profile.Name @profile.Surname</p>
+                    <p class="text-muted font-weight-lighter m-0">Go to profile</p>
+                </div>
+            </div>
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item rounded-0 d-flex align-items-center text-dark" id="manage" asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a>
+        <a class="dropdown-item rounded-0 d-flex align-items-center text-dark" href="#">Help</a>
+        <div class="dropdown-divider"></div>
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit" class="dropdown-item rounded-0 d-flex align-items-center text-dark">Logout</button>
+        </form>
+    </div>
+</div>
+@*<ul class="navbar-nav align-items-center">
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        <a id="manage" class="nav-link text-dark bg-danger d-flex align-content-center" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
     </li>
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark bg-success rounded-0">Logout</button>
         </form>
     </li>
 }
@@ -24,4 +62,4 @@ else
         <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>
+</ul>*@

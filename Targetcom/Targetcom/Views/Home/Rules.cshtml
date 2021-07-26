@@ -11,50 +11,100 @@
         padding: 0 .2rem;
     }
 
-        .rulebtn:hover {
-            text-decoration: none;
-            color: #1e8cdc;
-            border-bottom: 2px dashed #1e8cdc;
-        }
+    .rulebtn:hover {
+        text-decoration: none;
+        color: #1e8cdc;
+        border-bottom: 2px dashed #1e8cdc;
+    }
 </style>
-<div class="border rounded p-4 day_back_head">
-    <h3 style="font-family: Roboto, sans-serif;" class="day_color_font text-center">Rules <i class="fas fa-hand-sparkles" style="color: #e14b4b"></i></h3>
-    <hr />
-    <div class="container">
-        <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Chat <i class="fas fa-location-arrow ml-2" style="color:#4a94ca"></i></h4>
-        <ol style="font-family: Roboto, sans-serif;">
-            <li><span class="font-weight-bolder text-info">Warn </span> writing content 18+ <span class="font-weight-bold text-success">Temporament freeze!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending nudes <span class="font-weight-bold text-success">Temporament freeze!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending atom code <span class="font-weight-bold text-warning">Blocked account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending programming code <span class="font-weight-bold text-warning">Blocked account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developent site <span class="font-weight-bold text-danger">Permanent banned account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
-        </ol>
-    </div>
-    <div class="container">
-        <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Comments <i class="fas fa-comments ml-2" style="color:#4a94ca"></i></h4>
-        <ol style="font-family: Roboto, sans-serif;">
-            <li><span class="font-weight-bolder text-info">Warn </span> writing content 18+ <span class="font-weight-bold text-success">Temporament freeze!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending nudes <span class="font-weight-bold text-success">Temporament freeze!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending atom code <span class="font-weight-bold text-warning">Blocked account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending programming code <span class="font-weight-bold text-warning">Blocked account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developent site <span class="font-weight-bold text-danger">Permanent banned account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
-        </ol>
-    </div>
-    <div class="container">
-        <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Groups <i class="fas fa-user-friends ml-2" style="color:#4a94ca"></i></h4>
-        <ol style="font-family: Roboto, sans-serif;">
-            <li><span class="font-weight-bolder text-info">Warn </span> creating public content 18+ <span class="font-weight-bold text-success">Delete postage!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> posting nudes nudes <span class="font-weight-bold text-success">Delete postage!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> merge atom code <span class="font-weight-bold text-danger">Delete account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> posting / sending programming code <span class="font-weight-bold text-danger">Delete account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> posting bad messages to developent site <span class="font-weight-bold text-danger">Delete account!</span></li>
-            <li><span class="font-weight-bolder text-info">Warn </span> posting bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
-        </ol>
-    </div>
-    <div class="d-flex justify-content-end">
-        <a asp-action="Index" class="rulebtn font-weight-bold">Back</a>
+@if (User.Identity.IsAuthenticated)
+{
+<div class="d-flex" style="gap: 1rem;">
+    <partial name="SideBar" />
+    <div class="border rounded p-4 day_back_head" style="width: 80%;">
+        <h3 style="font-family: Roboto, sans-serif;" class="day_color_font text-center">Rules <i class="fas fa-hand-sparkles" style="color: #e14b4b"></i></h3>
+        <hr />
+        <div class="container">
+            <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Chat <i class="fas fa-location-arrow ml-2" style="color:#4a94ca"></i></h4>
+            <ol style="font-family: Roboto, sans-serif;">
+                <li><span class="font-weight-bolder text-info">Warn </span> writing content 18+ <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending nudes <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending atom code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending programming code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developent site <span class="font-weight-bold text-danger">Permanent banned account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
+            </ol>
+        </div>
+        <div class="container">
+            <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Comments <i class="fas fa-comments ml-2" style="color:#4a94ca"></i></h4>
+            <ol style="font-family: Roboto, sans-serif;">
+                <li><span class="font-weight-bolder text-info">Warn </span> writing content 18+ <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending nudes <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending atom code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending programming code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developent site <span class="font-weight-bold text-danger">Permanent banned account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
+            </ol>
+        </div>
+        <div class="container">
+            <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Groups <i class="fas fa-user-friends ml-2" style="color:#4a94ca"></i></h4>
+            <ol style="font-family: Roboto, sans-serif;">
+                <li><span class="font-weight-bolder text-info">Warn </span> creating public content 18+ <span class="font-weight-bold text-success">Delete postage!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting nudes nudes <span class="font-weight-bold text-success">Delete postage!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> merge atom code <span class="font-weight-bold text-danger">Delete account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting / sending programming code <span class="font-weight-bold text-danger">Delete account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting bad messages to developent site <span class="font-weight-bold text-danger">Delete account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
+            </ol>
+        </div>
+        <div class="d-flex justify-content-end">
+            <a asp-action="Index" class="rulebtn font-weight-bold">Back</a>
+        </div>
     </div>
 </div>
+}
+else
+{
+
+    <div class="border rounded p-4 day_back_head">
+        <h3 style="font-family: Roboto, sans-serif;" class="day_color_font text-center">Rules <i class="fas fa-hand-sparkles" style="color: #e14b4b"></i></h3>
+        <hr />
+        <div class="container">
+            <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Chat <i class="fas fa-location-arrow ml-2" style="color:#4a94ca"></i></h4>
+            <ol style="font-family: Roboto, sans-serif;">
+                <li><span class="font-weight-bolder text-info">Warn </span> writing content 18+ <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending nudes <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending atom code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending programming code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developent site <span class="font-weight-bold text-danger">Permanent banned account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
+            </ol>
+        </div>
+        <div class="container">
+            <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Comments <i class="fas fa-comments ml-2" style="color:#4a94ca"></i></h4>
+            <ol style="font-family: Roboto, sans-serif;">
+                <li><span class="font-weight-bolder text-info">Warn </span> writing content 18+ <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending nudes <span class="font-weight-bold text-success">Temporament freeze!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending atom code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending programming code <span class="font-weight-bold text-warning">Blocked account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developent site <span class="font-weight-bold text-danger">Permanent banned account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> sending bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
+            </ol>
+        </div>
+        <div class="container">
+            <h4 style="font-family: Roboto, sans-serif;" class="day_color_font d-flex align-items-center pt-2 pb-3">Groups <i class="fas fa-user-friends ml-2" style="color:#4a94ca"></i></h4>
+            <ol style="font-family: Roboto, sans-serif;">
+                <li><span class="font-weight-bolder text-info">Warn </span> creating public content 18+ <span class="font-weight-bold text-success">Delete postage!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting nudes nudes <span class="font-weight-bold text-success">Delete postage!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> merge atom code <span class="font-weight-bold text-danger">Delete account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting / sending programming code <span class="font-weight-bold text-danger">Delete account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting bad messages to developent site <span class="font-weight-bold text-danger">Delete account!</span></li>
+                <li><span class="font-weight-bolder text-info">Warn </span> posting bad messages to developers site <span class="font-weight-bold text-danger">Delete account!</span></li>
+            </ol>
+        </div>
+        <div class="d-flex justify-content-end">
+            <a asp-action="Index" class="rulebtn font-weight-bold">Back</a>
+        </div>
+    </div>
+}
 
