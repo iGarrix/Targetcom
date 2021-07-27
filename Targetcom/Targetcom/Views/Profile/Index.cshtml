@@ -72,14 +72,16 @@
     {
         <div style="width: 25%;" class="gap d-flex flex-column">
             <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden">
-                @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
-                {
-                    <div class="img-card rounded bg-dark" style="min-width: 200px; min-height: 200px;"></div>
-                }
-                else
-                {
-                    <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="min-width: 200px; min-height: 200px;" />
-                }
+                <div>
+                    @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                    {
+                        <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                    }
+                    else
+                    {
+                        <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                    }
+                </div>
                 <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Update</a>
                 <a asp-controller="Friends" asp-action="Blacklist" class="btn middletabbtn1 text-muted border pl-4 pr-4" style="font-size: 14px;">View blacklist</a>
             </div>
@@ -300,7 +302,7 @@
                     <div class="d-flex align-items-center">
                         @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
                         {
-                            <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="width: 32px; height: 32px;" />
                         }
                         else
                         {

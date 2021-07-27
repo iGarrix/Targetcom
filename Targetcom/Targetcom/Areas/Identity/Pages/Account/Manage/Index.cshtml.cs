@@ -191,13 +191,17 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
 
                 if (!myprofile.IsVerify)
                 {
-                    if (myprofile.Name.Length > 0 && myprofile.Surname.Length > 0 &&
-                        (DateTime.Now.Year - myprofile.Age.Year) >= 18 && myprofile.Gender.Length > 0 && 
-                        myprofile.Status.Length > 0 && myprofile.Quote.Length > 0 &&
-                        myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
-                        myprofile.UrlAvatar != "Nullable" && myprofile.Hobbies.Length > 0)
+                    if (myprofile.Status != null && myprofile.Quote != null && 
+                        myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
+                        myprofile.UrlAvatar != null && myprofile.Hobbies != null)
                     {
-                        myprofile.IsVerify = true;
+                        if ((DateTime.Now.Year - myprofile.Age.Year) >= 18 && 
+                            myprofile.Status.Length > 0 && myprofile.Quote.Length > 0 &&
+                            myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
+                            myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.Hobbies.Length > 0)
+                        {
+                            myprofile.IsVerify = true;
+                        }
                     }
                 }
 

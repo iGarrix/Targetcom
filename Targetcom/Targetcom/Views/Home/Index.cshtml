@@ -27,7 +27,7 @@
                 <div class="d-flex align-items-center">
                     @if (profile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
                     {
-                    <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                        <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle align-self-center" style="height: 32px; width: 32px;" />
                     }
                     else
                     {

@@ -67,14 +67,16 @@
     {
         <div style="width: 25%;" class="gap d-flex flex-column">
             <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden">
-                @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
-                {
-                    <div class="bg-dark img-card rounded" style="min-width: 200px; min-height: 200px;"></div>
-                }
-                else
-                {
-                    <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="min-width: 200px; min-height: 200px;" />
-                }
+                <div>
+                    @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                    {
+                        <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                    }
+                    else
+                    {
+                        <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                    }
+                </div>
                 <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add to friend</a>
                 <a href="#" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Add to blacklist</a>
             </div>
@@ -271,7 +273,7 @@
                     <div class="d-flex align-items-center">
                         @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
                         {
-                            <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="height: 32px; width: 32px;" />
                         }
                         else
                         {

@@ -3,7 +3,7 @@
 <div class="d-flex p-3">
     @if (@Model.UrlAvatar == Targetcom.Env.DefaultImageUrl)
     {
-        <div class="bg-dark img-card rounded-circle" style="width: 70px; height: 70px;"></div>
+        <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
     }
     else
     {

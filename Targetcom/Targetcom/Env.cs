@@ -37,6 +37,6 @@ namespace Targetcom
         public static string PrivateProfile = "Private";
         public static string PublicProfile = "Public";
 
-        public static string DefaultImageUrl = "Nullable";
+        public static string DefaultImageUrl = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
     }
 }

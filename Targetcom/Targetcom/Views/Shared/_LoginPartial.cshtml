@@ -23,11 +23,11 @@
         <span class="align-items-center">@profile.Name</span>
         @if (profile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
         {
-            <div class="bg-dark img-card rounded rounded-circle bg-dark d-inline-block ml-2 mr-1" style="height: 32px; width: 32px;"></div>
+            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle bg-dark d-inline-block ml-2 mr-1" style="height: 32px; width: 32px;" />
         }
         else
         {
-            <img src="@profile.UrlAvatar" alt="Avatar" class="img-card rounded rounded-circle bg-dark d-inline-block ml-2 mr-1" style="height: 32px; width: 32px;" />
+            <img src="@profile.UrlAvatar" alt="Avatar" class="img-card rounded-circle bg-dark d-inline-block ml-2 mr-1" style="height: 32px; width: 32px;" />
         }
     </button>
     <div class="dropdown-menu" style="font-size: 14px; min-width: 13rem; z-index: 100;">
@@ -35,7 +35,7 @@
             <div class="d-flex align-items-center">
                 @if (profile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
                 {
-                    <div class="bg-dark img-card rounded rounded-circle" style="height: 36px; width: 36px;"></div>
+                     <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded rounded-circle" style="height: 36px; width: 36px;" />
                 }
                 else
                 {
