@@ -22,7 +22,7 @@ namespace Targetcom.Controllers
             _userManager = userManager;
         }
         [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }

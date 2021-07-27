@@ -100,6 +100,15 @@ namespace Targetcom.Areas.Identity.Pages.Account
                     Gender = Input.Profile.Gender,
                     UrlAvatar = Env.DefaultImageUrl,
                     Privacy = Env.PublicProfile,
+                    IsPremium = false,
+                    IsVerify = false,
+                    TargetCoins = 0,
+                    JobGeoplace = "",
+                    Hobbies = "",
+                    StudyGeoplace = "",
+                    Quote = "",
+                    Status = "",
+
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

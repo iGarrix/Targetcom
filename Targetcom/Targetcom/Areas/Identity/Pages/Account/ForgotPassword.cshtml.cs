@@ -44,7 +44,7 @@ namespace Targetcom.Areas.Identity.Pages.Account
                 {
                     return RedirectToAction("Index");
                 }
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return Page();
