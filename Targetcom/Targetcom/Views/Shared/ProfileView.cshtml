@@ -79,61 +79,85 @@
                 </div>
                 <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add to friend</a>
                 <a href="#" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Add to blacklist</a>
-            </div>
-            <div class="border-0 rounded day_back_head">
-                <div class="p-3 overflow-hidden">
-                    <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
-                    <hr />
-                    <div class="d-flex flex-wrap" style="gap: .8rem;">
-                        @for (int i = 0; i < 6; i++)
-                        {
-                            <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                <p class="m-0">Name</p>
-                            </div>
-                        }
+                @if (Model.FindedProfile.Privacy == Env.PrivateProfile)
+                {
+                    <div class="alert alert-danger d-flex justify-content-center align-items-center day_color_main m-0">
+                        Private account
                     </div>
-                </div>
-                <hr class="m-0" />
-                <div class="p-3 overflow-hidden">
-                    <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
-                    <div class="d-flex justify-content-between" style="gap: .8rem;">
-                        @for (int i = 0; i < 3; i++)
-                        {
-                            <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
-                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                <p class="m-0">Name</p>
-                            </div>
-                        }
+                }
+                else
+                {
+                    <div class="alert alert-success d-flex justify-content-center align-items-center day_color_main m-0">
+                        Public account
                     </div>
-                </div>
+                }
             </div>
-            <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
-                <hr />
-                <div class="d-flex flex-wrap" style="gap: .8rem;">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                            <p class="m-0">Name</p>
+            @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+            {
+                if (Model.FindedProfile.VisibilityFriends)
+                {
+                    <div class="border-0 rounded day_back_head">
+                        <div class="p-3 overflow-hidden">
+                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
+                            <hr />
+                            <div class="d-flex flex-wrap" style="gap: .8rem;">
+                                @for (int i = 0; i < 6; i++)
+                                {
+                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                        <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
+                                        <p class="m-0">Name</p>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    }
-                </div>
-            </div>
-            <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                <hr />
-                <div style="gap: .8rem;">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <div class="d-flex align-items-center p-2 overflow-hidden">
-                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                            <p class="m-0 ml-2">Name</p>
+                        <hr class="m-0" />
+                        <div class="p-3 overflow-hidden">
+                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
+                            <div class="d-flex justify-content-between" style="gap: .8rem;">
+                                @for (int i = 0; i < 3; i++)
+                                {
+                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
+                                        <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
+                                        <p class="m-0">Name</p>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    }
-                </div>
-            </div>
+                    </div>
+                }
+                if (Model.FindedProfile.VisibilitySubscribers)
+                {
+                    <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                        <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
+                        <hr />
+                        <div class="d-flex flex-wrap" style="gap: .8rem;">
+                            @for (int i = 0; i < 6; i++)
+                            {
+                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
+                                    <p class="m-0">Name</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                if (Model.FindedProfile.VisibilityCommunity)
+                {
+                    <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
+                        <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
+                        <hr />
+                        <div style="gap: .8rem;">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <div class="d-flex align-items-center p-2 overflow-hidden">
+                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
+                                    <p class="m-0 ml-2">Name</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
         </div>
         <div style="width: 55%" class="gap d-flex flex-column overflow-hidden">
 
@@ -148,161 +172,224 @@
                             </h4>
                             <p class="m-0 text-muted font-weight-normal" style="font-size: 14px;">@Model.FindedProfile.AfkStatus</p>
                         </div>
-                        <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.FindedProfile.Quote</p>
-                    </div>
-                    <hr style="height: 2px; width: 100%;" />
-                    @if (Model.Role == Env.AdminRole)
-                    {
-                        <div class="alert alert-danger p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                            <p class="m-0">This user is Admin <i class="fas fa-code" style="font-size: 13px;"></i></p>
-                        </div>
-                    }
-                    @if (Model.Role == Env.ModerRole)
-                    {
-                        <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                            <p class="m-0">This user is Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
-                        </div>
-                    }
-                    @if (Model.FindedProfile.IsPremium)
-                    {
-                        <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                            <p class="m-0">Premium plan (Permanent) <i class="fas fa-crown" style="font-size: 13px;"></i></p>
-                        </div>
-                    }
-                    else
-                    {
-                        <a class="alert middletabbtn1 border-0 p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                            <p class="m-0">Doesnt plan</p>
-                        </a>
-                    }
-                    <hr class="mt-0" style="height: 2px; width: 100%;" />
-                    <div class="d-flex">
-                        <p class="text-muted m-0" style="width: 12rem;">Birthday:</p>
-                        <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Age.ToShortDateString()</p>
-                    </div>
-                    @if (Model.FindedProfile.JobGeoplace != null)
-                    {
-                        @if (Model.FindedProfile.JobGeoplace.Length > 0)
+                        @if (Model.FindedProfile.Privacy == Env.PublicProfile)
                         {
-                            <div class="d-flex">
-                                <p class="text-muted m-0" style="width: 12rem;">Job place:</p>
-                                <p class="day_color_main ml-2 m-0">@Model.FindedProfile.JobGeoplace</p>
+                            if (Model.FindedProfile.VisibilityQuote)
+                            {
+                                <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.FindedProfile.Quote</p>
+                            }
+                        }
+                    </div>
+                    @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                    {
+                        <hr style="height: 2px; width: 100%;" />
+                        @if (Model.Role == Env.AdminRole)
+                        {
+                            <div class="alert alert-danger p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
+                                <p class="m-0">This user is Admin <i class="fas fa-code" style="font-size: 13px;"></i></p>
                             </div>
                         }
-                    }
-                    <hr style="height: 2px; width: 100%;" />
-                    <div class="viewalldata disable">
-                        @if (Model.FindedProfile.Status != null)
+                        @if (Model.Role == Env.ModerRole)
                         {
-                            @if (Model.FindedProfile.Status.Length > 0)
-                            {
-                                <div class="d-flex">
-                                    <p class="text-muted m-0" style="width: 12rem;">Status:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Status</p>
-                                </div>
-                            }
+                            <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
+                                <p class="m-0">This user is Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
+                            </div>
                         }
-                        @if (Model.FindedProfile.StudyGeoplace != null)
+                        @if (Model.FindedProfile.IsPremium)
                         {
-                            @if (Model.FindedProfile.StudyGeoplace.Length > 0)
-                            {
-                                <div class="d-flex">
-                                    <p class="text-muted m-0" style="width: 12rem;">Study place:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.StudyGeoplace</p>
-                                </div>
-                                <br />
-                            }
-                        }
-                        <div class="d-flex">
-                            <p class="text-muted m-0" style="width: 12rem;">Coins:</p>
-                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.TargetCoins</p>
-                        </div>
-                        <br />
-                        <div class="d-flex">
-                            <p class="text-muted m-0" style="width: 12rem;">Genger:</p>
-                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Gender</p>
-                        </div>
-                        @if (Model.FindedProfile.Hobbies != null)
-                        {
-                            @if (Model.FindedProfile.Hobbies.Length > 0)
-                            {
-                                <div class="d-flex">
-                                    <p class="text-muted m-0" style="width: 12rem;">Hobbies:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Hobbies</p>
-                                </div>
-                            }
-                        }
-                        <br />
-                        @if (Model.FindedProfile.PhoneNumber != null)
-                        {
-                            @if (Model.FindedProfile.PhoneNumber.Length > 0)
-                            {
-                                <div class="d-flex">
-                                    <p class="text-muted m-0" style="width: 12rem;">Number:</p>
-                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.PhoneNumber</p>
-                                </div>
-                            }
-                        }
-                        <div class="d-flex">
-                            <p class="text-muted m-0" style="width: 12rem;">Email:</p>
-                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Email</p>
-                        </div>
-                        <hr style="height: 2px; width: 100%;" />
-                    </div>
-                    <a href="#" class="viewallbtn rounded day_color_main p-2 text-center">View all</a>
-                    <script>
-                        document.querySelector(".viewallbtn").addEventListener("click", () => {
-                            document.querySelector(".viewalldata").classList.toggle("disable");
-                        });
-                    </script>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
-                        <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
-                        <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
-                        <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
-                        <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
-                    </div>
-                </div>
-            </div>
-            <div class="card border day_back_head overflow-auto rounded">
-                <div class="card-body p-2">
-                    <textarea class="form-control item-font m-0 rounded-0" id="summernote" placeholder="Write something?"></textarea>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
-                        {
-                            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="height: 32px; width: 32px;" />
+                            <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
+                                <p class="m-0">Premium plan (Permanent) <i class="fas fa-crown" style="font-size: 13px;"></i></p>
+                            </div>
                         }
                         else
                         {
-                            <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="height: 32px; width: 32px;" />
+                            <a class="alert middletabbtn1 border-0 p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
+                                <p class="m-0">Doesnt plan</p>
+                            </a>
                         }
-                        <div class="d-flex flex-column ml-2">
-                            <p class="m-0 day_color_main" style="font-size: 14px;">
-                                @Model.IdentityProfile.Name
-                                @Model.IdentityProfile.Surname
-                                @if (Model.IdentityProfile.IsVerify)
+                        @if (Model.FindedProfile.VisibilityAboutMe || Model.FindedProfile.VisibilityCommerceData)
+                        {
+                            <hr class="mt-0" style="height: 2px; width: 100%;" />
+                        }
+                        @if (Model.FindedProfile.VisibilityAboutMe)
+                        {
+                            @if (Model.FindedProfile.IsShortDate)
+                            {
+                                <div class="d-flex">
+                                    <p class="text-muted m-0" style="width: 12rem;">Birthday:</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Age.ToString("dddd, dd MMMM")</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex">
+                                    <p class="text-muted m-0" style="width: 12rem;">Birthday:</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Age.ToString("dddd, dd MMMM yyyy")</p>
+                                </div>
+                            }
+                            @if (Model.FindedProfile.JobGeoplace != null)
+                            {
+                                @if (Model.FindedProfile.JobGeoplace.Length > 0)
                                 {
-                                    <i class="fas fa-check" style="font-size: 13px;"></i>
+                                    <div class="d-flex">
+                                        <p class="text-muted m-0" style="width: 12rem;">Job place:</p>
+                                        <p class="day_color_main ml-2 m-0">@Model.FindedProfile.JobGeoplace</p>
+                                    </div>
                                 }
-                                @if (User.IsInRole(Env.AdminRole))
+                            }
+                            <hr style="height: 2px; width: 100%;" />
+                        }
+                        <div class="viewalldata disable">
+                            @if (Model.FindedProfile.VisibilityAboutMe)
+                            {
+                                @if (Model.FindedProfile.Status != null)
                                 {
-                                    <i class="fas fa-code" style="font-size: 13px;"></i>
+                                    @if (Model.FindedProfile.Status.Length > 0)
+                                    {
+                                        <div class="d-flex">
+                                            <p class="text-muted m-0" style="width: 12rem;">Status:</p>
+                                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Status</p>
+                                        </div>
+                                    }
                                 }
-                                else if (User.IsInRole(Env.ModerRole))
+                                @if (Model.FindedProfile.StudyGeoplace != null)
                                 {
-                                    <i class="fas fa-glasses" style="font-size: 13px;"></i>
+                                    @if (Model.FindedProfile.StudyGeoplace.Length > 0)
+                                    {
+                                        <div class="d-flex">
+                                            <p class="text-muted m-0" style="width: 12rem;">Study place:</p>
+                                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.StudyGeoplace</p>
+                                        </div>
+                                        <br />
+                                    }
                                 }
-                            </p>
+                                <div class="d-flex">
+                                    <p class="text-muted m-0" style="width: 12rem;">Coins:</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.TargetCoins</p>
+                                </div>
+                                <br />
+                                <div class="d-flex">
+                                    <p class="text-muted m-0" style="width: 12rem;">Genger:</p>
+                                    <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Gender</p>
+                                </div>
+                                @if (Model.FindedProfile.Hobbies != null)
+                                {
+                                    @if (Model.FindedProfile.Hobbies.Length > 0)
+                                    {
+                                        <div class="d-flex">
+                                            <p class="text-muted m-0" style="width: 12rem;">Hobbies:</p>
+                                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Hobbies</p>
+                                        </div>
+                                    }
+                                }
+                                <hr style="height: 2px; width: 100%;" />
+
+                            }
+                            @if (Model.FindedProfile.VisibilityCommerceData)
+                            {
+
+                                @if (Model.FindedProfile.PhoneNumber != null)
+                                {
+                                    @if (Model.FindedProfile.PhoneNumber.Length > 0)
+                                    {
+                                        <div class="d-flex">
+                                            <p class="text-muted m-0" style="width: 12rem;">Number:</p>
+                                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.PhoneNumber</p>
+                                        </div>
+                                    }
+                                }
+                                @if (Model.FindedProfile.Email != null)
+                                {
+                                    if (Model.FindedProfile.Email.Length > 0)
+                                    {
+                                        <div class="d-flex">
+                                            <p class="text-muted m-0" style="width: 12rem;">Email:</p>
+                                            <p class="day_color_main ml-2 m-0">@Model.FindedProfile.Email</p>
+                                        </div>
+                                    }
+                                }
+                                <hr style="height: 2px; width: 100%;" />
+                            }
+                        </div>
+                        @if (Model.FindedProfile.VisibilityAboutMe || Model.FindedProfile.VisibilityCommerceData)
+                        {
+                            <a href="#" class="viewallbtn rounded day_color_main p-2 text-center">View all</a>
+                            <script>
+                                document.querySelector(".viewallbtn").addEventListener("click", () => {
+                                    document.querySelector(".viewalldata").classList.toggle("disable");
+                                });
+                            </script>
+                        }
+                    }
+                </div>
+                @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                {
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
+                            @if (Model.FindedProfile.VisibilityFriends)
+                            {
+                                <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
+                            }
+                            @if (Model.FindedProfile.VisibilitySubscribers)
+                            {
+                                <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
+                            }
+                            @if (Model.FindedProfile.VisibilityImages)
+                            {
+                                <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
+                            }
+                            @if (Model.FindedProfile.VisibilityPlaylist)
+                            {
+                                <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
+                            }
                         </div>
                     </div>
-                    <div>
-                        <button type="submit" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Publish</button>
-                    </div>
-                </div>
+                }
             </div>
+            @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+            {
+                if (!Model.FindedProfile.IsNessessaredPublishPost)
+                {
+                    <div class="card border day_back_head overflow-auto rounded">
+                        <div class="card-body p-2">
+                            <textarea class="form-control item-font m-0 rounded-0" id="summernote" placeholder="Write something?"></textarea>
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                                {
+                                    <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="height: 32px; width: 32px;" />
+                                }
+                                else
+                                {
+                                    <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="height: 32px; width: 32px;" />
+                                }
+                                <div class="d-flex flex-column ml-2">
+                                    <p class="m-0 day_color_main" style="font-size: 14px;">
+                                        @Model.IdentityProfile.Name
+                                        @Model.IdentityProfile.Surname
+                                        @if (Model.IdentityProfile.IsVerify)
+                                        {
+                                            <i class="fas fa-check" style="font-size: 13px;"></i>
+                                        }
+                                        @if (User.IsInRole(Env.AdminRole))
+                                        {
+                                            <i class="fas fa-code" style="font-size: 13px;"></i>
+                                        }
+                                        else if (User.IsInRole(Env.ModerRole))
+                                        {
+                                            <i class="fas fa-glasses" style="font-size: 13px;"></i>
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Publish</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
         </div>
     }
 </div>

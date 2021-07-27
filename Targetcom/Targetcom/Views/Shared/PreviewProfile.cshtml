@@ -10,11 +10,11 @@
         <img src="@Model.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
     }
     <div class="d-flex flex-column ml-3">
-        <a href="#" class="m-0 font-weight-normal day_color_main">@Model.Name @Model.Surname</a>
+        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="m-0 font-weight-normal day_color_main">@Model.Name @Model.Surname</a>
         <div class="d-flex gap">
             <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
             <a href="#" class="day_color_main" style="font-size: 14px;">Add friends</a>
         </div>
     </div>
-    <a href="#" class="day_color_font ml-auto"><i class="fas fa-ellipsis-h day_color_font settingsbtn"></i></a>
+    <a href="#" class="day_color_main ml-auto"><i class="fas fa-ellipsis-h day_color_main settingsbtn"></i></a>
 </div>

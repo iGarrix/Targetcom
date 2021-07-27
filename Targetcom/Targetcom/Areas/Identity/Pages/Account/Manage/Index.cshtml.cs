@@ -89,123 +89,151 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
             if (usermanagement != null)
             {
                 Profile myprofile = user as Profile;
-
+                bool ischanged = false;
                 if (usermanagement.Name != Input.profile.Name)
                 {
                     myprofile.Name = Input.profile.Name;
+                    ischanged = true;
                 }
                 if (usermanagement.Surname != Input.profile.Surname)
                 {
                     myprofile.Surname = Input.profile.Surname;
+                    ischanged = true;
                 }
                 if (usermanagement.Age != Input.profile.Age)
                 {
                     myprofile.Age = Input.profile.Age;
+                    ischanged = true;
                 }
                 if (usermanagement.Gender != Input.profile.Gender)
                 {
                     myprofile.Gender = Input.profile.Gender;
+                    ischanged = true;
                 }
 
                 if (usermanagement.Quote != Input.profile.Quote)
                 {
                     myprofile.Quote = Input.profile.Quote;
+                    ischanged = true;
                 }
                 if (usermanagement.Status != Input.profile.Status)
                 {
                     myprofile.Status = Input.profile.Status;
+                    ischanged = true;
                 }
                 if (usermanagement.JobGeoplace != Input.profile.JobGeoplace)
                 {
                     myprofile.JobGeoplace = Input.profile.JobGeoplace;
+                    ischanged = true;
                 }
                 if (usermanagement.StudyGeoplace != Input.profile.StudyGeoplace)
                 {
                     myprofile.StudyGeoplace = Input.profile.StudyGeoplace;
+                    ischanged = true;
                 }
                 if (usermanagement.Hobbies != Input.profile.Hobbies)
                 {
                     myprofile.Hobbies = Input.profile.Hobbies;
+                    ischanged = true;
                 }
                 if (usermanagement.UrlAvatar != Input.profile.UrlAvatar)
                 {
                     myprofile.UrlAvatar = Input.profile.UrlAvatar;
+                    ischanged = true;
                 }
 
 
                 if (usermanagement.Privacy != Input.profile.Privacy)
                 {
                     myprofile.Privacy = Input.profile.Privacy;
+                    ischanged = true;
                 }
 
                 if (usermanagement.IsShortDate != Input.profile.IsShortDate)
                 {
                     myprofile.IsShortDate = Input.profile.IsShortDate;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityQuote != Input.profile.VisibilityQuote)
                 {
                     myprofile.VisibilityQuote = Input.profile.VisibilityQuote;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityAboutMe != Input.profile.VisibilityAboutMe)
                 {
                     myprofile.VisibilityAboutMe = Input.profile.VisibilityAboutMe;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityPostage != Input.profile.VisibilityPostage)
                 {
                     myprofile.VisibilityPostage = Input.profile.VisibilityPostage;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityPlaylist != Input.profile.VisibilityPlaylist)
                 {
                     myprofile.VisibilityPlaylist = Input.profile.VisibilityPlaylist;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityFriends != Input.profile.VisibilityFriends)
                 {
                     myprofile.VisibilityFriends = Input.profile.VisibilityFriends;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilitySubscribers != Input.profile.VisibilitySubscribers)
                 {
                     myprofile.VisibilitySubscribers = Input.profile.VisibilitySubscribers;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityImages != Input.profile.VisibilityImages)
                 {
                     myprofile.VisibilityImages = Input.profile.VisibilityImages;
+                    ischanged = true;
                 }
                 if (usermanagement.VisibilityCommunity != Input.profile.VisibilityCommunity)
                 {
                     myprofile.VisibilityCommunity = Input.profile.VisibilityCommunity;
+                    ischanged = true;
                 }
 
                 if (usermanagement.VisibilityCommerceData != Input.profile.VisibilityCommerceData)
                 {
                     myprofile.VisibilityCommerceData = Input.profile.VisibilityCommerceData;
+                    ischanged = true;
                 }
 
                 if (usermanagement.IsNessessaredLikedPost != Input.profile.IsNessessaredLikedPost)
                 {
                     myprofile.IsNessessaredLikedPost = Input.profile.IsNessessaredLikedPost;
+                    ischanged = true;
                 }
                 if (usermanagement.IsNessessaredSharedPost != Input.profile.IsNessessaredSharedPost)
                 {
                     myprofile.IsNessessaredSharedPost = Input.profile.IsNessessaredSharedPost;
+                    ischanged = true;
+                }
+                if (usermanagement.IsNessessaredPublishPost != Input.profile.IsNessessaredPublishPost)
+                {
+                    myprofile.IsNessessaredPublishPost = Input.profile.IsNessessaredPublishPost;
+                    ischanged = true;
                 }
 
-                if (!myprofile.IsVerify)
+                if (myprofile.Status != null && myprofile.Quote != null && 
+                    myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
+                    myprofile.UrlAvatar != null && myprofile.Hobbies != null)
                 {
-                    if (myprofile.Status != null && myprofile.Quote != null && 
-                        myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
-                        myprofile.UrlAvatar != null && myprofile.Hobbies != null)
+                    if ((DateTime.Now.Year - myprofile.Age.Year) >= 18 && 
+                        myprofile.Status.Length > 0 && myprofile.Quote.Length > 0 &&
+                        myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
+                        myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.Hobbies.Length > 0 && myprofile.EmailConfirmed)
                     {
-                        if ((DateTime.Now.Year - myprofile.Age.Year) >= 18 && 
-                            myprofile.Status.Length > 0 && myprofile.Quote.Length > 0 &&
-                            myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
-                            myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.Hobbies.Length > 0)
-                        {
-                            myprofile.IsVerify = true;
-                        }
+                        myprofile.IsVerify = true;
+                        ischanged = true;
                     }
                 }
-
-                await _userManager.UpdateAsync(myprofile);
+                if (ischanged)
+                {
+                    await _userManager.UpdateAsync(myprofile);
+                }
             }
 
 

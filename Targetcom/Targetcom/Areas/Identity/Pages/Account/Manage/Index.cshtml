@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "All";
+    ViewData["Title"] = "General";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
@@ -200,15 +200,6 @@
                 </label>
                 <span asp-validation-for="Input.profile.VisibilityQuote" class="text-danger" style="font-size: 14px;"></span>
             </div>
-            <div class="form-group">
-                <label class="container-checkbox">
-                    Visible data for me
-                    @*<input type="checkbox" checked="checked">*@
-                    <input asp-for="Input.profile.VisibilityAboutMe" type="checkbox" id="flexCheckDefault">
-                    <span class="checkmark"></span>
-                </label>
-                <span asp-validation-for="Input.profile.VisibilityAboutMe" class="text-danger" style="font-size: 14px;"></span>
-            </div>
             <p class="text-center mt-4 mb-0">Communication me</p>
             <hr class="mb-3 mt-1" />
             <div class="form-group">
@@ -269,6 +260,15 @@
             <hr class="mb-3 mt-1" />
             <div class="form-group">
                 <label class="container-checkbox">
+                    Visible data for me
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityAboutMe" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityAboutMe" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
                     Visible my commerce data
                     @*<input type="checkbox" checked="checked">*@
                     <input asp-for="Input.profile.VisibilityCommerceData" type="checkbox" id="flexCheckDefault">
@@ -295,6 +295,15 @@
                     <span class="checkmark"></span>
                 </label>
                 <span asp-validation-for="Input.profile.IsNessessaredSharedPost" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Nessessared published post
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.IsNessessaredPublishPost" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.IsNessessaredPublishPost" class="text-danger" style="font-size: 14px;"></span>
             </div>
             <hr />
             <button id="update-profile-button" type="submit" class="btn btn-primary" style="font-size: 14px;">Save</button>

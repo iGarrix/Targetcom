@@ -54,5 +54,6 @@ namespace Targetcom.Models
         public bool VisibilityCommerceData { get; set; } = true;
         public bool IsNessessaredLikedPost { get; set; } = false;
         public bool IsNessessaredSharedPost { get; set; } = false;
+        public bool IsNessessaredPublishPost { get; set; } = false;
     }
 }
