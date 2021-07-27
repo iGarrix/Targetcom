@@ -1,11 +1,309 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "All";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
+<style>
+    .gap {
+        gap: 1rem;
+    }
+    .viewallbtn {
+        width: 100%;
+        font-family: Poppins, sans-serif;
+    }
+
+        .viewallbtn:hover {
+            background-color: #eeeeee;
+            text-decoration: none;
+        }
+
+
+    .container-checkbox {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Hide the browser's default checkbox */
+        .container-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 22px;
+        width: 22px;
+        background-color: #eee;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
+<div style="font-family: Poppins, sans-serif;" >
+    <div class="border-0 day_back_head overflow-hidden rounded p-4">
+        <h4 class="text-center">General</h4>
+        <hr />
+        <partial name="_StatusMessage" for="StatusMessage" />
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" style="font-size: 14px;"></div>
+            <div class="form-group">
+                @*<label asp-for="Username" ></label>*@
+                <input asp-for="Username" class="form-control" placeholder="Username" disabled style="font-size: 14px;" />
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.PhoneNumber" placeholder="Enter phone number" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="d-flex gap">
+                <div class="form-group" style="width: 50%">
+                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                    <input asp-for="Input.profile.Name" placeholder="Enter name" class="form-control" style="font-size: 14px;" />
+                    <span asp-validation-for="Input.profile.Name" class="text-danger" style="font-size: 14px;"></span>
+                </div>
+                <div class="form-group" style="width: 50%">
+                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                    <input asp-for="Input.profile.Surname" placeholder="Enter surname" class="form-control" style="font-size: 14px;" />
+                    <span asp-validation-for="Input.profile.Surname" class="text-danger" style="font-size: 14px;"></span>
+                </div>
+            </div>
+            <div class="d-flex gap">
+                <div class="form-group" style="width: 60%">
+                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                    <input asp-for="Input.profile.Age" placeholder="Enter age" class="form-control" style="font-size: 14px;" />
+                    <span asp-validation-for="Input.profile.Age" class="text-danger" style="font-size: 14px;"></span>
+                </div>
+                <div class="form-group" style="width: 40%">
+                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                    <select asp-for="Input.profile.Gender" class="form-control" style="font-size: 14px;">
+                        <option disabled>Select Genger</option>
+                        <option value="Male">Famale</option>
+                        <option value="Male">Male</option>
+                    </select>
+                    <span asp-validation-for="Input.profile.Gender" class="text-danger" style="font-size: 14px;"></span>
+                </div>
+            </div>
+            <h4 class="text-center mt-4">About me</h4>
+            <hr />
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.profile.Quote" placeholder="Enter ouote (Not necessary)" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.profile.Quote" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.profile.Status" placeholder="Enter status (Not necessary)" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.profile.Status" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.profile.JobGeoplace" placeholder="Enter job place (Not necessary)" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.profile.JobGeoplace" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.profile.StudyGeoplace" placeholder="Enter study place (Not necessary)" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.profile.StudyGeoplace" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.profile.Hobbies" placeholder="Enter hobbies (Not necessary)" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.profile.Hobbies" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <input asp-for="Input.profile.UrlAvatar" placeholder="https://www.cnet.com/images/yourimage.jpg (Not nessessary)" class="form-control" style="font-size: 14px;" />
+                <span asp-validation-for="Input.profile.UrlAvatar" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+
+            <h4 class="text-center mt-4">Pay planes</h4>
+            <hr />
+            <div class="form-group d-flex">
+                <a asp-controller="Vip" asp-action="Index" class="viewallbtn rounded day_color_main p-2 text-center">You dont have plane. Buy premium plane for free</a>
+            </div>
+
+            <h4 class="text-center mt-4">Privacy</h4>
+            <hr />
+            <div class="form-group">
+                @*<label asp-for="Input.PhoneNumber"></label>*@
+                <select asp-for="Input.profile.Privacy" class="form-control" style="font-size: 14px;">
+                    <option value="@Targetcom.Env.PublicProfile">@Targetcom.Env.PublicProfile</option>
+                    <option value="@Targetcom.Env.PrivateProfile">@Targetcom.Env.PrivateProfile</option>
+                </select>
+                <span asp-validation-for="Input.profile.Privacy" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <p class="text-center mt-4 mb-0">Info me</p>
+            <hr class="mb-3 mt-1" />
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Short birthdate
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.IsShortDate" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.IsShortDate" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible quote
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityQuote" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityQuote" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible data for me
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityAboutMe" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityAboutMe" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <p class="text-center mt-4 mb-0">Communication me</p>
+            <hr class="mb-3 mt-1" />
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my postage
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityPostage" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityPostage" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my friends
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityFriends" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityFriends" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my subscibers
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilitySubscribers" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilitySubscribers" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my communities
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityCommunity" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityCommunity" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my images
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityImages" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityImages" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my playlist
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityPlaylist" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityPlaylist" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <p class="text-center mt-4 mb-0">Contact me</p>
+            <hr class="mb-3 mt-1" />
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Visible my commerce data
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.VisibilityCommerceData" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.VisibilityCommerceData" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <p class="text-center mt-4 mb-0">Nessessared action</p>
+            <hr class="mb-3 mt-1" />
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Nessessared liked post
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.IsNessessaredLikedPost" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.IsNessessaredLikedPost" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <div class="form-group">
+                <label class="container-checkbox">
+                    Nessessared shared post
+                    @*<input type="checkbox" checked="checked">*@
+                    <input asp-for="Input.profile.IsNessessaredSharedPost" type="checkbox" id="flexCheckDefault">
+                    <span class="checkmark"></span>
+                </label>
+                <span asp-validation-for="Input.profile.IsNessessaredSharedPost" class="text-danger" style="font-size: 14px;"></span>
+            </div>
+            <hr />
+            <button id="update-profile-button" type="submit" class="btn btn-primary" style="font-size: 14px;">Save</button>
+        </form>
+
+    </div>
+</div>
+
+@*<h4>@ViewData["Title"]</h4>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">
     <div class="col-md-6">
@@ -23,7 +321,7 @@
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
-</div>
+</div>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

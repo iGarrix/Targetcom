@@ -1,7 +1,14 @@
 ﻿@model Profile;
 
 <div class="d-flex p-3">
-    <div class="bg-dark rounded-circle" style="width: 70px; height: 70px;"></div>
+    @if (@Model.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+    {
+        <div class="bg-dark img-card rounded-circle" style="width: 70px; height: 70px;"></div>
+    }
+    else
+    {
+        <img src="@Model.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
+    }
     <div class="d-flex flex-column ml-3">
         <a href="#" class="m-0 font-weight-normal day_color_main">@Model.Name @Model.Surname</a>
         <div class="d-flex gap">

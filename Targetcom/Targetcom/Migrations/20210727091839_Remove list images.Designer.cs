@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210727091839_Remove list images")]
+    partial class Removelistimages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,12 +241,6 @@ namespace Targetcom.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsNessessaredLikedPost")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNessessaredSharedPost")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPremium")
                         .HasColumnType("bit");
 
@@ -309,9 +305,6 @@ namespace Targetcom.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilityQuote")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("VisibilitySubscribers")
                         .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Profile");

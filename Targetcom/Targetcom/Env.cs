@@ -36,5 +36,7 @@ namespace Targetcom
 
         public static string PrivateProfile = "Private";
         public static string PublicProfile = "Public";
+
+        public static string DefaultImageUrl = "Nullable";
     }
 }

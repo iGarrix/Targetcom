@@ -98,8 +98,8 @@ namespace Targetcom.Areas.Identity.Pages.Account
                     Surname = Input.Profile.Surname,
                     Age = Input.Profile.Age,
                     Gender = Input.Profile.Gender,
-                    UrlImage = "Nullable"
-
+                    UrlAvatar = Env.DefaultImageUrl,
+                    Privacy = Env.PublicProfile,
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

@@ -67,7 +67,14 @@
     {
         <div style="width: 25%;" class="gap d-flex flex-column">
             <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden">
-                <div class="bg-dark" style="width: 200px; height: 200px;"></div>
+                @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                {
+                    <div class="bg-dark img-card rounded" style="min-width: 200px; min-height: 200px;"></div>
+                }
+                else
+                {
+                    <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="min-width: 200px; min-height: 200px;" />
+                }
                 <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add to friend</a>
                 <a href="#" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Add to blacklist</a>
             </div>
@@ -100,7 +107,7 @@
                 </div>
             </div>
             <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                <a asp-controller="Subscribers" asp-action="Index" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
+                <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
                 <hr />
                 <div class="d-flex flex-wrap" style="gap: .8rem;">
                     @for (int i = 0; i < 6; i++)
@@ -250,7 +257,7 @@
                 <div class="card-footer">
                     <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
                         <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
-                        <a asp-controller="Subscribers" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
+                        <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
                         <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
                         <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
                     </div>
@@ -262,7 +269,14 @@
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                        @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                        {
+                            <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                        }
+                        else
+                        {
+                            <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="height: 32px; width: 32px;" />
+                        }
                         <div class="d-flex flex-column ml-2">
                             <p class="m-0 day_color_main" style="font-size: 14px;">
                                 @Model.IdentityProfile.Name

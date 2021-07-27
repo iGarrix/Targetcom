@@ -44,18 +44,6 @@
             }
         </div>
     </div>
-    <div style="width: 23%;" class="gap d-flex flex-column">
-        <div class="card border-0 day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
-            <div class="card-body pt-2 pb-2 pr-0 pl-0">
-                <a asp-controller="Friends" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Friends</a>
-                <hr class="m-0 p-1" />
-                <a asp-controller="Friends" asp-action="Newfriend" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">New friens</a>
-                <a asp-controller="Subscribers" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Subscribers</a>
-                <hr class="m-0 p-1" />
-                <a asp-controller="Friends" asp-action="Invates" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Invite to friends</a>
-                <a asp-controller="Friends" asp-action="Blacklist" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Blacklist</a>
-            </div>
-        </div>
-    </div>
+    <partial name="FriendSidebar"/>
 </div>
 

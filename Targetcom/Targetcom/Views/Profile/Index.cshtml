@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = $"{Model.IdentityProfile.Name} {Model.IdentityProfile.Surname}";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -60,7 +59,7 @@
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
-
+    @*Banned*@
     @if (false)
     {
         <div style="width: 80%;" class="gap d-flex flex-column">
@@ -73,12 +72,62 @@
     {
         <div style="width: 25%;" class="gap d-flex flex-column">
             <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden">
-                <div class="bg-dark" style="width: 200px; height: 200px;"></div>
+                @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                {
+                    <div class="img-card rounded bg-dark" style="min-width: 200px; min-height: 200px;"></div>
+                }
+                else
+                {
+                    <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="min-width: 200px; min-height: 200px;" />
+                }
                 <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Update</a>
+                <a asp-controller="Friends" asp-action="Blacklist" class="btn middletabbtn1 text-muted border pl-4 pr-4" style="font-size: 14px;">View blacklist</a>
             </div>
-            <div class="border-0 rounded day_back_head">
-                <div class="p-3 overflow-hidden">
-                    <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
+            @** If 0 friends *@
+            @if (false)
+            {
+
+            }
+            else
+            {
+                <div class="border-0 rounded day_back_head">
+                    <div class="p-3 overflow-hidden">
+                        <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
+                        <hr />
+                        <div class="d-flex flex-wrap" style="gap: .8rem;">
+                            @for (int i = 0; i < 6; i++)
+                            {
+                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
+                                    <p class="m-0">Name</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <hr class="m-0" />
+                    <div class="p-3 overflow-hidden">
+                        <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
+                        <div class="d-flex justify-content-between" style="gap: .8rem;">
+                            @for (int i = 0; i < 3; i++)
+                            {
+                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
+                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
+                                    <p class="m-0">Name</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            @** If 0 friends *@
+            @if (false)
+            {
+
+            }
+            else
+            {
+                <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                    <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
                     <hr />
                     <div class="d-flex flex-wrap" style="gap: .8rem;">
                         @for (int i = 0; i < 6; i++)
@@ -90,46 +139,28 @@
                         }
                     </div>
                 </div>
-                <hr class="m-0" />
-                <div class="p-3 overflow-hidden">
-                    <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
-                    <div class="d-flex justify-content-between" style="gap: .8rem;">
-                        @for (int i = 0; i < 3; i++)
+            }
+            @* If 0 friends *@
+            @if (false)
+            {
+
+            }
+            else
+            {
+                <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
+                    <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
+                    <hr />
+                    <div style="gap: .8rem;">
+                        @for (int i = 0; i < 5; i++)
                         {
-                            <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
+                            <div class="d-flex align-items-center p-2 overflow-hidden">
                                 <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                <p class="m-0">Name</p>
+                                <p class="m-0 ml-2">Name</p>
                             </div>
                         }
                     </div>
                 </div>
-            </div>
-            <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                <a asp-controller="Subscribers" asp-action="Index" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
-                <hr />
-                <div class="d-flex flex-wrap" style="gap: .8rem;">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                            <p class="m-0">Name</p>
-                        </div>
-                    }
-                </div>
-            </div>
-            <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                <hr />
-                <div style="gap: .8rem;">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <div class="d-flex align-items-center p-2 overflow-hidden">
-                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                            <p class="m-0 ml-2">Name</p>
-                        </div>
-                    }
-                </div>
-            </div>
+            }
         </div>
         <div style="width: 55%" class="gap d-flex flex-column overflow-hidden">
 
@@ -174,7 +205,7 @@
                     <hr class="mt-0" style="height: 2px; width: 100%;" />
                     <div class="d-flex">
                         <p class="text-muted m-0" style="width: 12rem;">Birthday:</p>
-                        <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Age.ToShortDateString()</p>
+                        <p class="day_color_main ml-2 m-0">@Model.IdentityProfile.Age.ToLongDateString()</p>
                     </div>
                     @if (Model.IdentityProfile.JobGeoplace != null)
                     {
@@ -255,7 +286,7 @@
                 <div class="card-footer">
                     <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
                         <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
-                        <a asp-controller="Subscribers" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
+                        <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
                         <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
                         <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
                     </div>
@@ -267,7 +298,14 @@
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                        @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                        {
+                            <div class="rounded-circle border bg-dark align-self-center" style="height: 32px; width: 32px;"></div>
+                        }
+                        else
+                        {
+                            <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 32px; height: 32px;" />
+                        }
                         <div class="d-flex flex-column ml-2">
                             <p class="m-0 day_color_main" style="font-size: 14px;">
                                 @Model.IdentityProfile.Name

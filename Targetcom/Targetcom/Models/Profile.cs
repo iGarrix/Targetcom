@@ -9,10 +9,6 @@ namespace Targetcom.Models
 {
     public class Profile : IdentityUser
     {
-        public Profile()
-        {
-
-        }
 
         [Required]
         public string Name { get; set; }
@@ -30,7 +26,7 @@ namespace Targetcom.Models
         public string StudyGeoplace { get; set; }
         [Required]
         public string Gender { get; set; }
-        public string UrlImage { get; set; }
+        public string UrlAvatar { get; set; }
         [Required]
         public DateTime CreateStamp { get; set; } = DateTime.Now;
         [Required]
@@ -43,18 +39,20 @@ namespace Targetcom.Models
         [NotMapped]
         public string AfkStatus { get; set; } = "offline";
 
-
         /*Privacy*/
 
         public string Privacy { get; set; } = Env.PublicProfile;
         public bool IsShortDate { get; set; } = true;
         public bool VisibilityQuote { get; set; } = true;
-        public bool VisibilityAboutMe { get; set; } = true;
-        public bool VisibilityCommerceData { get; set; } = true;
         public bool VisibilityPostage { get; set; } = true;
         public bool VisibilityPlaylist { get; set; } = true;
         public bool VisibilityFriends { get; set; } = true;
         public bool VisibilityImages { get; set; } = true;
         public bool VisibilityCommunity { get; set; } = true;
+        public bool VisibilitySubscribers { get; set; } = true;
+        public bool VisibilityAboutMe { get; set; } = true;
+        public bool VisibilityCommerceData { get; set; } = true;
+        public bool IsNessessaredLikedPost { get; set; } = false;
+        public bool IsNessessaredSharedPost { get; set; } = false;
     }
 }

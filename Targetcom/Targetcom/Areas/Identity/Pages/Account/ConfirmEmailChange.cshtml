@@ -4,5 +4,12 @@
     ViewData["Title"] = "Confirm email change";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="d-flex" style="gap:1rem;">
+    <partial name="SideBar" />
+    <div style="font-family: Poppins, sans-serif; width: 80%">
+        <div>
+            <partial name="_StatusMessage" model="Model.StatusMessage" />
+        </div>
+    </div>
+</div>
+
