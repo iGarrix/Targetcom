@@ -9,6 +9,10 @@ namespace Targetcom.Models
 {
     public class Profile : IdentityUser
     {
+        public Profile()
+        {
+            FollowGames = new HashSet<Game>();
+        }
 
         [Required]
         public string Name { get; set; }
@@ -56,5 +60,7 @@ namespace Targetcom.Models
         public bool IsNessessaredLikedPost { get; set; } = false;
         public bool IsNessessaredSharedPost { get; set; } = false;
         public bool IsNessessaredPublishPost { get; set; } = false;
+
+        public virtual ICollection<Game> FollowGames { get; set; }
     }
 }

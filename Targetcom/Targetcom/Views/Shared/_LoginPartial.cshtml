@@ -2,7 +2,8 @@
 
 @inject UserManager<IdentityUser> UserManager
 @{ 
-    Profile profile = await UserManager.GetUserAsync(User) as Profile; 
+    Profile profile = await UserManager.GetUserAsync(User) as Profile;
+    string role = UserManager.GetRolesAsync(profile).Result.ToList()[0];
 }
 
 <style>
@@ -35,7 +36,7 @@
             <div class="d-flex align-items-center">
                 @if (profile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
                 {
-                     <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded rounded-circle" style="height: 36px; width: 36px;" />
+                    <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded rounded-circle" style="height: 36px; width: 36px;" />
                 }
                 else
                 {
@@ -48,6 +49,10 @@
             </div>
         </a>
         <div class="dropdown-divider"></div>
+        @if (role == Env.AdminRole)
+        {
+            <a class="dropdown-item rounded-0 d-flex align-items-center text-dark" href="#">Root panel</a>
+        }
         <a class="dropdown-item rounded-0 d-flex align-items-center text-dark" id="manage" asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a>
         <a class="dropdown-item rounded-0 d-flex align-items-center text-dark" href="#">Help</a>
         <div class="dropdown-divider"></div>
@@ -56,25 +61,3 @@
         </form>
     </div>
 </div>
-@*<ul class="navbar-nav align-items-center">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-dark bg-danger d-flex align-content-center" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark bg-success rounded-0">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>*@
