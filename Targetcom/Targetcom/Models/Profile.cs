@@ -42,7 +42,7 @@ namespace Targetcom.Models
         /*Privacy*/
 
         public string Privacy { get; set; } = Env.PublicProfile;
-        public bool IsShortDate { get; set; } = true;
+        public bool IsShortDate { get; set; } = false;
         public bool VisibilityQuote { get; set; } = true;
         public bool VisibilityPostage { get; set; } = true;
         public bool VisibilityPlaylist { get; set; } = true;
@@ -52,6 +52,7 @@ namespace Targetcom.Models
         public bool VisibilitySubscribers { get; set; } = true;
         public bool VisibilityAboutMe { get; set; } = true;
         public bool VisibilityCommerceData { get; set; } = true;
+        public bool VisibilityRole { get; set; } = false;
         public bool IsNessessaredLikedPost { get; set; } = false;
         public bool IsNessessaredSharedPost { get; set; } = false;
         public bool IsNessessaredPublishPost { get; set; } = false;

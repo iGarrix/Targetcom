@@ -34,14 +34,7 @@
             <input type="text" placeholder="Enter name" style="width: 100%;" />
         </div>
         <div class="day_back_head">
-            @foreach (var item in Model)
-            {
-                if (item.Id != me.Id)
-                {
-                    <partial name="PreviewProfile" model="item" />
-                    <hr class="m-0" />
-                }
-            }
+            
         </div>
     </div>
     <partial name="FriendSidebar"/>

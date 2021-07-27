@@ -92,9 +92,9 @@
                     </div>
                 }
             </div>
-            @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+            @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
             {
-                if (Model.FindedProfile.VisibilityFriends)
+                if (Model.FindedProfile.VisibilityFriends || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                 {
                     <div class="border-0 rounded day_back_head">
                         <div class="p-3 overflow-hidden">
@@ -125,7 +125,7 @@
                         </div>
                     </div>
                 }
-                if (Model.FindedProfile.VisibilitySubscribers)
+                if (Model.FindedProfile.VisibilitySubscribers || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                 {
                     <div class="border-0 rounded day_back_head p-3 overflow-hidden">
                         <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                 }
-                if (Model.FindedProfile.VisibilityCommunity)
+                if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                 {
                     <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
                         <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
@@ -172,28 +172,22 @@
                             </h4>
                             <p class="m-0 text-muted font-weight-normal" style="font-size: 14px;">@Model.FindedProfile.AfkStatus</p>
                         </div>
-                        @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                        @if (Model.FindedProfile.VisibilityQuote || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
-                            if (Model.FindedProfile.VisibilityQuote)
-                            {
-                                <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.FindedProfile.Quote</p>
-                            }
+                            <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.FindedProfile.Quote</p>
                         }
                     </div>
-                    @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                    @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                     {
                         <hr style="height: 2px; width: 100%;" />
-                        @if (Model.Role == Env.AdminRole)
-                        {
-                            <div class="alert alert-danger p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                                <p class="m-0">This user is Admin <i class="fas fa-code" style="font-size: 13px;"></i></p>
-                            </div>
-                        }
                         @if (Model.Role == Env.ModerRole)
                         {
-                            <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                                <p class="m-0">This user is Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
-                            </div>
+                            if (Model.FindedProfile.VisibilityRole || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                            {
+                                <div class="alert alert-warning p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
+                                    <p class="m-0">This user is Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
+                                </div>
+                            }
                         }
                         @if (Model.FindedProfile.IsPremium)
                         {
@@ -207,11 +201,11 @@
                                 <p class="m-0">Doesnt plan</p>
                             </a>
                         }
-                        @if (Model.FindedProfile.VisibilityAboutMe || Model.FindedProfile.VisibilityCommerceData)
+                        @if (Model.FindedProfile.VisibilityAboutMe || Model.FindedProfile.VisibilityCommerceData || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
                             <hr class="mt-0" style="height: 2px; width: 100%;" />
                         }
-                        @if (Model.FindedProfile.VisibilityAboutMe)
+                        @if (Model.FindedProfile.VisibilityAboutMe || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
                             @if (Model.FindedProfile.IsShortDate)
                             {
@@ -240,7 +234,7 @@
                             <hr style="height: 2px; width: 100%;" />
                         }
                         <div class="viewalldata disable">
-                            @if (Model.FindedProfile.VisibilityAboutMe)
+                            @if (Model.FindedProfile.VisibilityAboutMe || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
                                 @if (Model.FindedProfile.Status != null)
                                 {
@@ -285,7 +279,7 @@
                                 <hr style="height: 2px; width: 100%;" />
 
                             }
-                            @if (Model.FindedProfile.VisibilityCommerceData)
+                            @if (Model.FindedProfile.VisibilityCommerceData || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
 
                                 @if (Model.FindedProfile.PhoneNumber != null)
@@ -311,7 +305,7 @@
                                 <hr style="height: 2px; width: 100%;" />
                             }
                         </div>
-                        @if (Model.FindedProfile.VisibilityAboutMe || Model.FindedProfile.VisibilityCommerceData)
+                        @if (Model.FindedProfile.VisibilityAboutMe || Model.FindedProfile.VisibilityCommerceData || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
                             <a href="#" class="viewallbtn rounded day_color_main p-2 text-center">View all</a>
                             <script>
@@ -322,33 +316,33 @@
                         }
                     }
                 </div>
-                @if (Model.FindedProfile.Privacy == Env.PublicProfile)
-                {
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
-                            @if (Model.FindedProfile.VisibilityFriends)
-                            {
-                                <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
-                            }
-                            @if (Model.FindedProfile.VisibilitySubscribers)
-                            {
-                                <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
-                            }
-                            @if (Model.FindedProfile.VisibilityImages)
+                <div class="card-footer">
+                    <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
+                        @if (Model.FindedProfile.VisibilityFriends || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
+                        }
+                        @if (Model.FindedProfile.VisibilitySubscribers || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                        {
+                            <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
+                        }
+                        @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                        {
+                            @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
                                 <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
                             }
-                            @if (Model.FindedProfile.VisibilityPlaylist)
+                            @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
                                 <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
                             }
-                        </div>
+                        }
                     </div>
-                }
+                </div>
             </div>
-            @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+            @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
             {
-                if (!Model.FindedProfile.IsNessessaredPublishPost)
+                if (!Model.FindedProfile.IsNessessaredPublishPost || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                 {
                     <div class="card border day_back_head overflow-auto rounded">
                         <div class="card-body p-2">
@@ -371,14 +365,6 @@
                                         @if (Model.IdentityProfile.IsVerify)
                                         {
                                             <i class="fas fa-check" style="font-size: 13px;"></i>
-                                        }
-                                        @if (User.IsInRole(Env.AdminRole))
-                                        {
-                                            <i class="fas fa-code" style="font-size: 13px;"></i>
-                                        }
-                                        else if (User.IsInRole(Env.ModerRole))
-                                        {
-                                            <i class="fas fa-glasses" style="font-size: 13px;"></i>
                                         }
                                     </p>
                                 </div>

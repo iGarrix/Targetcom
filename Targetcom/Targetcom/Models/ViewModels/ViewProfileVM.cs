@@ -12,5 +12,6 @@ namespace Targetcom.Models.ViewModels
         public Profile IdentityProfile { get; set; }
         public Profile FindedProfile { get; set; }
         public string Role { get; set; }
+        public string MyRole { get; set; }
     }
 }

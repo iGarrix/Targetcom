@@ -9,12 +9,18 @@
     {
         <img src="@Model.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
     }
-    <div class="d-flex flex-column ml-3">
-        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="m-0 font-weight-normal day_color_main">@Model.Name @Model.Surname</a>
-        <div class="d-flex gap">
-            <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
-            <a href="#" class="day_color_main" style="font-size: 14px;">Add friends</a>
-        </div>
+<div class="d-flex flex-column ml-3">
+    <div class="d-flex align-items-center">
+        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="m-0 font-weight-normal day_color_main d-flex align-items-center">@Model.Name @Model.Surname</a>
+        @if (Model.IsVerify)
+        {
+            <i class="fas fa-check day_color_main ml-2" style="font-size: 10px; text-decoration: none"></i>
+        }
     </div>
+    <div class="d-flex gap">
+        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
+        <a href="#" class="day_color_main" style="font-size: 14px;">Add friends</a>
+    </div>
+</div>
     <a href="#" class="day_color_main ml-auto"><i class="fas fa-ellipsis-h day_color_main settingsbtn"></i></a>
 </div>

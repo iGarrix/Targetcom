@@ -18,12 +18,14 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
+            
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
         public string Username { get; set; }
+        public string Role { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -48,7 +50,7 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
             Profile myprofile = user as Profile;
 
             Username = userName;
-
+            Role = (await _userManager.GetRolesAsync(myprofile)).ToList()[0];
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
@@ -82,9 +84,6 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            //AppUser myuser = user as AppUser;
-            //myuser.Surname = Input.user.Surname;
-            //await _userManager.UpdateAsync(myuser);
             var usermanagement = await _userManager.GetUserAsync(User) as Profile;
             if (usermanagement != null)
             {
@@ -198,6 +197,11 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                 if (usermanagement.VisibilityCommerceData != Input.profile.VisibilityCommerceData)
                 {
                     myprofile.VisibilityCommerceData = Input.profile.VisibilityCommerceData;
+                    ischanged = true;
+                }
+                if (usermanagement.VisibilityRole != Input.profile.VisibilityRole)
+                {
+                    myprofile.VisibilityRole = Input.profile.VisibilityRole;
                     ischanged = true;
                 }
 

@@ -276,6 +276,20 @@
                 </label>
                 <span asp-validation-for="Input.profile.VisibilityCommerceData" class="text-danger" style="font-size: 14px;"></span>
             </div>
+            @if (Model.Role == Targetcom.Env.ModerRole)
+	        {		 
+                <p class="text-center mt-4 mb-0">Role management</p>
+                <hr class="mb-3 mt-1" />
+                <div class="form-group">
+                    <label class="container-checkbox">
+                        Visible my role
+                        @*<input type="checkbox" checked="checked">*@
+                        <input asp-for="Input.profile.VisibilityRole" type="checkbox" id="flexCheckDefault">
+                        <span class="checkmark"></span>
+                    </label>
+                    <span asp-validation-for="Input.profile.VisibilityRole" class="text-danger" style="font-size: 14px;"></span>
+                </div>
+	        }
             <p class="text-center mt-4 mb-0">Nessessared action</p>
             <hr class="mb-3 mt-1" />
             <div class="form-group">

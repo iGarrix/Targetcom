@@ -44,8 +44,9 @@ namespace Targetcom.Controllers
             {
                 return RedirectToAction(nameof(Newfriend));
             }
-
+            var myprofile = await _userManager.GetUserAsync(User);
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
+            viewProfileVM.MyRole = _userManager.GetRolesAsync(myprofile as IdentityUser).Result.ToList()[0];
             viewProfileVM.FindedProfile = profile;
 
             return View(viewProfileVM);
