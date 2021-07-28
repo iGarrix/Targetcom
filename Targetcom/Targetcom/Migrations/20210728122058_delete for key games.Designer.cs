@@ -10,8 +10,8 @@ using Targetcom.Data;
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    [Migration("20210727100614_Add visibility subscribers")]
-    partial class Addvisibilitysubscribers
+    [Migration("20210728122058_delete for key games")]
+    partial class deleteforkeygames
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace Targetcom.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("GameProfile", b =>
+                {
+                    b.Property<int>("GamesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProfilesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("GamesId", "ProfilesId");
+
+                    b.HasIndex("ProfilesId");
+
+                    b.ToTable("GameProfile");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -223,6 +238,40 @@ namespace Targetcom.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Targetcom.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GameUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TargetPrice")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games");
+                });
+
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -242,6 +291,9 @@ namespace Targetcom.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsNessessaredLikedPost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNessessaredPublishPost")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsNessessaredSharedPost")
@@ -313,10 +365,28 @@ namespace Targetcom.Migrations
                     b.Property<bool>("VisibilityQuote")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("VisibilityRole")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("VisibilitySubscribers")
                         .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Profile");
+                });
+
+            modelBuilder.Entity("GameProfile", b =>
+                {
+                    b.HasOne("Targetcom.Models.Game", null)
+                        .WithMany()
+                        .HasForeignKey("GamesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Targetcom.Models.Profile", null)
+                        .WithMany()
+                        .HasForeignKey("ProfilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

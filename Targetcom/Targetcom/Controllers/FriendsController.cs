@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using Targetcom.Models.ViewModels;
 
 namespace Targetcom.Controllers
 {
+    [Authorize]
     public class FriendsController : Controller
     {
         private readonly TargetDbContext _db;

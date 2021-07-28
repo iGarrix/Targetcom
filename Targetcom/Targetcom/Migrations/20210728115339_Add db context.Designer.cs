@@ -10,8 +10,8 @@ using Targetcom.Data;
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    [Migration("20210727203402_Added follow games")]
-    partial class Addedfollowgames
+    [Migration("20210728115339_Add db context")]
+    partial class Adddbcontext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -230,6 +230,10 @@ namespace Targetcom.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("GameUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -242,19 +246,18 @@ namespace Targetcom.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProfileId1")
+                    b.Property<string>("ProfileId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Subscribe")
-                        .IsRequired()
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TargetPrice")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileId1");
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Games");
                 });
@@ -414,14 +417,16 @@ namespace Targetcom.Migrations
 
             modelBuilder.Entity("Targetcom.Models.Game", b =>
                 {
-                    b.HasOne("Targetcom.Models.Profile", null)
-                        .WithMany("FollowGames")
-                        .HasForeignKey("ProfileId1");
+                    b.HasOne("Targetcom.Models.Profile", "Profile")
+                        .WithMany("Games")
+                        .HasForeignKey("ProfileId");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
                 {
-                    b.Navigation("FollowGames");
+                    b.Navigation("Games");
                 });
 #pragma warning restore 612, 618
         }

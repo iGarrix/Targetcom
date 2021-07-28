@@ -11,6 +11,7 @@ using Targetcom.Models.ViewModels;
 
 namespace Targetcom.Controllers
 {
+    [Authorize]
     public class GameController : Controller
     {
         private readonly TargetDbContext _db;
@@ -21,14 +22,69 @@ namespace Targetcom.Controllers
             _userManager = userManager;
         }
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             GameVM gameVM = new GameVM()
             {
-                IdentityProfile = _userManager.GetUserAsync(User).Result as Profile,
+                IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
                 Games = _db.Games,
             };
+            gameVM.IdentityProfile.ProfileGames = _db.ProfileGames.Where(i => i.ProfileId == gameVM.IdentityProfile.Id).ToList();
             return View(gameVM);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> IndexPost(int? id)
+        {
+            var profile = await _userManager.GetUserAsync(User) as Profile;
+            var game = _db.Games.Find(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+            if (profile != null)
+            {
+                var finded = _db.ProfileGames.FirstOrDefault(i => i.GameId == game.Id && i.ProfileId == profile.Id);
+                if (finded != null)
+                {
+                    profile.ProfileGames.Remove(finded);
+                    if (finded.Status == Env.GameStatusBuyed)
+                    {
+                        finded.Status = Env.GameStatusFollowed;
+                    }
+                    else
+                    {
+                        finded.Status = Env.GameStatusBuyed;
+                    }
+                    profile.ProfileGames.Add(finded);
+                }
+                else
+                {
+                    if (profile.TargetCoins >= game.TargetPrice || profile.IsPremium)
+                    {
+                        profile.ProfileGames.Add(new ProfileGame()
+                        {
+                            Game = game,
+                            Profile = profile,
+                            Status = Env.GameStatusBuyed,
+                        });
+                        if (!profile.IsPremium)
+                        {
+                            profile.TargetCoins -= game.TargetPrice;
+                        }
+                    }
+
+                }
+                await _userManager.UpdateAsync(profile);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult StartGame(string url, string name)
+        {
+            return View(new Game() { GameUrl = url, Name = name });
         }
     }
 }

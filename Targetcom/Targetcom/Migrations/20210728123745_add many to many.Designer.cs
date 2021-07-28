@@ -10,8 +10,8 @@ using Targetcom.Data;
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    [Migration("20210726160652_Add default values")]
-    partial class Adddefaultvalues
+    [Migration("20210728123745_add many to many")]
+    partial class addmanytomany
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -223,6 +223,37 @@ namespace Targetcom.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Targetcom.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GameUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TargetPrice")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games");
+                });
+
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -241,7 +272,19 @@ namespace Targetcom.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("IsNessessaredLikedPost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNessessaredPublishPost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNessessaredSharedPost")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPremium")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShortDate")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVerify")
@@ -253,6 +296,9 @@ namespace Targetcom.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Privacy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Quote")
@@ -274,8 +320,38 @@ namespace Targetcom.Migrations
                     b.Property<int>("TargetCoins")
                         .HasColumnType("int");
 
-                    b.Property<string>("UrlImage")
+                    b.Property<string>("UrlAvatar")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("VisibilityAboutMe")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityCommerceData")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityCommunity")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityFriends")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityImages")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityPlaylist")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityPostage")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityQuote")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityRole")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilitySubscribers")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Profile");
                 });

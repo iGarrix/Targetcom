@@ -11,7 +11,7 @@ namespace Targetcom.Models
     {
         public Profile()
         {
-            FollowGames = new HashSet<Game>();
+            ProfileGames = new HashSet<ProfileGame>();
         }
 
         [Required]
@@ -61,6 +61,6 @@ namespace Targetcom.Models
         public bool IsNessessaredSharedPost { get; set; } = false;
         public bool IsNessessaredPublishPost { get; set; } = false;
 
-        public virtual ICollection<Game> FollowGames { get; set; }
+        public ICollection<ProfileGame> ProfileGames { get; set; }
     }
 }

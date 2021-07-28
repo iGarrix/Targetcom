@@ -27,16 +27,14 @@ namespace Targetcom
         public static string Online = "online";
         public static string Offline = "offline";
 
-        /*User Status*/
-        public static string Loose = "Loose!";
-        public static string Loves = "In love with";
-        public static string Married = "Married with";
-
         /* Privacy */
 
         public static string PrivateProfile = "Private";
         public static string PublicProfile = "Public";
 
         public static string DefaultImageUrl = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
+
+        public static string GameStatusFollowed = "Followed";
+        public static string GameStatusBuyed = "Buyed";
     }
 }

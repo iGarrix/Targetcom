@@ -12,8 +12,16 @@ namespace Targetcom.Data
     {
         public TargetDbContext(DbContextOptions<TargetDbContext> options) : base(options) { }
 
-        //public DbSet<Category> Category { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<ProfileGame>()
+             .HasKey(e => new { e.ProfileId, e.GameId });
+        }
+
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<ProfileGame> ProfileGames { get; set; }
     }
 }

@@ -228,6 +228,10 @@ namespace Targetcom.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("GameUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -240,21 +244,30 @@ namespace Targetcom.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProfileId")
+                    b.Property<int>("TargetPrice")
                         .HasColumnType("int");
-
-                    b.Property<string>("ProfileId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Subscribe")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileId1");
-
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
+                {
+                    b.Property<string>("ProfileId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProfileId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("ProfileGames");
                 });
 
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
@@ -410,16 +423,33 @@ namespace Targetcom.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
+                {
+                    b.HasOne("Targetcom.Models.Game", "Project")
+                        .WithMany("ProfileGames")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Targetcom.Models.Profile", "Employee")
+                        .WithMany("ProfileGames")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("Targetcom.Models.Game", b =>
                 {
-                    b.HasOne("Targetcom.Models.Profile", null)
-                        .WithMany("FollowGames")
-                        .HasForeignKey("ProfileId1");
+                    b.Navigation("ProfileGames");
                 });
 
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
                 {
-                    b.Navigation("FollowGames");
+                    b.Navigation("ProfileGames");
                 });
 #pragma warning restore 612, 618
         }

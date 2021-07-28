@@ -8,6 +8,10 @@ namespace Targetcom.Models
 {
     public class Game
     {
+        public Game()
+        {
+            ProfileGames = new HashSet<ProfileGame>();
+        }
         [Key]
         public int Id { get; set; }
         [Required]
@@ -17,9 +21,9 @@ namespace Targetcom.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Subscribe { get; set; }
+        public string Description { get; set; }
+        public int TargetPrice { get; set; } = 0;
 
-        public int ProfileId { get; set; }
-        public virtual Profile Profile { get; set; }
+        public ICollection<ProfileGame> ProfileGames { get; set; }
     }
 }

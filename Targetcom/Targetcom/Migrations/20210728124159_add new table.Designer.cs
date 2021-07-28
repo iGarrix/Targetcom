@@ -10,8 +10,8 @@ using Targetcom.Data;
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    [Migration("20210726123137_Add Studyplace")]
-    partial class AddStudyplace
+    [Migration("20210728124159_add new table")]
+    partial class addnewtable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -223,6 +223,55 @@ namespace Targetcom.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Targetcom.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GameUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TargetPrice")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
+                {
+                    b.Property<string>("ProfileId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProfileId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("ProfileGames");
+                });
+
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -241,7 +290,19 @@ namespace Targetcom.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("IsNessessaredLikedPost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNessessaredPublishPost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNessessaredSharedPost")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsPremium")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShortDate")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVerify")
@@ -253,6 +314,9 @@ namespace Targetcom.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Privacy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Quote")
@@ -274,8 +338,38 @@ namespace Targetcom.Migrations
                     b.Property<int>("TargetCoins")
                         .HasColumnType("int");
 
-                    b.Property<string>("UrlImage")
+                    b.Property<string>("UrlAvatar")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("VisibilityAboutMe")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityCommerceData")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityCommunity")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityFriends")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityImages")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityPlaylist")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityPostage")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityQuote")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityRole")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilitySubscribers")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Profile");
                 });
@@ -329,6 +423,35 @@ namespace Targetcom.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
+                {
+                    b.HasOne("Targetcom.Models.Game", "Project")
+                        .WithMany("ProfileGames")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Targetcom.Models.Profile", "Employee")
+                        .WithMany("ProfileGames")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Targetcom.Models.Game", b =>
+                {
+                    b.Navigation("ProfileGames");
+                });
+
+            modelBuilder.Entity("Targetcom.Models.Profile", b =>
+                {
+                    b.Navigation("ProfileGames");
                 });
 #pragma warning restore 612, 618
         }

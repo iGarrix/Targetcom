@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Targetcom.Migrations
 {
-    public partial class SetIdentityDbContext : Migration
+    public partial class Adddbcontext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,6 +26,36 @@ namespace Targetcom.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JobGeoplace = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Hobbies = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Quote = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    StudyGeoplace = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlAvatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Age = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsVerify = table.Column<bool>(type: "bit", nullable: true),
+                    IsPremium = table.Column<bool>(type: "bit", nullable: true),
+                    TargetCoins = table.Column<int>(type: "int", nullable: true),
+                    Privacy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsShortDate = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityQuote = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityPostage = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityPlaylist = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityFriends = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityImages = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityCommunity = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilitySubscribers = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityAboutMe = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityCommerceData = table.Column<bool>(type: "bit", nullable: true),
+                    VisibilityRole = table.Column<bool>(type: "bit", nullable: true),
+                    IsNessessaredLikedPost = table.Column<bool>(type: "bit", nullable: true),
+                    IsNessessaredSharedPost = table.Column<bool>(type: "bit", nullable: true),
+                    IsNessessaredPublishPost = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -152,6 +182,31 @@ namespace Targetcom.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GameUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TargetPrice = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfileId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Games_AspNetUsers_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -190,6 +245,11 @@ namespace Targetcom.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_ProfileId",
+                table: "Games",
+                column: "ProfileId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -208,6 +268,9 @@ namespace Targetcom.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
