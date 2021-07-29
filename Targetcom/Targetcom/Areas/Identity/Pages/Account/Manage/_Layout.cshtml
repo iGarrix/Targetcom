@@ -1,0 +1,25 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
+    {
+        Layout = (string)parentLayout;
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+    <partial name="SideBar" />
+    <div style="width: 57%;" class="gap d-flex flex-column">
+        @RenderBody()      
+    </div>
+    <div style="width: 23%;" class="gap d-flex flex-column">
+        <div class="border-0 day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
+            <partial name="_ManageNav" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

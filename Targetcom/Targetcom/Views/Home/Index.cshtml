@@ -1,8 +1,76 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "News";
 }
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@{ Profile profile = await UserManager.GetUserAsync(User) as Profile; }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    #summernote {
+        font-size: 14px;
+        outline: 0 !important;
+        border: 0;
+    }
+    .activel {
+        border-left: 3px solid #0094ff;
+    }
+</style>
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+    <partial name="SideBar" />
+
+    <div style="width: 57%" class="d-flex flex-column">
+        <div class="card border-0 day_back_head overflow-auto rounded">
+            <div class="card-body p-2">
+                <textarea class="form-control item-font m-0 rounded-0" id="summernote" placeholder="Tell us what's new?"></textarea>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    @if (profile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                    {
+                        <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle align-self-center" style="height: 32px; width: 32px;" />
+                    }
+                    else
+                    {
+                        <img src="@profile.UrlAvatar" alt="Avatar" class="img-card rounded-circle align-self-center" style="height: 32px; width: 32px;" />
+                    }
+                    
+                    <div class="d-flex flex-column ml-2">
+                        <p class="m-0 day_color_main" style="font-size: 14px;">
+                            @profile.Name
+                            @profile.Surname
+                            @if (profile.IsVerify)
+                            {
+                                <i class="fas fa-check" style="font-size: 13px;"></i>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Publish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 23%;" class="gap d-flex flex-column">
+        <div class="card border-0 day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
+            <div class="card-body pt-2 pb-2 pr-0 pl-0" id="newsbar">
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">All post</a>
+                <hr class="m-0 p-1" />
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">People postage</a>
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Public postage</a>
+                <hr class="m-0 p-1" />
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">People updated</a>
+                <a asp-controller="Home" asp-action="Index" class="bars text-dark d-flex align-items-center pt-2 pb-2 pl-3">Public updated</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        $('#summernote').summernote({
+            tabsize: 2,
+            height: 120,
+        });
+    </script>
+}

@@ -1,0 +1,259 @@
+﻿@{
+    ViewData["Title"] = "Games";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model Targetcom.Models.ViewModels.GameVM;
+<style>
+    .gap {
+        gap: 1rem;
+    }
+    .btngame:hover {
+        text-decoration:none;
+    }
+    .pointer {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 2px solid white;
+    }
+    .borders {
+        border: 0;
+        background-repeat: no-repeat;
+    }
+
+    input[type=text] {
+        border: 0;
+        background-color: transparent;
+        outline: 0 !important;
+        font-size: 14px;
+    }
+</style>
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+    <partial name="SideBar" />
+
+    <div style="width: 100%; height: 100%;" class="d-flex flex-column gap">
+        <div class="rounded overflow-hidden day_back_head">
+            <div class="pt-4 pr-4 pl-4 pb-2">
+                <h4>Follow games</h4>
+            </div>
+            @if (Model.IdentityProfile.ProfileGames.Where(i => i.ProfileId == Model.IdentityProfile.Id && i.Status == "Followed").Count() > 0)
+            {
+                <div id="carouselExampleCaptions" class="carousel slide bg-dark" data-ride="carousel" style="width: 100%; height: 50vh;">
+                    <ol class="carousel-indicators">
+                        @for (int i = 0; i < Model.IdentityProfile.ProfileGames.Where(i => i.ProfileId == Model.IdentityProfile.Id && i.Status == "Followed").Count(); ++i)
+                        {
+                            if (i == 0)
+                            {
+                                <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                            }
+                            else
+                            {
+                                <li data-target="#carouselExampleCaptions" data-slide-to="@i"></li>
+                            }
+                        }
+                    </ol>
+                    <div class="carousel-inner overflow-hidden">
+                        @*@foreach (var item in Model.IdentityProfile.ProfileGames.Where(i => i.Status == "Followed"))
+                        {
+                            foreach (var item2 in Model.Games.Where(i => i.Id == item.GameId))
+                            {
+                                <a href="#tanki" class="carousel-item active">
+                                    <img src="@item2.ImageUrl" class="rounded d-block w-100" style="height: 50vh; object-fit: cover; filter: opacity(40%)" alt="game" />
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>@item2.Name</h5>
+                                        <p>@item2.Description</p>
+                                    </div>
+                                </a>
+                            }
+                        }*@
+                        @for (int i = 0; i < Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).Count(); ++i)
+                        {
+                            for (int j = 0; j < Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).Count(); ++j)
+                            {
+                                @if (i == 0)
+                                {
+                                    <a href="@Url.Action("StartGame", "Game", new
+                                        {
+                                            url = @Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].GameUrl,
+                                            name = @Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Name
+                                        })
+                                       " class="carousel-item active bg-dark">
+                                        <img src="@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].ImageUrl" class="rounded d-block w-100" style="height: 50vh; object-fit: cover; filter: opacity(40%)" alt="game" />
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Name</h5>
+                                            <p>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Description</p>
+                                        </div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="StartGame" asp-route-Url="@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].GameUrl" class="carousel-item bg-dark">
+                                        <img src="@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].ImageUrl" class="rounded d-block w-100" style="height: 50vh; object-fit: cover; filter: opacity(40%)" alt="game" />
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Name</h5>
+                                            <p>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Description</p>
+                                        </div>
+                                    </a>
+                                }
+                            }
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="pr-4 pl-4 pb-4">
+                    <div class="alert alert-success m-0">
+                        <h5 class="m-0 text-dark">Following games for one</h5>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="rounded overflow-hidden day_back_head d-flex flex-column">
+            <div class="pt-4 pr-4 pl-4 pb-2">
+                <h4>New games</h4>
+            </div>
+            @if (Model.Games.Count() > 0)
+            {
+                @*@foreach (var item in Model.Games)*@
+                @for (int item = 0; item < Model.Games.Count(); ++item)
+                {
+                    @if (item < 3)
+                    {
+                        @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id) != null)
+                        {
+                            <a href="@Url.Action("StartGame", "Game", new
+                                {
+                                    url = Model.Games.ToList()[item].GameUrl,
+                                    name = Model.Games.ToList()[item].Name
+                                })" class="position-relative bg-dark btngame" style="width: 100%; height: 30vh;">
+                                <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
+                                <div class="d-flex align-items-center" style="height: 100%;">
+                                    <div class="ml-5">
+                                        <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
+                                    </div>
+                                    <div class="ml-4 d-flex flex-column">
+                                        <h5 class="text-light">@Model.Games.ToList()[item].Name</h5>
+                                        <p class="text-light">@Model.Games.ToList()[item].Description</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="position-relative bg-dark btngame" style="width: 100%; height: 30vh;">
+                                <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
+                                <div class="d-flex align-items-center" style="height: 100%;">
+                                    <div class="ml-5">
+                                        <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
+                                    </div>
+                                    <div class="ml-4 d-flex flex-column">
+                                        <h5 class="text-light">@Model.Games.ToList()[item].Name</h5>
+                                        <p class="text-light">@Model.Games.ToList()[item].Description</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                        <div class="bg-dark">
+                            <form method="post">
+                                @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id) != null)
+                                {
+                                    @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id).Status == Env.GameStatusBuyed)
+                                    {
+                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Add to Follow</button>
+                                    }
+                                    else if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id).Status == Env.GameStatusFollowed)
+                                    {
+                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Remove with Follow</button>
+                                    }
+                                }
+                                else
+                                {
+                                    if (Model.IdentityProfile.IsPremium)
+                                    {
+                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Get for free</button>
+                                    }
+                                    else
+                                    {
+                                        @if (Model.IdentityProfile.TargetCoins >= Model.Games.ToList()[item].TargetPrice)
+                                        {
+                                            <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Buy game for @Model.Games.ToList()[item].TargetPrice target coins</button>
+                                        }
+                                        else
+                                        {
+                                            <a href="" class="btn btn-outline-light rounded-0 pointer ml-5">There are not enough coins on your balance</a>
+                                        }
+                                    }
+                                }
+                            </form>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="pr-4 pl-4 pb-4">
+                    <div class="alert alert-warning m-0">
+                        <h5 class="m-0 text-dark">Game is not found</h5>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="rounded day_back_head" style="font-family: Poppins, sans-serif;">
+            <div class="pt-4 pr-4 pl-4">
+                <h4>All games</h4>
+            </div>
+            <div class="d-flex flex-wrap justify-content-center p-4 gap">
+                @foreach (var item in Model.Games)
+                {
+                    <div class="card borders bg-dark text-light rounded" style="width: 200px;">
+                        <img src="@item.ImageUrl" class="card-img-top rounded" alt="..." style="width: 200px; height: 200px; object-fit: cover;">
+                        <div class="card-body overflow-auto" style="height:5rem;">
+                            <h5 class="card-title text-center">@item.Name</h5>
+                        </div>
+                        <form method="post" class="card-footer p-0 d-flex bg-dark">
+                            @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == item.Id) != null)
+                            {
+                                @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == item.Id).Status == Env.GameStatusBuyed)
+                                {
+                                    <button class="btn btn-outline-light rounded-0 pointer" style="width: 100%;" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@item.Id">Add to Follow</button>
+                                }
+                                else if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == item.Id).Status == Env.GameStatusFollowed)
+                                {
+                                    <button class="btn btn-outline-light rounded-0 pointer" style="width: 100%;" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@item.Id">Remove with Follow</button>
+                                }
+                            }
+                            else
+                            {
+                                if (Model.IdentityProfile.IsPremium)
+                                {
+                                    <button class="btn btn-outline-light rounded-0 pointer" style="width: 100%;" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@item.Id">Get for free</button>
+                                }
+                                else
+                                {
+                                    @if (Model.IdentityProfile.TargetCoins >= item.TargetPrice)
+                                    {
+                                        <button class="btn btn-outline-light rounded-0 pointer" style="width: 100%;" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@item.Id">Buy game for @item.TargetPrice target coins</button>
+                                    }
+                                    else
+                                    {
+                                        <a href="" class="btn btn-outline-light rounded-0 pointer" style="width: 100%;">There are not enough coins on your balance</a>
+                                    }
+                                }
+                            }
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

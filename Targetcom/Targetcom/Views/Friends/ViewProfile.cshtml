@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = $"{Model.FindedProfile.Name} {Model.FindedProfile.Surname}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Targetcom.Models.ViewModels.ViewProfileVM;
+
+<partial name="ProfileView" model="Model" />
+
