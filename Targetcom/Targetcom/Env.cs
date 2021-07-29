@@ -36,5 +36,16 @@ namespace Targetcom
 
         public static string GameStatusFollowed = "Followed";
         public static string GameStatusBuyed = "Buyed";
+
+        /* Target coins buy */
+
+        public static string LitePackage = "Lite";
+        public static int LitePackageCoin = 40;
+        public static string MiddlePackage = "Middle";
+        public static int MiddlePackageCoin = 60;
+        public static string SuperPackage = "Super";
+        public static int SuperPackageCoin = 360;
+        public static string RichPackage = "Rich";
+        public static int RichPackageCoin = 800;
     }
 }

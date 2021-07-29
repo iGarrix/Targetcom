@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewData["Title"] = "Coins";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .gap {
+        gap: 1rem;
+    }
+
+    .bordered {
+        color: black;
+    }
+</style>
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+    <partial name="SideBar" />
+    <div class="d-flex flex-column rounded" style="width: 100%;">
+        <div class="p-3 alert alert-light d-flex justify-content-center align-items-center rounded">
+            <h4 class="m-0">Buy target coins</h4>
+        </div>
+        <div class="gap d-flex flex-column">
+            <div class="d-flex gap">
+                <div class="alert-success rounded p-3" style="width: 100%; height: 100%">
+                    <h5 class="m-0 text-center">Lite package</h5>
+                    <hr />
+                    <div class="mb-3">
+                        <span class="badge badge-primary m-0">Discount 30%</span>
+                        <span class="badge badge-primary m-0">Vip discount 45%</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div class="bordered pl-2 pr-2">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <form method="post">
+                                        <button asp-action="Coins" asp-route-package="@Env.LitePackage" class="border-0 btn-link" style="outline:0!important;"><i class="fas fa-money-check" style="font-size:35px;"></i></button>
+                                    </form>
+                                </div>
+                                <div class="d-flex flex-column ml-4 pl-2">
+                                    <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
+                                        <span class="text-muted">20</span> - <strong>14</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">11</strong>
+                                        uan
+                                    </p>
+                                    <hr class="m-1" />
+                                    <p class="m-0">Total: @Env.LitePackageCoin coins</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-warning rounded p-3" style="width: 100%; height: 100%">
+                    <h5 class="m-0 text-center">Middle package</h5>
+                    <hr />
+                    <div class="mb-3">
+                        <span class="badge badge-dark m-0">Discount 32%</span>
+                        <span class="badge badge-dark m-0">Vip discount 41%</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div class="bordered pl-2 pr-2">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <form method="post">
+                                        <button asp-action="Coins" asp-route-package="@Env.MiddlePackage" class="border-0 btn-link" style="outline:0!important;"><i class="fas fa-money-check" style="font-size:35px;"></i></button>
+                                    </form>
+                                </div>
+                                <div class="d-flex flex-column ml-4 pl-2">
+                                    <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
+                                        <span class="text-muted">30</span> - <strong>21</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">18</strong>
+                                        uan
+                                    </p>
+                                    <hr class="m-1" />
+                                    <p class="m-0">Total: @Env.MiddlePackageCoin coins</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap">
+                <div class="alert-primary rounded p-3" style="width: 100%; height: 100%">
+                    <h5 class="m-0 text-center">Super package</h5>
+                    <hr />
+                    <div class="mb-3">
+                        <span class="badge badge-success m-0">Discount 20%</span>
+                        <span class="badge badge-success m-0">Vip discount 35%</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div class="bordered pl-2 pr-2">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <form method="post">
+                                        <button asp-action="Coins" asp-route-package="@Env.SuperPackage" class="border-0 btn-link" style="outline:0!important;"><i class="fas fa-money-check" style="font-size:35px;"></i></button>
+                                    </form>
+                                </div>
+                                <div class="d-flex flex-column ml-4 pl-2">
+                                    <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
+                                        <span class="text-muted">180</span> - <strong>144</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">117</strong>
+                                        uan
+                                    </p>
+                                    <hr class="m-1" />
+                                    <p class="m-0">Total: @Env.SuperPackageCoin coins</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-danger rounded p-3" style="width: 100%; height: 100%">
+                    <h5 class="m-0 text-center">Rich package</h5>
+                    <hr />
+                    <div class="mb-3">
+                        <span class="badge badge-primary m-0">Discount 20%</span>
+                        <span class="badge badge-primary m-0">Vip discount 35%</span>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div class="bordered pl-2 pr-2">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <form method="post">
+                                        <button asp-action="Coins" asp-route-package="@Env.RichPackage" class="border-0 btn-link" style="outline:0!important;"><i class="fas fa-money-check" style="font-size:35px;"></i></button>
+                                    </form>
+                                </div>
+                                <div class="d-flex flex-column ml-4 pl-2">
+                                    <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
+                                        <span class="text-muted">400</span> - <strong>320</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">260</strong>
+                                        uan
+                                    </p>
+                                    <hr class="m-1" />
+                                    <p class="m-0">Total: @Env.RichPackageCoin coins</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
