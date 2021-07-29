@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210729153222_Updated profile postage")]
+    partial class Updatedprofilepostage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,34 +330,6 @@ namespace Targetcom.Migrations
                     b.ToTable("ProfilePostages");
                 });
 
-            modelBuilder.Entity("Targetcom.Models.ProfilePostageComment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProfileCommentatorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostageId");
-
-                    b.HasIndex("ProfileCommentatorId");
-
-                    b.ToTable("ProfilePostageComments");
-                });
-
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -562,23 +536,6 @@ namespace Targetcom.Migrations
                     b.Navigation("Writter");
                 });
 
-            modelBuilder.Entity("Targetcom.Models.ProfilePostageComment", b =>
-                {
-                    b.HasOne("Targetcom.Models.ProfilePostage", "Postage")
-                        .WithMany("ProfilePostageComments")
-                        .HasForeignKey("PostageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Targetcom.Models.Profile", "ProfileCommentator")
-                        .WithMany("ProfilePostageComments")
-                        .HasForeignKey("ProfileCommentatorId");
-
-                    b.Navigation("Postage");
-
-                    b.Navigation("ProfileCommentator");
-                });
-
             modelBuilder.Entity("Targetcom.Models.Game", b =>
                 {
                     b.Navigation("ProfileGames");
@@ -587,8 +544,6 @@ namespace Targetcom.Migrations
             modelBuilder.Entity("Targetcom.Models.ProfilePostage", b =>
                 {
                     b.Navigation("LikedProfiles");
-
-                    b.Navigation("ProfilePostageComments");
                 });
 
             modelBuilder.Entity("Targetcom.Models.Profile", b =>
@@ -596,8 +551,6 @@ namespace Targetcom.Migrations
                     b.Navigation("LikedProfilePostages");
 
                     b.Navigation("ProfileGames");
-
-                    b.Navigation("ProfilePostageComments");
 
                     b.Navigation("ProfilePostages");
                 });

@@ -79,7 +79,7 @@
                                         })
                                        " class="carousel-item active bg-dark">
                                         <img src="@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].ImageUrl" class="rounded d-block w-100" style="height: 50vh; object-fit: cover; filter: opacity(40%)" alt="game" />
-                                        <div class="carousel-caption d-none d-md-block">
+                                        <div class="carousel-caption d-none d-md-block mb-5">
                                             <h5>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Name</h5>
                                             <p>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Description</p>
                                         </div>
@@ -89,7 +89,7 @@
                                 {
                                     <a asp-action="StartGame" asp-route-Url="@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].GameUrl" class="carousel-item bg-dark">
                                         <img src="@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].ImageUrl" class="rounded d-block w-100" style="height: 50vh; object-fit: cover; filter: opacity(40%)" alt="game" />
-                                        <div class="carousel-caption d-none d-md-block">
+                                        <div class="carousel-caption d-none d-md-block mb-5">
                                             <h5>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Name</h5>
                                             <p>@Model.Games.Where(item => item.Id == Model.IdentityProfile.ProfileGames.Where(i => i.Status == Env.GameStatusFollowed).ToList()[i].GameId).ToList()[j].Description</p>
                                         </div>

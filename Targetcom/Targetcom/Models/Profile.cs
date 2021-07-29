@@ -12,6 +12,9 @@ namespace Targetcom.Models
         public Profile()
         {
             ProfileGames = new HashSet<ProfileGame>();
+            ProfilePostages = new HashSet<ProfilePostage>();
+            LikedProfilePostages = new HashSet<LikedProfilePostage>();
+            ProfilePostageComments = new HashSet<ProfilePostageComment>();
         }
 
         [Required]
@@ -62,5 +65,8 @@ namespace Targetcom.Models
         public bool IsNessessaredPublishPost { get; set; } = false;
 
         public ICollection<ProfileGame> ProfileGames { get; set; }
+        public ICollection<ProfilePostage> ProfilePostages { get; set; }
+        public ICollection<LikedProfilePostage> LikedProfilePostages { get; set; }
+        public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
     }
 }
