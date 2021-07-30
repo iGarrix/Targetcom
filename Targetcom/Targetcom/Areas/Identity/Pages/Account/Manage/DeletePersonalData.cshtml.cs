@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Targetcom.Data;
+using Targetcom.Models;
 
 namespace Targetcom.Areas.Identity.Pages.Account.Manage
 {
@@ -13,15 +18,18 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly TargetDbContext _db;
 
         public DeletePersonalDataModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            TargetDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
         }
 
         [BindProperty]
@@ -65,6 +73,10 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
+
+            var myprofile = user as Profile;
+            _db.ProfilePostages.RemoveRange(_db.ProfilePostages.Where(i => i.ProfileId == myprofile.Id));
+            _db.SaveChanges();
 
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);

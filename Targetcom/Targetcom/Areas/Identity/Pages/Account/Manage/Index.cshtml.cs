@@ -138,6 +138,21 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                 if (usermanagement.UrlAvatar != Input.profile.UrlAvatar)
                 {
                     myprofile.UrlAvatar = Input.profile.UrlAvatar;
+                    var content = myprofile.UrlAvatar;
+                    if (content != null || content.Length > 0)
+                    {
+                        myprofile.ProfilePostages.Add(new ProfilePostage()
+                        {
+                            TimeStamp = DateTime.Now,
+                            Profile = myprofile,
+                            Writter = myprofile,
+                            IsObject = true,
+                            Content = content,
+                            Alert = "Updated the photo on the page",
+                        });
+                    }
+
+
                     ischanged = true;
                 }
 
@@ -221,14 +236,13 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                     ischanged = true;
                 }
 
-                if (myprofile.Status != null && myprofile.Quote != null && 
-                    myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
-                    myprofile.UrlAvatar != null && myprofile.Hobbies != null)
+                if (myprofile.Status != null &&  myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
+                    myprofile.UrlAvatar != null)
                 {
                     if ((DateTime.Now.Year - myprofile.Age.Year) >= 18 && 
-                        myprofile.Status.Length > 0 && myprofile.Quote.Length > 0 &&
+                        myprofile.Status.Length > 0 &&
                         myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
-                        myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.Hobbies.Length > 0 && myprofile.EmailConfirmed)
+                        myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.EmailConfirmed)
                     {
                         myprofile.IsVerify = true;
                         ischanged = true;

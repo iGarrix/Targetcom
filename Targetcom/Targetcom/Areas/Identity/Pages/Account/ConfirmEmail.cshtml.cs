@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Targetcom.Models;
 
 namespace Targetcom.Areas.Identity.Pages.Account
 {
@@ -40,6 +41,25 @@ namespace Targetcom.Areas.Identity.Pages.Account
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            if (result.Succeeded)
+            {
+                var myprofile = user as Profile;
+                if (!myprofile.IsVerify)
+                {
+                    if (myprofile.Status != null && myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
+                        myprofile.UrlAvatar != null)
+                    {
+                        if ((DateTime.Now.Year - myprofile.Age.Year) >= 18 &&
+                            myprofile.Status.Length > 0 &&
+                            myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
+                            myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.EmailConfirmed)
+                        {
+                            myprofile.IsVerify = true;
+                            await _userManager.UpdateAsync(myprofile);
+                        }
+                    }
+                }
+            }
             return Page();
         }
     }
