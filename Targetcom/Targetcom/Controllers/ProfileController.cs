@@ -25,19 +25,36 @@ namespace Targetcom.Controllers
         {
             ProfileVM profileVM = new ProfileVM()
             {
-                IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                IdentityProfile = new Profile(),
             };
-            if (profileVM.IdentityProfile.AfkStatus == Env.Offline)
+
+            IEnumerable<Profile> profiles = _db.Profiles;
+            var user = await _userManager.GetUserAsync(User);
+            var profile = profiles.FirstOrDefault(i => i.Id == user.Id);
+
+            if (profile.AfkStatus == Env.Offline)
             {
-                profileVM.IdentityProfile.AfkStatus = Env.Online;
+                profile.AfkStatus = Env.Online;
             }
-            var postage = _db.ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
+
+            var postage = _db.ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             postage.ForEach(i =>
             {
-                i.ProfilePostageComments = _db.ProfilePostageComments.Where(s => s.PostageId == i.Id).ToList();
+                var list = _db.ProfilePostageComments.Where(s => s.PostageId == i.Id).ToList();
+                list.ForEach(j =>
+                {
+                    j.ProfileCommentator = _db.Profiles.FirstOrDefault(f => f.Id == j.ProfileCommentatorId);
+                });
+                i.ProfilePostageComments = list;
             });
-            profileVM.IdentityProfile.ProfilePostages = postage;
-            profileVM.IdentityProfile.LikedProfilePostages = _db.LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
+            postage.ForEach(i =>
+            {
+                i.LikedProfiles = _db.LikedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
+            });
+            profile.ProfilePostages = postage;
+            profile.LikedProfilePostages = _db.LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+
+            profileVM.IdentityProfile = profile;
             return View(profileVM);
         }
 

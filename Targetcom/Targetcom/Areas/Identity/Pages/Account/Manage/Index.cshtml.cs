@@ -148,7 +148,7 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                             Writter = myprofile,
                             IsObject = true,
                             Content = content,
-                            Alert = "Updated the photo on the page",
+                            Alert = "Updated photo",
                         });
                     }
 

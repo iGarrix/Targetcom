@@ -75,7 +75,10 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
             }
 
             var myprofile = user as Profile;
-            _db.ProfilePostages.RemoveRange(_db.ProfilePostages.Where(i => i.ProfileId == myprofile.Id));
+            var postages = _db.ProfilePostages.Where(i => i.ProfileId == myprofile.Id);
+            _db.ProfilePostageComments.RemoveRange(_db.ProfilePostageComments.Where(i => i.ProfileCommentatorId == myprofile.Id));
+            //_db.SaveChanges();
+            _db.ProfilePostages.RemoveRange(postages);
             _db.SaveChanges();
 
             var result = await _userManager.DeleteAsync(user);

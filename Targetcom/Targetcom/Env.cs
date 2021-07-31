@@ -32,7 +32,7 @@ namespace Targetcom
         public static string PrivateProfile = "Private";
         public static string PublicProfile = "Public";
 
-        public static string DefaultImageUrl = "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
+        public static string DefaultImageUrl = "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331257_960_720.png";
 
         public static string GameStatusFollowed = "Followed";
         public static string GameStatusBuyed = "Buyed";
