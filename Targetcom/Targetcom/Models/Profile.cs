@@ -14,6 +14,7 @@ namespace Targetcom.Models
             ProfileGames = new HashSet<ProfileGame>();
             ProfilePostages = new HashSet<ProfilePostage>();
             LikedProfilePostages = new HashSet<LikedProfilePostage>();
+            SharedProfilePostages = new HashSet<SharedProfilePostage>();
             ProfilePostageComments = new HashSet<ProfilePostageComment>();
         }
 
@@ -52,6 +53,7 @@ namespace Targetcom.Models
         public bool IsShortDate { get; set; } = false;
         public bool VisibilityQuote { get; set; } = true;
         public bool VisibilityPostage { get; set; } = true;
+        public bool VisibilitySharePostage { get; set; } = true;
         public bool VisibilityPlaylist { get; set; } = true;
         public bool VisibilityFriends { get; set; } = true;
         public bool VisibilityImages { get; set; } = true;
@@ -63,10 +65,12 @@ namespace Targetcom.Models
         public bool IsNessessaredLikedPost { get; set; } = false;
         public bool IsNessessaredSharedPost { get; set; } = false;
         public bool IsNessessaredPublishPost { get; set; } = false;
+        public bool IsNessessaredCommentedPost { get; set; } = false;
 
         public ICollection<ProfileGame> ProfileGames { get; set; }
         public ICollection<ProfilePostage> ProfilePostages { get; set; }
         public ICollection<LikedProfilePostage> LikedProfilePostages { get; set; }
+        public ICollection<SharedProfilePostage> SharedProfilePostages { get; set; }
         public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
     }
 }

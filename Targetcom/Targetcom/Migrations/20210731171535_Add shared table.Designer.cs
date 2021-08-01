@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210731171535_Add shared table")]
+    partial class Addsharedtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -389,9 +391,6 @@ namespace Targetcom.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsNessessaredCommentedPost")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsNessessaredLikedPost")
                         .HasColumnType("bit");
 
@@ -468,9 +467,6 @@ namespace Targetcom.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilityRole")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("VisibilitySharePostage")
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilitySubscribers")

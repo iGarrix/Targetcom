@@ -12,6 +12,7 @@ namespace Targetcom.Models
         public ProfilePostage()
         {
             LikedProfiles = new HashSet<LikedProfilePostage>();
+            SharedProfiles = new HashSet<SharedProfilePostage>();
             ProfilePostageComments = new HashSet<ProfilePostageComment>();
         }
         [Key]
@@ -35,6 +36,7 @@ namespace Targetcom.Models
         public Profile Profile { get; set; }
 
         public ICollection<LikedProfilePostage> LikedProfiles { get; set; }
+        public ICollection<SharedProfilePostage> SharedProfiles { get; set; }
         public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
     }
 }

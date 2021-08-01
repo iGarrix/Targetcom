@@ -22,6 +22,9 @@ namespace Targetcom.Data
             builder.Entity<LikedProfilePostage>()
              .HasKey(e => new { e.ProfileId, e.ProfilePostageId });
 
+            builder.Entity<SharedProfilePostage>()
+             .HasKey(e => new { e.ProfileId, e.ProfilePostageId });
+
             builder.Entity<Profile>()
                 .HasMany(e => e.ProfilePostages)
                 .WithOne(w => w.Profile);
@@ -32,6 +35,7 @@ namespace Targetcom.Data
         public DbSet<ProfileGame> ProfileGames { get; set; }
         public DbSet<ProfilePostage> ProfilePostages { get; set; }
         public DbSet<LikedProfilePostage> LikedProfilePostages { get; set; }
+        public DbSet<SharedProfilePostage> SharedProfilePostages { get; set; }
         public DbSet<ProfilePostageComment> ProfilePostageComments { get; set; }
     }
 }

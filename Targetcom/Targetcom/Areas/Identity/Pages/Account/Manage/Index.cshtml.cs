@@ -183,6 +183,11 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                     myprofile.VisibilityPostage = Input.profile.VisibilityPostage;
                     ischanged = true;
                 }
+                if (usermanagement.VisibilitySharePostage != Input.profile.VisibilitySharePostage)
+                {
+                    myprofile.VisibilitySharePostage = Input.profile.VisibilitySharePostage;
+                    ischanged = true;
+                }
                 if (usermanagement.VisibilityPlaylist != Input.profile.VisibilityPlaylist)
                 {
                     myprofile.VisibilityPlaylist = Input.profile.VisibilityPlaylist;
@@ -233,6 +238,11 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                 if (usermanagement.IsNessessaredPublishPost != Input.profile.IsNessessaredPublishPost)
                 {
                     myprofile.IsNessessaredPublishPost = Input.profile.IsNessessaredPublishPost;
+                    ischanged = true;
+                }
+                if (usermanagement.IsNessessaredCommentedPost != Input.profile.IsNessessaredCommentedPost)
+                {
+                    myprofile.IsNessessaredCommentedPost = Input.profile.IsNessessaredCommentedPost;
                     ischanged = true;
                 }
 
