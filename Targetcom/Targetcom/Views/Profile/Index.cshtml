@@ -423,7 +423,7 @@
                                                     <img src="@item.Writter.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 38px; height: 38px; object-fit: cover;" />
                                                     <div class="d-flex flex-column ml-2">
                                                         <div class="d-flex">
-                                                            <a href="#" style="white-space:nowrap;">
+                                                            <a class="text-primary" style="white-space:nowrap; cursor:pointer;">
                                                                 @item.Writter.Name @item.Writter.Surname
                                                                 @if (item.Profile.IsVerify)
                                                                 {
@@ -544,7 +544,7 @@
                                                                                     <div class="d-flex align-items-center">
                                                                                         <img src="@item.Profile.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
                                                                                         <div class="d-flex flex-column ml-2 justify-content-center">
-                                                                                            <a class="m-0 d-flex align-items-center text-primary">
+                                                                                            <a class="m-0 d-flex align-items-center text-primary" style="cursor: pointer;">
                                                                                                 @item.Profile.Name @item.Profile.Surname
                                                                                                 @if (item.Profile.IsVerify)
                                                                                                 {
@@ -567,7 +567,7 @@
                                                                                             <img src="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
                                                                                             <div class="d-flex flex-column ml-2" style="width: 100%;">
                                                                                                 <div class="d-flex">
-                                                                                                    <a href="#" class="m-0">
+                                                                                                    <a class="m-0 text-primary" style="cursor: pointer;">
                                                                                                         @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
                                                                                                         @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                                                         {
@@ -669,7 +669,7 @@
                                                                     <img src="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
                                                                     <div class="d-flex flex-column ml-2" style="width: 100%;">
                                                                         <div class="d-flex">
-                                                                            <a href="#" class="m-0">
+                                                                            <a class="m-0 text-primary" style="cursor: pointer;">
                                                                                 @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
                                                                                 @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                                 {
@@ -728,7 +728,7 @@
                                                     <img src="@item.Writter.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 38px; height: 38px; object-fit: cover;" />
                                                     <div class="d-flex flex-column ml-2">
                                                         <div class="d-flex">
-                                                            <a href="#" style="white-space:nowrap;">
+                                                            <a class="text-primary" style="white-space: nowrap; cursor: pointer;">
                                                                 @item.Writter.Name @item.Writter.Surname
                                                                 @if (item.Profile.IsVerify)
                                                                 {
@@ -810,7 +810,7 @@
                                                                                     <div class="d-flex align-items-center">
                                                                                         <img src="@item.Profile.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
                                                                                         <div class="d-flex flex-column ml-2 justify-content-center">
-                                                                                            <a class="m-0 d-flex align-items-center text-primary">
+                                                                                            <a class="m-0 d-flex align-items-center text-primary" style="cursor: pointer;">
                                                                                                 @item.Profile.Name @item.Profile.Surname
                                                                                                 @if (item.Profile.IsVerify)
                                                                                                 {
@@ -833,7 +833,7 @@
                                                                                             <img src="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
                                                                                             <div class="d-flex flex-column ml-2" style="width: 100%;">
                                                                                                 <div class="d-flex">
-                                                                                                    <a href="#" class="m-0">
+                                                                                                    <a class="m-0 text-primary" style="cursor: pointer;">
                                                                                                         @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
                                                                                                         @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                                                         {
@@ -943,7 +943,7 @@
                                                                     <img src="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
                                                                     <div class="d-flex flex-column ml-2" style="width: 100%;">
                                                                         <div class="d-flex">
-                                                                            <a href="#" class="m-0">
+                                                                            <a class="m-0 text-primary" style="cursor: pointer;">
                                                                                 @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
                                                                                 @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                                 {
