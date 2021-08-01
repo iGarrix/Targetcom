@@ -584,7 +584,7 @@
                                                                                                     }
                                                                                                     <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                         <div class="dropdown">
-                                                                                                            <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                                            <a class="dropbtn text-primary" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                             <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                                                 <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                             </div>
@@ -679,7 +679,7 @@
                                                                             <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
                                                                             <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                 <div class="dropdown">
-                                                                                    <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                    <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                     <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                         <button type="submit" class="btn-link border-0 bg-transparent" asp-controller="Profile" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                     </div>
@@ -852,7 +852,7 @@
                                                                                                     {
                                                                                                         <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                             <div class="dropdown">
-                                                                                                                <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                                                <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                                 <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                                                     <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                                 </div>
@@ -955,7 +955,7 @@
                                                                             {
                                                                                 <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                     <div class="dropdown">
-                                                                                        <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                        <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                         <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                             <button type="submit" class="btn-link border-0 bg-transparent" asp-controller="Profile" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                         </div>

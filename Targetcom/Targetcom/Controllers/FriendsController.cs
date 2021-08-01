@@ -254,6 +254,34 @@ namespace Targetcom.Controllers
             return RedirectToAction(nameof(ViewProfile), new { id = finderPostage.ProfileId });
         }
         [HttpPost]
+        public async Task<IActionResult> PublishPost(string content, string id)
+        {
+            if (content is null)
+            {
+                return NotFound("Content null");
+            }
+            if (id is null)
+            {
+                return NotFound("Id null");
+            }
+            if (content.Length > 0)
+            {
+                var myprofile = await _userManager.GetUserAsync(User) as Profile;
+                var profile = await _userManager.FindByIdAsync(id) as Profile;
+                profile.ProfilePostages.Add(new ProfilePostage()
+                {
+                    TimeStamp = DateTime.Now,
+                    Profile = profile,
+                    Writter = myprofile,
+                    IsObject = false,
+                    Content = content,
+                });
+                await _userManager.UpdateAsync(profile);
+                return RedirectToAction(nameof(ViewProfile), new { id = profile.Id });
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
         public IActionResult DeleteProfilePostageCommentPost(int? id)
         {
             if (id != null)
@@ -262,7 +290,19 @@ namespace Targetcom.Controllers
                 findedPostage.Postage = _db.ProfilePostages.FirstOrDefault(i => i.ProfilePostageComments.Contains(findedPostage));
                 _db.ProfilePostageComments.Remove(findedPostage);
                 _db.SaveChanges();
-                return RedirectToAction(nameof(ViewProfile), new { id = findedPostage.Postage.ProfileId });
+                return RedirectToAction(nameof(ViewProfile), new { id = _db.SharedProfilePostages.FirstOrDefault(f => f.ProfilePostageId == findedPostage.PostageId).ProfileId });
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public IActionResult DeletePostagePost(int? id)
+        {
+            if (id != null)
+            {
+                var findedPostage = _db.ProfilePostages.Find(id);
+                _db.ProfilePostages.Remove(findedPostage);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(ViewProfile), new { id = findedPostage.ProfileId });
             }
             return RedirectToAction(nameof(Index));
         }

@@ -385,7 +385,7 @@
             {
                 if (!Model.FindedProfile.IsNessessaredPublishPost || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                 {
-                    @using (Html.BeginForm("CommentPublishPost", "Friends", FormMethod.Post))
+                    @using (Html.BeginForm(FormMethod.Post))
                     {
                         <div class="card border-0 day_back_head overflow-auto rounded">
                             <div class="card-body p-2">
@@ -413,7 +413,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn day_back_main text-light pl-4 pr-4 disable" style="font-size: 14px;" id="publishpost" asp-action="PublishPost">Publish</button>
+                                    <button type="submit" class="btn day_back_main text-light pl-4 pr-4 disable" style="font-size: 14px;" id="publishpost" asp-controller="Friends" asp-action="PublishPost" asp-route-Id="@Model.FindedProfile.Id">Publish</button>
                                     <script>
                                         document.getElementById("summer").addEventListener("keyup", () => {
                                             if (document.getElementById("summer").value.length > 0) {
@@ -486,7 +486,7 @@
                                                             <img src="@item.Writter.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 38px; height: 38px; object-fit: cover;" />
                                                             <div class="d-flex flex-column ml-2">
                                                                 <div class="d-flex">
-                                                                    <a  class="text-primary" style="white-space:nowrap; cursor:pointer;" >
+                                                                    <a class="text-primary" style="white-space:nowrap; cursor:pointer;">
                                                                         @item.Writter.Name @item.Writter.Surname
                                                                         @if (item.Profile.IsVerify)
                                                                         {
@@ -497,6 +497,21 @@
                                                                 </div>
                                                                 <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
                                                             </div>
+                                                            @if (item.WritterId == Model.IdentityProfile.Id)
+                                                            {
+                                                                <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
+                                                                    <div class="dropdown">
+                                                                        <a class="dropbtn" style="outline:0!important;"><i class="fas fa-chevron-down text-muted ml-auto" style="font-size: 16px;"></i></a>
+                                                                        <div class="dropdown-content day_back_head rounded p-2 shadow">
+                                                                            @using (Html.BeginForm(FormMethod.Post))
+                                                                            {
+                                                                                <button type="submit" class="btn-link border-0 bg-transparent" asp-controller="Friends" asp-action="DeletePostagePost" asp-route-id="@item.Id" style="outline:0!important;">Delete post</button>
+                                                                            }
+                                                                  
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
                                                         </div>
                                                         @if (item.IsObject)
                                                         {
@@ -753,7 +768,7 @@
                                                                                         {
                                                                                             <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                 <div class="dropdown">
-                                                                                                    <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                                    <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                     <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                                         <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                     </div>
@@ -936,7 +951,7 @@
                                                                                                             {
                                                                                                                 <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                                     <div class="dropdown">
-                                                                                                                        <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                                                        <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                                         <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                                                             <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                                         </div>
@@ -1075,9 +1090,9 @@
                                                                                     {
                                                                                         <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                             <div class="dropdown">
-                                                                                                <button class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></button>
+                                                                                                <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                 <div class="dropdown-content day_back_head rounded p-2 shadow">
-                                                                                                    <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                                                                    <button type="submit" class="btn-link border-0 bg-transparent" asp-controller="Friends" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
