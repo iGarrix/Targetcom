@@ -28,11 +28,9 @@ namespace Targetcom.Models
         public bool IsNessessaredCommentedPost { get; set; } = false;
 
         public string WritterId { get; set; }
-        [ForeignKey("WritterId")]
         public Profile Writter { get; set; }
 
         public string ProfileId { get; set; }
-        [ForeignKey("ProfileId")]
         public Profile Profile { get; set; }
 
         public ICollection<LikedProfilePostage> LikedProfiles { get; set; }

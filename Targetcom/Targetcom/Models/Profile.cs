@@ -13,6 +13,7 @@ namespace Targetcom.Models
         {
             ProfileGames = new HashSet<ProfileGame>();
             ProfilePostages = new HashSet<ProfilePostage>();
+            WritterPostages = new HashSet<ProfilePostage>();
             LikedProfilePostages = new HashSet<LikedProfilePostage>();
             SharedProfilePostages = new HashSet<SharedProfilePostage>();
             ProfilePostageComments = new HashSet<ProfilePostageComment>();
@@ -69,6 +70,7 @@ namespace Targetcom.Models
 
         public ICollection<ProfileGame> ProfileGames { get; set; }
         public ICollection<ProfilePostage> ProfilePostages { get; set; }
+        public ICollection<ProfilePostage> WritterPostages { get; set; }
         public ICollection<LikedProfilePostage> LikedProfilePostages { get; set; }
         public ICollection<SharedProfilePostage> SharedProfilePostages { get; set; }
         public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }

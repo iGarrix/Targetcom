@@ -32,8 +32,6 @@ namespace Targetcom.Controllers
             IEnumerable<Profile> profiles = _db.Profiles;
             return View(profiles);
         }
-
-        /* old variant (Not proffited) A lot if requests (Repeated Requests) */
         //public async Task<IActionResult> ViewProfile(string id)
         //{
         //    ViewProfileVM viewProfileVM = new ViewProfileVM()
@@ -41,8 +39,15 @@ namespace Targetcom.Controllers
         //        FindedProfile = new Profile(),
         //        IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
         //    };
-        //    IEnumerable<Profile> profiles = _db.Profiles;
-        //    var profile = profiles.FirstOrDefault(i => i.Id == id);          
+
+        //    var ProfilePostages = _db.ProfilePostages;
+        //    var ProfilePostageComments = _db.ProfilePostageComments;
+        //    var LikedProfilePostages = _db.LikedProfilePostages;
+        //    var SharedProfilePostages = _db.SharedProfilePostages;
+        //    var Profiles = _db.Profiles;
+
+        //    IEnumerable<Profile> profiles = Profiles;
+        //    var profile = profiles.FirstOrDefault(i => i.Id == id);
         //    if (profile == null)
         //    {
         //        return RedirectToAction(nameof(Newfriend));
@@ -51,27 +56,39 @@ namespace Targetcom.Controllers
         //    viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
         //    viewProfileVM.MyRole = _userManager.GetRolesAsync(myprofile as IdentityUser).Result.ToList()[0];
 
-        //    var postage = _db.ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+        //    var postage = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
         //    postage.ForEach(i =>
         //    {
-        //        var list = _db.ProfilePostageComments.Where(s => s.PostageId == i.Id).ToList();
+        //        var list = ProfilePostageComments.Where(s => s.PostageId == i.Id).ToList();
         //        list.ForEach(j =>
         //        {
-        //            j.ProfileCommentator = _db.Profiles.FirstOrDefault(f => f.Id == j.ProfileCommentatorId);
+        //            j.ProfileCommentator = Profiles.FirstOrDefault(f => f.Id == j.ProfileCommentatorId);
         //        });
         //        i.ProfilePostageComments = list;
         //    });
         //    postage.ForEach(i =>
         //    {
-        //        i.LikedProfiles = _db.LikedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
+        //        i.LikedProfiles = LikedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
         //    });
         //    postage.ForEach(i =>
         //    {
-        //        i.SharedProfiles = _db.SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
+        //        i.SharedProfiles = SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
         //    });
         //    profile.ProfilePostages = postage;
-        //    profile.LikedProfilePostages = _db.LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
-        //    profile.SharedProfilePostages = _db.SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+        //    profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+
+        //    var sharedpostage = SharedProfilePostages.ToList();
+        //    sharedpostage.ForEach(i =>
+        //    {
+        //        i.Postage = ProfilePostages.FirstOrDefault(f => f.Id == i.ProfilePostageId);
+        //        i.Postage.LikedProfiles = LikedProfilePostages.Where(w => w.ProfilePostageId == i.Postage.Id).ToList();
+        //        i.Postage.ProfilePostageComments = ProfilePostageComments.Where(s => s.PostageId == i.Postage.Id).ToList();
+        //    });
+        //    sharedpostage.ForEach(i =>
+        //    {
+        //        i.Profile = Profiles.FirstOrDefault(f => f.Id == i.ProfileId);
+        //    });
+        //    profile.SharedProfilePostages = sharedpostage;
 
         //    viewProfileVM.FindedProfile = profile;
 
@@ -80,61 +97,48 @@ namespace Targetcom.Controllers
 
         public async Task<IActionResult> ViewProfile(string id)
         {
+            string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
             ViewProfileVM viewProfileVM = new ViewProfileVM()
             {
                 FindedProfile = new Profile(),
-                IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                IdentityProfile = _db.Profiles.Find(myid),
             };
 
-            var ProfilePostages = _db.ProfilePostages;
-            var ProfilePostageComments = _db.ProfilePostageComments;
-            var LikedProfilePostages = _db.LikedProfilePostages;
-            var SharedProfilePostages = _db.SharedProfilePostages;
             var Profiles = _db.Profiles;
+            var SharedProfilePostages = _db.SharedProfilePostages;
 
-            IEnumerable<Profile> profiles = Profiles;
-            var profile = profiles.FirstOrDefault(i => i.Id == id);
+            var LikedProfilePostages = _db.LikedProfilePostages;
+
+            var ProfilePostages = _db.ProfilePostages;
+            ProfilePostages.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.LikedProfiles = LikedProfilePostages.Where(l => l.ProfilePostageId == i.Id).ToList();
+                i.SharedProfiles = SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
+            });
+
+            var ProfilePostageComments = _db.ProfilePostageComments;
+            ProfilePostageComments.ToList().ForEach(i =>
+            {
+                i.Postage = ProfilePostages.FirstOrDefault(f => f.Id == i.PostageId);
+                i.ProfileCommentator = Profiles.Find(i.ProfileCommentatorId);
+            });
+
+            //IEnumerable<Profile> profiles = Profiles;
+            //var profile = profiles.FirstOrDefault(i => i.Id == id);
+            var profile = await _userManager.FindByIdAsync(id) as Profile;
             if (profile == null)
             {
                 return RedirectToAction(nameof(Newfriend));
             }
-            var myprofile = await _userManager.GetUserAsync(User);
+            //var myprofile = await _userManager.GetUserAsync(User);
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
-            viewProfileVM.MyRole = _userManager.GetRolesAsync(myprofile as IdentityUser).Result.ToList()[0];
+            viewProfileVM.MyRole = _userManager.GetRolesAsync(viewProfileVM.IdentityProfile as IdentityUser).Result.ToList()[0];
 
-            var postage = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
-            postage.ForEach(i =>
-            {
-                var list = ProfilePostageComments.Where(s => s.PostageId == i.Id).ToList();
-                list.ForEach(j =>
-                {
-                    j.ProfileCommentator = Profiles.FirstOrDefault(f => f.Id == j.ProfileCommentatorId);
-                });
-                i.ProfilePostageComments = list;
-            });
-            postage.ForEach(i =>
-            {
-                i.LikedProfiles = LikedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
-            });
-            postage.ForEach(i =>
-            {
-                i.SharedProfiles = SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
-            });
-            profile.ProfilePostages = postage;
+            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
-
-            var sharedpostage = SharedProfilePostages.ToList();
-            sharedpostage.ForEach(i =>
-            {
-                i.Postage = ProfilePostages.FirstOrDefault(f => f.Id == i.ProfilePostageId);
-                i.Postage.LikedProfiles = LikedProfilePostages.Where(w => w.ProfilePostageId == i.Postage.Id).ToList();
-                i.Postage.ProfilePostageComments = ProfilePostageComments.Where(s => s.PostageId == i.Postage.Id).ToList();
-            });
-            sharedpostage.ForEach(i =>
-            {
-                i.Profile = Profiles.FirstOrDefault(f => f.Id == i.ProfileId);
-            });
-            profile.SharedProfilePostages = sharedpostage;
+            profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
 
             viewProfileVM.FindedProfile = profile;
 

@@ -11,9 +11,7 @@ namespace Targetcom.Models
         public string ProfileId { get; set; }
         public int ProfilePostageId { get; set; }
 
-        [ForeignKey("ProfileId")]
         public Profile Profile { get; set; }
-        [ForeignKey("ProfilePostageId")]
         public ProfilePostage Postage { get; set; }
     }
 }

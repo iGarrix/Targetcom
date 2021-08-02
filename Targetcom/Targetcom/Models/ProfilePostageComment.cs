@@ -15,11 +15,9 @@ namespace Targetcom.Models
         public DateTime TimeStamp { get; set; } = DateTime.Now;
 
         public string ProfileCommentatorId { get; set; }
-        [ForeignKey("ProfileCommentatorId")]
         public Profile ProfileCommentator { get; set; }
 
         public int PostageId { get; set; }
-        [ForeignKey("PostageId")]
         public ProfilePostage Postage { get; set; }
     }
 }
