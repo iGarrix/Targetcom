@@ -100,6 +100,7 @@ namespace Targetcom.Controllers
             ProfilePostages.ToList().ForEach(i =>
             {
                 i.Profile = Profiles.Find(i.ProfileId);
+                i.Writter = Profiles.Find(i.WritterId);
                 i.LikedProfiles = LikedProfilePostages.Where(l => l.ProfilePostageId == i.Id).ToList();
                 i.SharedProfiles = SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
             });
