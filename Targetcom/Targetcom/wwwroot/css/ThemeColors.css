@@ -14,10 +14,18 @@
 }
 
 .day_color_main {
-    color: #5181b8;
+    color: #4f90db;
 }
 .day_back_main {
-    background-color: #5181b8;
+    background-color: #4f90db;
+}
+
+.day_color_mainlight {
+    color: #6ba8ed;
+}
+
+.day_back_mainlight {
+    background-color: #6ba8ed;
 }
 
 .day_color_font {

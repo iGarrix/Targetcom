@@ -4,9 +4,7 @@
     ViewData["Title"] = "Friends";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model IEnumerable<Profile>;
-@inject UserManager<IdentityUser> UserManager
-@{ Profile me = await UserManager.GetUserAsync(User) as Profile; }
+@model Targetcom.Models.ViewModels.FriendVM;
 
 <style>
     .gap {
@@ -24,19 +22,96 @@
         text-decoration: none;
     }
 </style>
-
+<head>
+    <link href="~/css/VTabs.css" rel="stylesheet" />
+</head>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
 
-    <div style="width: 57%;" class="d-flex flex-column rounded">
-        <div class="day_back_default d-flex align-items-center p-3" style="background-color: #e8e8e8;">
-            <i class="fas fa-search text-muted" style="font-size: 14px;"></i>
-            <input type="text" placeholder="Enter name" style="width: 100%;" />
+    <div class="d-flex gap" style="width: 100%;">
+        <div style="width: 75%;" class="d-flex flex-column rounded">
+            <div class="day_back_default d-flex align-items-center p-3" style="background-color: #e8e8e8;">
+                <i class="fas fa-search text-muted" style="font-size: 14px;"></i>
+                <input type="text" placeholder="Enter name" style="width: 100%;" />
+            </div>
+            <div class="day_back_head">
+                <div id="Friends">Friends</div>
+                <div id="Invites">Invites</div>
+                <div id="Newfriends">
+                    @foreach (var item in Model.AllUsers)
+                    {
+                        if (item.Id != Model.IdentityUser.Id)
+                        {
+                            <partial name="PreviewProfile" model="item" />
+                            <hr class="m-0" />
+                        }
+                    }
+                </div>
+                <div id="Subscribers">Subscribers</div>
+                <div id="Blacklist">Blacklist</div>
+            </div>
         </div>
-        <div class="day_back_head">
-            
+        <div style="width: 25%;" class="gap d-flex flex-column">
+            <div class="card border-0 day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
+                <div class="card-body pt-2 pb-2 pr-0 pl-0">
+                    <nav class="left-navtabs" style="width: 100%;">
+                        <a href="#" class="navtabs-item is-active">Friends</a>
+                        <a href="#" class="navtabs-item">Invite to friends</a>
+                        <hr class="m-0 p-1" />
+                        <a href="#" class="navtabs-item">New friens</a>
+                        <a href="#" class="navtabs-item">Subscribers</a>
+                        <hr class="m-0 p-1" />
+                        <a href="#" class="navtabs-item">Blacklist</a>
+                        <span class="navtabs-indicator"></span>
+                    </nav>
+                    <script>
+                        const indicator = document.querySelector(".navtabs-indicator");
+                        const items = document.querySelectorAll(".navtabs-item");
+                        let dives = new Array(document.getElementById("Friends"),
+                            document.getElementById("Invites"),
+                            document.getElementById("Newfriends"),
+                            document.getElementById("Subscribers"),
+                            document.getElementById("Blacklist"));
+                        Adding();
+                        dives[0].classList.remove("d-none");
+                        function handleIndicator(el) {
+                            items.forEach(item => {
+                                item.classList.remove("is-active");
+                                item.removeAttribute("style");
+                            });
+
+                            indicator.style.height = `${el.offsetHeight}px`;
+                            indicator.style.top = `${el.offsetTop}px`;
+                            indicator.style.backgroundColor = el.getAttribute("active-color");
+
+                            el.classList.add("is-active");
+                            //el.style.color = "#6200ee";
+                            el.style.color = "#ffffff";
+                        }
+                        function Adding() {
+                            for (var i = 0; i < dives.length; ++i) {
+                                dives[i].classList.add("d-none");
+                            }
+                        }
+                        for (let i = 0; i < items.length; ++i) {
+                            items[i].addEventListener("click", e => {
+                                Adding();
+                                dives[i].classList.remove("d-none");
+                                handleIndicator(e.target);
+                            });
+                            items[i].classList.contains("is-active") && handleIndicator(items[i]);
+                        }
+                        //items.forEach((item, index) => {
+                        //    item.addEventListener("click", e => {
+                        //        handleIndicator(e.target);
+                        //    });
+                        //    item.classList.contains("is-active") && handleIndicator(item);
+                        //});
+                    </script>
+
+                </div>
+            </div>
         </div>
     </div>
-    <partial name="FriendSidebar"/>
 </div>
 

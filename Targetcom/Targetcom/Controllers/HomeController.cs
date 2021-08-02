@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Targetcom.Data;
 using Targetcom.Models;
+using Targetcom.Models.ViewModels;
 
 namespace Targetcom.Controllers
 {
@@ -15,16 +17,23 @@ namespace Targetcom.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly TargetDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, TargetDbContext db)
         {
             _logger = logger;
             _userManager = userManager;
+            _db = db;
         }
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            NewsVM newsVM = new NewsVM()
+            {
+                IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                AllUsers = _db.Profiles,
+            };
+            return View(newsVM);
         }
 
         [AllowAnonymous]

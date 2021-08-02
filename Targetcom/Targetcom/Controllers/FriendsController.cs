@@ -21,16 +21,14 @@ namespace Targetcom.Controllers
             _db = db;
             _userManager = userManager;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Profile> profiles = _db.Profiles;
-            return View(profiles);
-        }
-
-        public IActionResult Newfriend()
-        {
-            IEnumerable<Profile> profiles = _db.Profiles;
-            return View(profiles);
+            FriendVM friendVM = new FriendVM()
+            {
+                IdentityUser = await _userManager.GetUserAsync(User) as Profile,
+                AllUsers = _db.Profiles,
+            };
+            return View(friendVM);
         }
         //public async Task<IActionResult> ViewProfile(string id)
         //{
@@ -130,7 +128,7 @@ namespace Targetcom.Controllers
             var profile = await _userManager.FindByIdAsync(id) as Profile;
             if (profile == null)
             {
-                return RedirectToAction(nameof(Newfriend));
+                return RedirectToAction(nameof(Index));
             }
             //var myprofile = await _userManager.GetUserAsync(User);
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
