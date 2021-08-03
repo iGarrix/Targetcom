@@ -117,6 +117,16 @@ namespace Targetcom.Controllers
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
+
+            profileVM.IdentityProfile.Friendships =
+                _db.Friendships.Where(w => w.FriendId == profileVM.IdentityProfile.Id
+                || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
+            profileVM.IdentityProfile.Friendships.ToList().ForEach(i =>
+            {
+                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
+                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
+            });
+
             return View(profileVM);
         }
 

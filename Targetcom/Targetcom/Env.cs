@@ -47,5 +47,12 @@ namespace Targetcom
         public static int SuperPackageCoin = 360;
         public static string RichPackage = "Rich";
         public static int RichPackageCoin = 800;
+
+        /* Friend Status */
+
+        public static string Invite = "Invite";
+        public static string Friend = "Friend";
+        public static string Subscribe = "Subscribe";
+        public static string Blacklist = "Blacklist";
     }
 }

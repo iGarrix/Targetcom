@@ -23,11 +23,27 @@ namespace Targetcom.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
             FriendVM friendVM = new FriendVM()
             {
-                IdentityUser = await _userManager.GetUserAsync(User) as Profile,
+                IdentityUser = _db.Profiles.Find(myid),
                 AllUsers = _db.Profiles,
             };
+            friendVM.IdentityUser.Friendships = _db.Friendships.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList();
+            friendVM.IdentityUser.Friendships.ToList().ForEach(i =>
+            {
+                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
+                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
+            });
+            friendVM.AllUsers.ToList().ForEach(i =>
+            {
+                i.Friendships = _db.Friendships.Where(w => w.FriendId == i.Id || w.ProfileId == i.Id).ToList();
+                i.Friendships.ToList().ForEach(j =>
+                {
+                    j.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == j.FriendId).Friend;
+                    j.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == j.ProfileId).Profile;
+                });
+            });
             return View(friendVM);
         }
         //public async Task<IActionResult> ViewProfile(string id)
@@ -92,7 +108,6 @@ namespace Targetcom.Controllers
 
         //    return View(viewProfileVM);
         //}
-
         public async Task<IActionResult> ViewProfile(string id)
         {
             string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
@@ -123,14 +138,11 @@ namespace Targetcom.Controllers
                 i.ProfileCommentator = Profiles.Find(i.ProfileCommentatorId);
             });
 
-            //IEnumerable<Profile> profiles = Profiles;
-            //var profile = profiles.FirstOrDefault(i => i.Id == id);
             var profile = await _userManager.FindByIdAsync(id) as Profile;
             if (profile == null)
             {
                 return RedirectToAction(nameof(Index));
             }
-            //var myprofile = await _userManager.GetUserAsync(User);
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
             viewProfileVM.MyRole = _userManager.GetRolesAsync(viewProfileVM.IdentityProfile as IdentityUser).Result.ToList()[0];
 
@@ -139,11 +151,244 @@ namespace Targetcom.Controllers
             profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
 
+            viewProfileVM.IdentityProfile.Friendships =
+                _db.Friendships.Where(w => w.FriendId == viewProfileVM.IdentityProfile.Id
+                || w.ProfileId == viewProfileVM.IdentityProfile.Id).ToList();
+            viewProfileVM.IdentityProfile.Friendships.ToList().ForEach(i =>
+            {
+                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
+                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
+            });
+
+            profile.Friendships =
+                _db.Friendships.Where(w => w.FriendId == profile.Id
+                || w.ProfileId == profile.Id).ToList();
+            profile.Friendships.ToList().ForEach(i =>
+            {
+                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
+                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
+            });
+
             viewProfileVM.FindedProfile = profile;
 
             return View(viewProfileVM);
         }
 
+        private async Task AddFriendMethod(string id)
+        {
+            if (id != null)
+            {
+                var findedFriend = _db.Profiles.Find(id);
+                var identity = await _userManager.GetUserAsync(User) as Profile;
+                if (findedFriend != null)
+                {
+                    identity.Friendships.Add(new Friendship()
+                    {
+                        Profile = identity,
+                        Friend = findedFriend,
+                        FriendStatus = Env.Invite,
+                    });
+                    await _userManager.UpdateAsync(identity);
+                }
+            }            
+        }
+        private Friendship RemoveFriendMethod(int? id)
+        {
+            if (id is not null)
+            {
+                var findedFriendship = _db.Friendships.FirstOrDefault(f => f.Id == id);
+                if (findedFriendship is not null)
+                {
+                    _db.Friendships.Remove(findedFriendship);
+                    _db.SaveChanges();
+                    return findedFriendship;
+                }
+            }
+            return null;
+        }
+        private Friendship AddInviteFriendMethod(int? id)
+        {
+            if (id is not null)
+            {
+                var findedFriendship = _db.Friendships.FirstOrDefault(f => f.Id == id);
+                if (findedFriendship is not null)
+                {
+                    findedFriendship.FriendStatus = Env.Friend;
+                    _db.Friendships.Update(findedFriendship);
+                    _db.SaveChanges();
+                    return findedFriendship;
+                }
+            }
+            return null;
+        }
+        private Friendship LeaveSubscribersMethod(int? id)
+        {
+            if (id is not null)
+            {
+                var findedFriendship = _db.Friendships.FirstOrDefault(f => f.Id == id);
+                if (findedFriendship is not null)
+                {
+                    findedFriendship.FriendStatus = Env.Subscribe;
+                    _db.Friendships.Update(findedFriendship);
+                    _db.SaveChanges();
+                    return findedFriendship;
+                }
+            }
+            return null;
+        }
+        private Friendship AddBlacklistFriendMethod(int? id)
+        {
+            if (id is not null)
+            {
+                var findedFriendship = _db.Friendships.FirstOrDefault(f => f.Id == id);
+                if (findedFriendship is not null)
+                {
+                    findedFriendship.FriendStatus = Env.Blacklist;
+                    _db.Friendships.Update(findedFriendship);
+                    _db.SaveChanges();
+                    return findedFriendship;
+                }
+            }
+            return null;
+        }
+        private Friendship ChangeFriendMethod(int? id)
+        {
+            if (id is not null)
+            {
+                var findedFriendship = _db.Friendships.FirstOrDefault(f => f.Id == id);
+                if (findedFriendship is not null)
+                {
+                    findedFriendship.FriendStatus = Env.Friend;
+                    _db.Friendships.Update(findedFriendship);
+                    _db.SaveChanges();
+                    return findedFriendship;
+                }
+            }
+            return null;
+        }
+
+        public async Task<IActionResult> AddFriend(string id)
+        {
+            await AddFriendMethod(id);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult RemoveFriend(int? id)
+        {
+            RemoveFriendMethod(id);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult AddInviteFriend(int? id)
+        {
+            AddInviteFriendMethod(id);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult LeaveSubscribers(int? id)
+        {
+            LeaveSubscribersMethod(id);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult AddBlacklistFriend(int? id)
+        {
+            AddBlacklistFriendMethod(id);
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult ChangeFriend(int? id)
+        {
+            ChangeFriendMethod(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ViewAddFriend(string id)
+        {
+            await AddFriendMethod(id);
+            return RedirectToAction(nameof(ViewProfile), new { id = id });
+        }
+        public async Task<IActionResult> ViewAddInviteFriend(int? id)
+        {
+            var ship = AddInviteFriendMethod(id);
+            if (ship is not null)
+            {
+                var identity = await _userManager.GetUserAsync(User) as Profile;
+                string finderid = "";
+                if (ship.FriendId != identity.Id)
+                {
+                    finderid = ship.FriendId;
+                }
+                else
+                {
+                    finderid = ship.ProfileId;
+                }
+                return RedirectToAction(nameof(ViewProfile), new { id = finderid });
+            }
+            return View();
+        }
+        public async Task<IActionResult> ViewRemoveFriend(int? id)
+        {
+            var ship = RemoveFriendMethod(id);
+            if (ship is not null)
+            {
+                var identity = await _userManager.GetUserAsync(User) as Profile;
+                string finderid = "";
+                if (ship.FriendId != identity.Id)
+                {
+                    finderid = ship.FriendId;
+                }
+                else
+                {
+                    finderid = ship.ProfileId;
+                }
+                return RedirectToAction(nameof(ViewProfile), new { id = finderid });
+            }
+            return View();
+        }
+        public async Task<IActionResult> ViewLeaveSubscribers(int? id)
+        {
+            LeaveSubscribersMethod(id);
+            var identity = await _userManager.GetUserAsync(User) as Profile;
+            string finderid = "";
+            var ship = _db.Friendships.Find(id);
+            if (ship.FriendId != identity.Id)
+            {
+                finderid = ship.FriendId;
+            }
+            else
+            {
+                finderid = ship.ProfileId;
+            }
+            return RedirectToAction(nameof(ViewProfile), new { id = finderid });
+        }
+        public async Task<IActionResult> ViewAddBlacklistFriend(int? id)
+        {
+            AddBlacklistFriendMethod(id);
+            var identity = await _userManager.GetUserAsync(User) as Profile;
+            string finderid = "";
+            var ship = _db.Friendships.Find(id);
+            if (ship.FriendId != identity.Id)
+            {
+                finderid = ship.FriendId;
+            }
+            else
+            {
+                finderid = ship.ProfileId;
+            }
+            return RedirectToAction(nameof(ViewProfile), new { id = finderid });
+        }
+        public async Task<IActionResult> ViewChangeFriend(int? id)
+        {
+            ChangeFriendMethod(id);
+            var identity = await _userManager.GetUserAsync(User) as Profile;
+            string finderid = "";
+            var ship = _db.Friendships.Find(id);
+            if (ship.FriendId != identity.Id)
+            {
+                finderid = ship.FriendId;
+            }
+            else
+            {
+                finderid = ship.ProfileId;
+            }
+            return RedirectToAction(nameof(ViewProfile), new { id = finderid });
+        }
 
         [HttpPost]
         public async Task<IActionResult> LikePostagePost(int? id)

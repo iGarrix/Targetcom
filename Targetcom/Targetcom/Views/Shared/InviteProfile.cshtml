@@ -1,0 +1,28 @@
+﻿@model Targetcom.Models.ViewModels.PreviewProfileVM;
+
+<div class="d-flex p-3">
+    @if (@Model.User.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+    {
+        <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
+    }
+    else
+    {
+        <img src="@Model.User.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
+    }
+    <div class="d-flex flex-column ml-3">
+        <div class="d-flex align-items-center">
+            <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.User.Id" class="m-0 font-weight-normal day_color_main d-flex align-items-center">@Model.User.Name @Model.User.Surname</a>
+            @if (Model.User.IsVerify)
+            {
+                <i class="fas fa-check day_color_main ml-2" style="font-size: 10px; text-decoration: none"></i>
+            }
+        </div>
+        <div class="d-flex gap flex-wrap">
+            <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.User.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
+            <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id || f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Remove query</a>
+            <a asp-controller="Friends" asp-action="AddInviteFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id || f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Accept friends</a>
+            <a asp-controller="Friends" asp-action="LeaveSubscribers" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id || f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Leave in subscribe</a>
+            <a asp-controller="Friends" asp-action="AddBlacklistFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id || f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Leave in blacklist</a>
+        </div>
+    </div>
+</div>

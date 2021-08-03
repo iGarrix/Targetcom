@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210803104737_Change key friendship")]
+    partial class Changekeyfriendship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,10 +225,8 @@ namespace Targetcom.Migrations
 
             modelBuilder.Entity("Targetcom.Models.Friendship", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("ProfileId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FriendId")
                         .HasColumnType("nvarchar(450)");
@@ -234,14 +234,9 @@ namespace Targetcom.Migrations
                     b.Property<string>("FriendStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfileId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
+                    b.HasKey("ProfileId");
 
                     b.HasIndex("FriendId");
-
-                    b.HasIndex("ProfileId");
 
                     b.ToTable("Friendships");
                 });
@@ -563,7 +558,9 @@ namespace Targetcom.Migrations
 
                     b.HasOne("Targetcom.Models.Profile", "Profile")
                         .WithMany("Friendships")
-                        .HasForeignKey("ProfileId");
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Friend");
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210803103114_add friendship")]
+    partial class addfriendship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,25 +225,13 @@ namespace Targetcom.Migrations
 
             modelBuilder.Entity("Targetcom.Models.Friendship", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("FriendId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FriendStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfileId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FriendId");
-
-                    b.HasIndex("ProfileId");
+                    b.HasKey("FriendId");
 
                     b.ToTable("Friendships");
                 });
@@ -558,16 +548,12 @@ namespace Targetcom.Migrations
             modelBuilder.Entity("Targetcom.Models.Friendship", b =>
                 {
                     b.HasOne("Targetcom.Models.Profile", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId");
-
-                    b.HasOne("Targetcom.Models.Profile", "Profile")
                         .WithMany("Friendships")
-                        .HasForeignKey("ProfileId");
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Friend");
-
-                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("Targetcom.Models.LikedProfilePostage", b =>

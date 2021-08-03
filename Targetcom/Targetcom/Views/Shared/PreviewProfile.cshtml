@@ -1,26 +1,68 @@
-﻿@model Profile;
+﻿@model Targetcom.Models.ViewModels.PreviewProfileVM;
 
 <div class="d-flex p-3">
-    @if (@Model.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+    @if (@Model.User.UrlAvatar == Targetcom.Env.DefaultImageUrl)
     {
         <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
     }
     else
     {
-        <img src="@Model.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
+        <img src="@Model.User.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 70px; height: 70px;" />
     }
 <div class="d-flex flex-column ml-3">
     <div class="d-flex align-items-center">
-        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="m-0 font-weight-normal day_color_main d-flex align-items-center">@Model.Name @Model.Surname</a>
-        @if (Model.IsVerify)
+        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.User.Id" class="m-0 font-weight-normal day_color_main d-flex align-items-center">@Model.User.Name @Model.User.Surname</a>
+        @if (Model.User.IsVerify)
         {
             <i class="fas fa-check day_color_main ml-2" style="font-size: 10px; text-decoration: none"></i>
         }
     </div>
-    <div class="d-flex gap">
-        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
-        <a href="#" class="day_color_main" style="font-size: 14px;">Add friends</a>
+    <div class="d-flex gap flex-wrap">
+        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.User.Id" class="day_color_main" style="font-size: 14px;">View profile</a>
+        @if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id) != null)
+        {
+            if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).FriendStatus == Env.Invite)
+            {
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Reject query</a>
+            }
+            else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).FriendStatus == Env.Friend)
+            {
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Remove friend</a>
+            }
+            else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).FriendStatus == Env.Subscribe)
+            {
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Unsubscribe</a>
+            }
+            else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.User.Id).FriendStatus == Env.Blacklist)
+            {
+                <a class="text-danger" style="font-size: 14px; cursor:pointer;">You in blacklist</a>
+            }
+        }
+        else
+        {
+            if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id && f.FriendStatus == Env.Friend) != null)
+            {
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Remove friend</a>
+            }
+            else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id && f.FriendStatus == Env.Invite) != null)
+            {
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Reject query</a>
+            }
+            else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id && f.FriendStatus == Env.Subscribe) != null)
+            {
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Remove subscriber</a>
+            }
+            else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id && f.FriendStatus == Env.Blacklist) != null)
+            {
+                <a asp-controller="Friends" asp-action="ChangeFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Add to friend</a>
+                <a asp-controller="Friends" asp-action="LeaveSubscribers" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Add to subscribers</a>
+                <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.User.Id).Id" class="day_color_main" style="font-size: 14px;">Remove with blacklist</a>
+            }
+            else
+            {
+                <a asp-controller="Friends" asp-action="AddFriend" asp-route-Id="@Model.User.Id" class="day_color_main" style="font-size: 14px;">Add friends</a>
+            }
+        }
     </div>
 </div>
-    <a href="#" class="day_color_main ml-auto"><i class="fas fa-ellipsis-h day_color_main settingsbtn"></i></a>
 </div>

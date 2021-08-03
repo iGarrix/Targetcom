@@ -28,55 +28,52 @@ namespace Targetcom.Data
 
             /* ------- */
 
+            builder.Entity<Friendship>()
+                .HasOne(fs => fs.Profile)
+                .WithMany(u => u.Friendships)
+                .HasForeignKey(fs => fs.ProfileId);
+
             builder.Entity<Profile>()
                 .HasMany(e => e.ProfilePostages)
                 .WithOne(w => w.Profile)
-                .HasForeignKey(f => f.ProfileId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.ProfileId);
 
 
             builder.Entity<Profile>()
                 .HasMany(e => e.WritterPostages)
                 .WithOne(w => w.Writter)
-                .HasForeignKey(f => f.WritterId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.WritterId);
 
 
             builder.Entity<Profile>()
                 .HasMany(m => m.LikedProfilePostages)
                 .WithOne(w => w.Profile)
-                .HasForeignKey(f => f.ProfileId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.ProfileId);
 
             builder.Entity<Profile>()
                 .HasMany(m => m.SharedProfilePostages)
                 .WithOne(w => w.Profile)
-                .HasForeignKey(f => f.ProfileId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.ProfileId);
 
             builder.Entity<Profile>()
                 .HasMany(m => m.ProfilePostageComments)
                 .WithOne(w => w.ProfileCommentator)
-                .HasForeignKey(f => f.ProfileCommentatorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.ProfileCommentatorId);
 
             builder.Entity<ProfilePostage>()
                 .HasMany(m => m.LikedProfiles)
                 .WithOne(w => w.Postage)
-                .HasForeignKey(f => f.ProfilePostageId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.ProfilePostageId);
 
             builder.Entity<ProfilePostage>()
                .HasMany(m => m.SharedProfiles)
                .WithOne(w => w.Postage)
-               .HasForeignKey(f => f.ProfilePostageId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .HasForeignKey(f => f.ProfilePostageId);
 
             builder.Entity<ProfilePostage>()
               .HasMany(m => m.ProfilePostageComments)
               .WithOne(w => w.Postage)
-              .HasForeignKey(f => f.PostageId)
-              .OnDelete(DeleteBehavior.Cascade);
+              .HasForeignKey(f => f.PostageId);
 
         }
 
@@ -87,5 +84,6 @@ namespace Targetcom.Data
         public DbSet<LikedProfilePostage> LikedProfilePostages { get; set; }
         public DbSet<SharedProfilePostage> SharedProfilePostages { get; set; }
         public DbSet<ProfilePostageComment> ProfilePostageComments { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
     }
 }

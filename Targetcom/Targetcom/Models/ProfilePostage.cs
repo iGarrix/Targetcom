@@ -35,6 +35,6 @@ namespace Targetcom.Models
 
         public ICollection<LikedProfilePostage> LikedProfiles { get; set; }
         public ICollection<SharedProfilePostage> SharedProfiles { get; set; }
-        public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
+        public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }      
     }
 }

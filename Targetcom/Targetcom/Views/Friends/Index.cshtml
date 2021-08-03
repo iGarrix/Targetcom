@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-
-@{
+﻿@{
     ViewData["Title"] = "Friends";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -35,20 +33,111 @@
                 <input type="text" placeholder="Enter name" style="width: 100%;" />
             </div>
             <div class="day_back_head">
-                <div id="Friends">Friends</div>
-                <div id="Invites">Invites</div>
+                <div id="Friends">
+                    @foreach (var item in Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Friend))
+                    {
+                        if (item.Friend.Id != Model.IdentityUser.Id)
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Friend,
+                            };
+                            <partial name="PreviewProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                        else
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Profile,
+                            };
+                            <partial name="PreviewProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                    }
+                </div>
+                <div id="Invites">
+                    @foreach (var item in Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Invite && w.ProfileId != Model.IdentityUser.Id))
+                    {
+                        if (item.Friend.Id != Model.IdentityUser.Id)
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Friend,
+                            };
+                            <partial name="InviteProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                        else
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Profile,
+                            };
+                            <partial name="InviteProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                    }
+                </div>
                 <div id="Newfriends">
                     @foreach (var item in Model.AllUsers)
                     {
                         if (item.Id != Model.IdentityUser.Id)
                         {
-                            <partial name="PreviewProfile" model="item" />
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item,
+                            };
+                            <partial name="PreviewProfile" model="vm" />
                             <hr class="m-0" />
                         }
                     }
                 </div>
-                <div id="Subscribers">Subscribers</div>
-                <div id="Blacklist">Blacklist</div>
+                <div id="Subscribers">
+                    @foreach (var item in Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Subscribe))
+                    {
+                        if (item.Friend.Id != Model.IdentityUser.Id)
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Friend,
+                            };
+                            <partial name="PreviewProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                        else
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Profile,
+                            };
+                            <partial name="PreviewProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                    }
+                </div>
+                <div id="Blacklist">
+                    @foreach (var item in Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Blacklist))
+                    {
+                        if (item.Friend.Id == Model.IdentityUser.Id)
+                        {
+                            Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                            {
+                                IdentityProfile = Model.IdentityUser,
+                                User = item.Profile,
+                            };
+                            <partial name="PreviewProfile" model="vm" />
+                            <hr class="m-0" />
+                        }
+                    }
+                </div>
             </div>
         </div>
         <div style="width: 25%;" class="gap d-flex flex-column">

@@ -17,6 +17,7 @@ namespace Targetcom.Models
             LikedProfilePostages = new HashSet<LikedProfilePostage>();
             SharedProfilePostages = new HashSet<SharedProfilePostage>();
             ProfilePostageComments = new HashSet<ProfilePostageComment>();
+            Friendships = new HashSet<Friendship>();
         }
 
         [Required]
@@ -74,5 +75,6 @@ namespace Targetcom.Models
         public ICollection<LikedProfilePostage> LikedProfilePostages { get; set; }
         public ICollection<SharedProfilePostage> SharedProfilePostages { get; set; }
         public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
+        public ICollection<Friendship> Friendships { get; set; }
     }
 }
