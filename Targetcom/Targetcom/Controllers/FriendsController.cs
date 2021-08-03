@@ -21,28 +21,27 @@ namespace Targetcom.Controllers
             _db = db;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string eventSelector = "None")
         {
             string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
             FriendVM friendVM = new FriendVM()
             {
                 IdentityUser = _db.Profiles.Find(myid),
                 AllUsers = _db.Profiles,
+                EventSetter = eventSelector,
             };
-            friendVM.IdentityUser.Friendships = _db.Friendships.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList();
-            friendVM.IdentityUser.Friendships.ToList().ForEach(i =>
+            var Profiles = _db.Profiles;
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
             {
-                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
-                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
             });
+
+            friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList();
             friendVM.AllUsers.ToList().ForEach(i =>
             {
-                i.Friendships = _db.Friendships.Where(w => w.FriendId == i.Id || w.ProfileId == i.Id).ToList();
-                i.Friendships.ToList().ForEach(j =>
-                {
-                    j.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == j.FriendId).Friend;
-                    j.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == j.ProfileId).Profile;
-                });
+                i.Friendships = ProfileFriendship.Where(w => w.FriendId == i.Id || w.ProfileId == i.Id).ToList();
             });
             return View(friendVM);
         }
@@ -138,6 +137,13 @@ namespace Targetcom.Controllers
                 i.ProfileCommentator = Profiles.Find(i.ProfileCommentatorId);
             });
 
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+
             var profile = await _userManager.FindByIdAsync(id) as Profile;
             if (profile == null)
             {
@@ -151,23 +157,8 @@ namespace Targetcom.Controllers
             profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
 
-            viewProfileVM.IdentityProfile.Friendships =
-                _db.Friendships.Where(w => w.FriendId == viewProfileVM.IdentityProfile.Id
-                || w.ProfileId == viewProfileVM.IdentityProfile.Id).ToList();
-            viewProfileVM.IdentityProfile.Friendships.ToList().ForEach(i =>
-            {
-                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
-                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
-            });
-
-            profile.Friendships =
-                _db.Friendships.Where(w => w.FriendId == profile.Id
-                || w.ProfileId == profile.Id).ToList();
-            profile.Friendships.ToList().ForEach(i =>
-            {
-                i.Friend = _db.Friendships.FirstOrDefault(w => w.FriendId == i.FriendId).Friend;
-                i.Profile = _db.Friendships.FirstOrDefault(w => w.ProfileId == i.ProfileId).Profile;
-            });
+            viewProfileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == viewProfileVM.IdentityProfile.Id || w.ProfileId == viewProfileVM.IdentityProfile.Id).ToList();
+            profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
 
             viewProfileVM.FindedProfile = profile;
 
@@ -388,6 +379,26 @@ namespace Targetcom.Controllers
                 finderid = ship.ProfileId;
             }
             return RedirectToAction(nameof(ViewProfile), new { id = finderid });
+        }
+        public async Task<IActionResult> ViewCreateBlacklistFriend(string id)
+        {
+            if (id != null)
+            {
+                var findedFriend = _db.Profiles.Find(id);
+                var identity = await _userManager.GetUserAsync(User) as Profile;
+                if (findedFriend != null)
+                {
+                    findedFriend.Friendships.Add(new Friendship()
+                    {
+                        Profile = findedFriend,
+                        Friend = identity,
+                        FriendStatus = Env.Blacklist,
+                    });
+                    await _userManager.UpdateAsync(findedFriend);
+                }
+                return RedirectToAction(nameof(ViewProfile), new { id = findedFriend.Id });
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

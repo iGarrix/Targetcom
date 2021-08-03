@@ -148,10 +148,10 @@
                         }
                         else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.FindedProfile.Id && f.FriendStatus == Env.Invite) != null)
                         {
-                            <a asp-controller="Friends" asp-action="ViewAddInviteFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.FindedProfile.Id || f.ProfileId == Model.FindedProfile.Id).Id" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Accept friends</a>
+                            <a asp-controller="Friends" asp-action="ViewAddInviteFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.FindedProfile.Id).Id" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Accept friends</a>
                             <a asp-controller="Friends" asp-action="ViewRemoveFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.FindedProfile.Id).Id" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Remove query</a>
-                            <a asp-controller="Friends" asp-action="ViewLeaveSubscribers" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.FindedProfile.Id || f.ProfileId == Model.FindedProfile.Id).Id" class="btn btn-warning text-light pl-4 pr-4" style="font-size: 14px;">Leave in subscribe</a>
-                            <a asp-controller="Friends" asp-action="ViewAddBlacklistFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.FindedProfile.Id || f.ProfileId == Model.FindedProfile.Id).Id" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Leave in blacklist</a>
+                            <a asp-controller="Friends" asp-action="ViewLeaveSubscribers" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.FindedProfile.Id).Id" class="btn btn-warning text-light pl-4 pr-4" style="font-size: 14px;">Leave in subscribe</a>
+                            <a asp-controller="Friends" asp-action="ViewAddBlacklistFriend" asp-route-Id="@Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.FindedProfile.Id).Id" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Leave in blacklist</a>
                         }
                         else if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.ProfileId == Model.FindedProfile.Id && f.FriendStatus == Env.Subscribe) != null)
                         {
@@ -166,6 +166,7 @@
                         else
                         {
                             <a asp-controller="Friends" asp-action="ViewAddFriend" asp-route-Id="@Model.FindedProfile.Id" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add friends</a>
+                            <a asp-controller="Friends" asp-action="ViewCreateBlacklistFriend" asp-route-Id="@Model.FindedProfile.Id" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Leave in blacklist</a>
                         }
                     }
                     @if (Model.FindedProfile.Privacy == Env.PrivateProfile)
@@ -194,50 +195,75 @@
                         {
                             if (Model.FindedProfile.VisibilityFriends || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
-                                <div class="border-0 rounded day_back_head">
-                                    <div class="p-3 overflow-hidden">
-                                        <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
-                                        <hr />
-                                        <div class="d-flex flex-wrap" style="gap: .8rem;">
-                                            @for (int i = 0; i < 6; i++)
-                                            {
-                                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                    <p class="m-0">Name</p>
-                                                </div>
-                                            }
+                                if (Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count() == 0)
+                                {
+                                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                                        Doesnt found friends
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="border-0 rounded day_back_head">
+                                        <div class="p-3 overflow-hidden">
+                                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span></a>
+                                            <hr />
+                                            <div class="d-flex flex-wrap" style="gap: .8rem;">
+                                                @foreach (var item in Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend))
+                                                {
+                                                    if (item.FriendId == Model.FindedProfile.Id)
+                                                    {
+                                                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                            <img src="@item.Profile.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                            <p class="m-0">@item.Profile.Name</p>
+                                                        </div>
+                                                    }
+                                                    else if (item.ProfileId == Model.FindedProfile.Id)
+                                                    {
+                                                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                            <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                            <p class="m-0">@item.Friend.Name</p>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
                                         </div>
                                     </div>
-                                    <hr class="m-0" />
-                                    <div class="p-3 overflow-hidden">
-                                        <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
-                                        <div class="d-flex justify-content-between" style="gap: .8rem;">
-                                            @for (int i = 0; i < 3; i++)
-                                            {
-                                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
-                                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                    <p class="m-0">Name</p>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                             }
                             if (Model.FindedProfile.VisibilitySubscribers || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
-                                <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                                    <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
-                                    <hr />
-                                    <div class="d-flex flex-wrap" style="gap: .8rem;">
-                                        @for (int i = 0; i < 6; i++)
-                                        {
-                                            <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                <p class="m-0">Name</p>
-                                            </div>
-                                        }
+                                if (Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count() == 0)
+                                {
+                                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                                        Doesnt found subscribers
                                     </div>
-                                </div>
+                                }
+                                else
+                                {
+                                    <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                                        <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
+                                        <hr />
+                                        <div class="d-flex flex-wrap" style="gap: .8rem;">
+                                            @foreach (var item in Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe))
+                                            {
+                                                if (item.FriendId == Model.FindedProfile.Id)
+                                                {
+                                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                        <img src="@item.Profile.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                        <p class="m-0">@item.Profile.Name</p>
+                                                    </div>
+                                                }
+                                                else if (item.ProfileId == Model.FindedProfile.Id)
+                                                {
+                                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                        <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                        <p class="m-0">@item.Friend.Name</p>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                }
                             }
                             if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
@@ -261,50 +287,75 @@
                     {
                         if (Model.FindedProfile.VisibilityFriends || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
-                            <div class="border-0 rounded day_back_head">
-                                <div class="p-3 overflow-hidden">
-                                    <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
-                                    <hr />
-                                    <div class="d-flex flex-wrap" style="gap: .8rem;">
-                                        @for (int i = 0; i < 6; i++)
-                                        {
-                                            <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                <p class="m-0">Name</p>
-                                            </div>
-                                        }
+                            if (Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count() == 0)
+                            {
+                                <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                                    Doesnt found friends
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="border-0 rounded day_back_head">
+                                    <div class="p-3 overflow-hidden">
+                                        <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span></a>
+                                        <hr />
+                                        <div class="d-flex flex-wrap" style="gap: .8rem;">
+                                            @foreach (var item in Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend))
+                                            {
+                                                if (item.FriendId == Model.FindedProfile.Id)
+                                                {
+                                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                        <img src="@item.Profile.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                        <p class="m-0">@item.Profile.Name</p>
+                                                    </div>
+                                                }
+                                                else if (item.ProfileId == Model.FindedProfile.Id)
+                                                {
+                                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                        <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                        <p class="m-0">@item.Friend.Name</p>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                                <hr class="m-0" />
-                                <div class="p-3 overflow-hidden">
-                                    <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
-                                    <div class="d-flex justify-content-between" style="gap: .8rem;">
-                                        @for (int i = 0; i < 3; i++)
-                                        {
-                                            <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
-                                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                <p class="m-0">Name</p>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         }
                         if (Model.FindedProfile.VisibilitySubscribers || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
-                            <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                                <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
-                                <hr />
-                                <div class="d-flex flex-wrap" style="gap: .8rem;">
-                                    @for (int i = 0; i < 6; i++)
-                                    {
-                                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                            <p class="m-0">Name</p>
-                                        </div>
-                                    }
+                            if (Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count() == 0)
+                            {
+                                <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                                    Doesnt found subscribers
                                 </div>
-                            </div>
+                            }
+                            else
+                            {
+                                <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                                    <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
+                                    <hr />
+                                    <div class="d-flex flex-wrap" style="gap: .8rem;">
+                                        @foreach (var item in Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe))
+                                        {
+                                            if (item.FriendId == Model.FindedProfile.Id)
+                                            {
+                                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                    <img src="@item.Profile.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                    <p class="m-0">@item.Profile.Name</p>
+                                                </div>
+                                            }
+                                            else if (item.ProfileId == Model.FindedProfile.Id)
+                                            {
+                                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                                    <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                    <p class="m-0">@item.Friend.Name</p>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
                         }
                         if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                         {
@@ -496,11 +547,11 @@
                                 <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
                                     @if (Model.FindedProfile.VisibilityFriends || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                     {
-                                        <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
+                                        <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span> <span class="text-muted">Friends</span></a>
                                     }
                                     @if (Model.FindedProfile.VisibilitySubscribers || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                     {
-                                        <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
+                                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span> <span class="text-muted">Subscribers</span></a>
                                     }
                                     @if (Model.FindedProfile.Privacy == Env.PublicProfile)
                                     {
@@ -1438,11 +1489,11 @@
                             <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
                                 @if (Model.FindedProfile.VisibilityFriends || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                 {
-                                    <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
+                                    <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span> <span class="text-muted">Friends</span></a>
                                 }
                                 @if (Model.FindedProfile.VisibilitySubscribers || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                 {
-                                    <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
+                                    <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span> <span class="text-muted">Subscribers</span></a>
                                 }
                                 @if (Model.FindedProfile.Privacy == Env.PublicProfile)
                                 {

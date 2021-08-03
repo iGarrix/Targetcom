@@ -127,61 +127,72 @@
                         }
                     </div>
                     <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Update</a>
-                    <a asp-controller="Friends" asp-action="Blacklist" class="btn middletabbtn1 text-muted border pl-4 pr-4" style="font-size: 14px;">View blacklist</a>
+                    <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Blacklist" class="btn middletabbtn1 text-muted border pl-4 pr-4" style="font-size: 14px;">View blacklist</a>
                 </div>
                 @** If 0 friends *@
-                @if (false)
+                @if (Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count() == 0)
                 {
-
+                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                        You doesnt have friends
+                    </div>
                 }
                 else
                 {
                     <div class="border-0 rounded day_back_head">
                         <div class="p-3 overflow-hidden">
-                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">25</span></a>
+                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span></a>
                             <hr />
                             <div class="d-flex flex-wrap" style="gap: .8rem;">
-                                @for (int i = 0; i < 6; i++)
+                                @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend))
                                 {
-                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                        <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                        <p class="m-0">Name</p>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <hr class="m-0" />
-                        <div class="p-3 overflow-hidden">
-                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends online: <span class="text-muted">4</span></a>
-                            <div class="d-flex justify-content-between" style="gap: .8rem;">
-                                @for (int i = 0; i < 3; i++)
-                                {
-                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden">
-                                        <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                        <p class="m-0">Name</p>
-                                    </div>
+                                    if (item.FriendId == Model.IdentityProfile.Id)
+                                    {
+                                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                            <img src="@item.Profile.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
+                                            <p class="m-0">@item.Profile.Name</p>
+                                        </div>
+                                    }
+                                    else if (item.ProfileId == Model.IdentityProfile.Id)
+                                    {
+                                        <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                            <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" tyle="width: 38px; height: 38px;" />
+                                            <p class="m-0">@item.Friend.Name</p>
+                                        </div>
+                                    }
                                 }
                             </div>
                         </div>
                     </div>
                 }
                 @** If 0 friends *@
-                @if (false)
+                @if (Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count() == 0)
                 {
-
+                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                        You doesnt have subscribers
+                    </div>
                 }
                 else
                 {
                     <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                        <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">135</span></a>
+                        <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
                         <hr />
                         <div class="d-flex flex-wrap" style="gap: .8rem;">
-                            @for (int i = 0; i < 6; i++)
+                            @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe))
                             {
-                                <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                    <p class="m-0">Name</p>
-                                </div>
+                                if (item.FriendId == Model.IdentityProfile.Id)
+                                {
+                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                        <img src="@item.Profile.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;"/>
+                                        <p class="m-0">@item.Profile.Name</p>
+                                    </div>
+                                }
+                                else if (item.ProfileId == Model.IdentityProfile.Id)
+                                {
+                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
+                                        <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" tyle="width: 38px; height: 38px;" />
+                                        <p class="m-0">@item.Friend.Name</p>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
@@ -331,10 +342,20 @@
                     </div>
                     <div class="card-footer">
                         <div class="d-flex justify-content-around" style="font-family: Poppins, sans-serif;">
-                            <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">25</span> <span class="text-muted">Friends</span></a>
-                            <a asp-controller="Friends" asp-action="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">135</span> <span class="text-muted">Subscribers</span></a>
-                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
-                            <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
+                            <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center">
+                                <span class="day_color_main" style="font-size: 18px;">
+                                    @Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()
+                                </span> 
+                                <span class="text-muted">Friends</span>
+                            </a>
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center">
+                                <span class="day_color_main" style="font-size: 18px;">
+                                    @Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()
+                                </span> 
+                                <span class="text-muted">Subscribers</span>
+                            </a>
+                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">Demo</span> <span class="text-muted">Images</span></a>
+                            <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">Demo</span> <span class="text-muted">Songs</span></a>
                         </div>
                     </div>
                 </div>

@@ -9,5 +9,6 @@ namespace Targetcom.Models.ViewModels
     {
         public Profile IdentityUser { get; set; }
         public IEnumerable<Profile> AllUsers { get; set; }
+        public string EventSetter { get; set; }
     }
 }
