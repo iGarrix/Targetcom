@@ -125,10 +125,15 @@ namespace Targetcom.Controllers
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
 
-            if (profileVM.IdentityProfile.Friendships.Where(w => w.FriendId == profileVM.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
+            if (!profileVM.IdentityProfile.IsVerify)
             {
-                profileVM.IdentityProfile.IsVerify = true;
-                await _userManager.UpdateAsync(profileVM.IdentityProfile);
+                if (ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
+                {
+                    profileVM.IdentityProfile.IsVerify = true;
+                    var prof = profileVM.IdentityProfile;
+                    prof.Friendships = new HashSet<Friendship>();
+                    await _userManager.UpdateAsync(prof);
+                }
             }
 
             return View(profileVM);
