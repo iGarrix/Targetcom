@@ -54,5 +54,7 @@ namespace Targetcom
         public static string Friend = "Friend";
         public static string Subscribe = "Subscribe";
         public static string Blacklist = "Blacklist";
+
+        public static int VerifySubscribe = 2;
     }
 }

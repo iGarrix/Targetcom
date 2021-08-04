@@ -165,7 +165,7 @@
                     </div>
                 }
                 @** If 0 friends *@
-                @if (Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count() == 0)
+                @if (Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() == 0)
                 {
                     <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
                         You doesnt have subscribers
@@ -177,7 +177,7 @@
                         <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
                         <hr />
                         <div class="d-flex flex-wrap" style="gap: .8rem;">
-                            @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe))
+                            @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe))
                             {
                                 if (item.FriendId == Model.IdentityProfile.Id)
                                 {
@@ -350,7 +350,7 @@
                             </a>
                             <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center">
                                 <span class="day_color_main" style="font-size: 18px;">
-                                    @Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()
+                                    @Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count()
                                 </span> 
                                 <span class="text-muted">Subscribers</span>
                             </a>
