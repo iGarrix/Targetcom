@@ -1,11 +1,11 @@
 ﻿
+
 .day_color_head {
     color: #ffffff;
 }
 .day_back_head {
     background-color: #ffffff;
 }
-
 .day_color_default {
     color: #eeeeee;
 }
@@ -32,3 +32,40 @@
     color: #2a3036;
 }
 
+
+
+.dark .day_color_default {
+    color: #222426;
+}
+.dark .day_back_default {
+    background-color: #222426;
+}
+.dark .day_color_head {
+    color: #181a1b;
+}
+.dark .day_back_head {
+    background-color: #181a1b;
+}
+.dark .day_color_font {
+    color: #d3d2d0;
+}
+
+.dark .day_color_default {
+    color: #222426;
+}
+
+.dark.day_back_default {
+    background-color: #222426;
+}
+
+.dark.day_color_head {
+    color: #181a1b;
+}
+
+.dark.day_back_head {
+    background-color: #181a1b;
+}
+
+.dark.day_color_font {
+    color: #d3d2d0;
+}
