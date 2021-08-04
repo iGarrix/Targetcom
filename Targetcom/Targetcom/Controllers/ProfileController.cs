@@ -123,8 +123,13 @@ namespace Targetcom.Controllers
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
-
             profileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
+
+            if (profileVM.IdentityProfile.Friendships.Where(w => w.FriendId == profileVM.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
+            {
+                profileVM.IdentityProfile.IsVerify = true;
+                await _userManager.UpdateAsync(profileVM.IdentityProfile);
+            }
 
             return View(profileVM);
         }

@@ -258,16 +258,14 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                     i.Friend = Profiles.Find(i.FriendId);
                 });
 
-                myprofile.Friendships = ProfileFriendship.Where(w => w.FriendId == myprofile.Id || w.ProfileId == myprofile.Id).ToList();
-
                 if (myprofile.Status != null &&  myprofile.JobGeoplace != null && myprofile.StudyGeoplace != null &&
                     myprofile.UrlAvatar != null)
                 {
                     if ((DateTime.Now.Year - myprofile.Age.Year) >= 18 && 
                         myprofile.Status.Length > 0 &&
                         myprofile.JobGeoplace.Length > 0 && myprofile.StudyGeoplace.Length > 0 &&
-                        myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.EmailConfirmed && 
-                        myprofile.Friendships.Where(w => w.FriendId == myprofile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
+                        myprofile.UrlAvatar != Env.DefaultImageUrl && myprofile.EmailConfirmed &&
+                        ProfileFriendship.Where(w => w.FriendId == myprofile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
                     {
                         myprofile.IsVerify = true;
                         ischanged = true;
