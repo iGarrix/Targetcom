@@ -119,22 +119,21 @@ namespace Targetcom.Controllers
                 i.Friend = Profiles.Find(i.FriendId);
             });
 
+            if (!profileVM.IdentityProfile.IsVerify)
+            {
+                if (ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
+                {
+                    profileVM.IdentityProfile.IsVerify = true;
+                    await _userManager.UpdateAsync(profileVM.IdentityProfile);
+                }
+            }
+
             profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
 
-            if (!profileVM.IdentityProfile.IsVerify)
-            {
-                if (ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() >= Env.VerifySubscribe)
-                {
-                    profileVM.IdentityProfile.IsVerify = true;
-                    var prof = profileVM.IdentityProfile;
-                    prof.Friendships = new HashSet<Friendship>();
-                    await _userManager.UpdateAsync(prof);
-                }
-            }
 
             return View(profileVM);
         }
