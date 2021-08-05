@@ -3,7 +3,7 @@
     ViewData["Title"] = "Coins";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@model Profile; 
 <style>
     .gap {
         gap: 1rem;
@@ -38,7 +38,14 @@
                                 </div>
                                 <div class="d-flex flex-column ml-4 pl-2">
                                     <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
-                                        <span class="text-muted">20</span> - <strong>14</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">11</strong>
+                                        @if (Model.IsPremium)
+                                        {
+                                            <strong>11</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>20</strong>
+                                        }
                                         uan
                                     </p>
                                     <hr class="m-1" />
@@ -65,7 +72,14 @@
                                 </div>
                                 <div class="d-flex flex-column ml-4 pl-2">
                                     <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
-                                        <span class="text-muted">30</span> - <strong>21</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">18</strong>
+                                        @if (Model.IsPremium)
+                                        {
+                                            <strong>18</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>30</strong>
+                                        }
                                         uan
                                     </p>
                                     <hr class="m-1" />
@@ -94,7 +108,14 @@
                                 </div>
                                 <div class="d-flex flex-column ml-4 pl-2">
                                     <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
-                                        <span class="text-muted">180</span> - <strong>144</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">117</strong>
+                                        @if (Model.IsPremium)
+                                        {
+                                            <strong>117</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>180</strong>
+                                        }
                                         uan
                                     </p>
                                     <hr class="m-1" />
@@ -121,7 +142,14 @@
                                 </div>
                                 <div class="d-flex flex-column ml-4 pl-2">
                                     <p class="m-0 d-flex align-items-center" style="font-size: 16px; gap: .5rem;">
-                                        <span class="text-muted">400</span> - <strong>320</strong> - <strong class="badge badge-warning m-0" style="font-size: 15px;">260</strong>
+                                        @if (Model.IsPremium)
+                                        {
+                                            <strong>260</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>400</strong>
+                                        }
                                         uan
                                     </p>
                                     <hr class="m-1" />

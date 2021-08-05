@@ -18,14 +18,16 @@ namespace Targetcom.Controllers
         {
             _userManager = userManager;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var profile = await _userManager.GetUserAsync(User) as Profile;
+            return View(profile);
         }
 
-        public IActionResult Coins()
+        public async Task<IActionResult> Coins()
         {
-            return View();
+            var profile = await _userManager.GetUserAsync(User) as Profile;
+            return View(profile);
         }
 
         [HttpPost]
