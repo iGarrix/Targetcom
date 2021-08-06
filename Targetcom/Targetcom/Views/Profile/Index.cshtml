@@ -103,11 +103,29 @@
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
     @*Banned*@
-    @if (false)
+    @if (Model.IdentityProfile.Banned is not null)
     {
         <div style="width: 100%;" class="gap d-flex flex-column">
-            <div class="alert alert-danger p-5 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                <h5 class="m-0">This user is banned <i class="fas fa-ban" style="font-size: 18px;"></i></h5>
+            <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
+                <div>
+                    <h4 class="text-center">@Model.IdentityProfile.Name @Model.IdentityProfile.Surname has banned</h4>
+                    <hr />
+                    <h5>Admin / moderator: <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.IdentityProfile.Banned.AdminId">@Model.IdentityProfile.Banned.Admin.Name @Model.IdentityProfile.Banned.Admin.Surname</a></h5>
+                    <hr />
+                    <h5>Reason: <a class="text-primary" style="cursor:pointer;">@Model.IdentityProfile.Banned.Reason</a></h5>
+                    <hr />
+                    <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@Model.IdentityProfile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                    @if (Model.IdentityProfile.Banned.IsPermanent)
+                    {
+                        <hr />
+                        <h5>This profile always non-active. Profile on sets permanent banned</h5>
+                    }
+                    else
+                    {
+                        <hr />
+                        <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@Model.IdentityProfile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                    }
+                </div>
             </div>
         </div>
     }

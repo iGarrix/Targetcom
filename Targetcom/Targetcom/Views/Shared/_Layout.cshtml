@@ -2,7 +2,13 @@
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@{ Profile profile = await UserManager.GetUserAsync(User) as Profile; }
+@{ 
+    Profile profile = await UserManager.GetUserAsync(User) as Profile;
+    if (profile is null)
+    {
+        profile = new Profile();
+    }
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -123,7 +129,38 @@
     <div class="container m-auto" style="max-width: 75%; padding-top: 1rem; padding-bottom: 1rem;">
         <div style="height: 54px;"></div>
         <div>
-            @RenderBody()
+            @if (profile.Banned is not null)
+            {
+                <div style="width: 100%;" class="gap d-flex flex-column">
+                    <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
+                        <div>
+                            <h4 class="text-center">@profile.Name @profile.Surname has banned</h4>
+                            <hr />
+                            <h5>Admin / moderator: <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@profile.Banned.AdminId">@profile.Banned.Admin.Name @profile.Banned.Admin.Surname</a></h5>
+                            <hr />
+                            <h5>Reason: <a class="text-primary" style="cursor:pointer;">@profile.Banned.Reason</a></h5>
+                            <hr />
+                            <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                            @if (profile.Banned.IsPermanent)
+                            {
+                                <hr />
+                                <h5>This profile always non-active. Profile on sets permanent banned</h5>
+                            }
+                            else
+                            {
+                                <hr />
+                                <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                            }
+                        </div>
+                    </div>
+                </div>
+                await SignInManager.SignOutAsync();
+                IgnoreBody();
+            }
+            else
+            {
+                @RenderBody()
+            }
         </div>
     </div>
 

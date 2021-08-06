@@ -18,6 +18,7 @@ namespace Targetcom.Models
             SharedProfilePostages = new HashSet<SharedProfilePostage>();
             ProfilePostageComments = new HashSet<ProfilePostageComment>();
             Friendships = new HashSet<Friendship>();
+            BannedProfiles = new HashSet<BannedProfile>();
         }
 
         [Required]
@@ -68,6 +69,11 @@ namespace Targetcom.Models
         public bool IsNessessaredSharedPost { get; set; } = false;
         public bool IsNessessaredPublishPost { get; set; } = false;
         public bool IsNessessaredCommentedPost { get; set; } = false;
+
+        public int BannedId { get; set; }
+        public BannedProfile Banned { get; set; }
+        public ICollection<BannedProfile> BannedProfiles { get; set; }
+
 
         public ICollection<ProfileGame> ProfileGames { get; set; }
         public ICollection<ProfilePostage> ProfilePostages { get; set; }

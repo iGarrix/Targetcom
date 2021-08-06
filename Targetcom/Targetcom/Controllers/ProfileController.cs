@@ -128,12 +128,31 @@ namespace Targetcom.Controllers
                 }
             }
 
+            var ProfileBanned = _db.BannedProfiles;
+            ProfileBanned.ToList().ForEach(i =>
+            {
+                i.Profile = _db.Profiles.Find(i.ProfileId);
+                i.Admin = _db.Profiles.Find(i.AdminId);
+            });
+
             profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
+            profileVM.IdentityProfile.BannedProfiles = ProfileBanned.Where(w => w.AdminId == profileVM.IdentityProfile.Id).ToList();
+            
+            profileVM.IdentityProfile.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == profileVM.IdentityProfile.Id);
 
+            // Set ban
+            //string id = "b3dcfe00-0be0-4aa6-a603-1eb27973232b";
+            //var ban = Profiles.Find(id);
+            //_db.BannedProfiles.Add(new BannedProfile()
+            //{
+            //    Profile = ban,
+            //    Admin = profileVM.IdentityProfile,
+            //});
+            //_db.SaveChanges();
 
             return View(profileVM);
         }

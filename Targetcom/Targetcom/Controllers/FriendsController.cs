@@ -37,11 +37,22 @@ namespace Targetcom.Controllers
                 i.Profile = Profiles.Find(i.ProfileId);
                 i.Friend = Profiles.Find(i.FriendId);
             });
+            var ProfileBanned = _db.BannedProfiles;
+            ProfileBanned.ToList().ForEach(i =>
+            {
+                i.Profile = _db.Profiles.Find(i.ProfileId);
+                i.Admin = _db.Profiles.Find(i.AdminId);
+            });
+
+            friendVM.IdentityUser.BannedProfiles = ProfileBanned.Where(w => w.AdminId == friendVM.IdentityUser.Id).ToList();
+            friendVM.IdentityUser.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == friendVM.IdentityUser.Id);
 
             friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList();
             friendVM.AllUsers.ToList().ForEach(i =>
             {
                 i.Friendships = ProfileFriendship.Where(w => w.FriendId == i.Id || w.ProfileId == i.Id).ToList();
+                i.BannedProfiles = ProfileBanned.Where(w => w.AdminId == i.Id).ToList();
+                i.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == i.Id);
             });
             return View(friendVM);
         }
@@ -152,6 +163,13 @@ namespace Targetcom.Controllers
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
             viewProfileVM.MyRole = _userManager.GetRolesAsync(viewProfileVM.IdentityProfile as IdentityUser).Result.ToList()[0];
 
+            var ProfileBanned = _db.BannedProfiles;
+            ProfileBanned.ToList().ForEach(i =>
+            {
+                i.Profile = _db.Profiles.Find(i.ProfileId);
+                i.Admin = _db.Profiles.Find(i.AdminId);
+            });
+
             profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
@@ -159,6 +177,11 @@ namespace Targetcom.Controllers
 
             viewProfileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == viewProfileVM.IdentityProfile.Id || w.ProfileId == viewProfileVM.IdentityProfile.Id).ToList();
             profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
+
+            profile.BannedProfiles = ProfileBanned.Where(w => w.AdminId == profile.Id).ToList();
+            profile.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == profile.Id);
+            viewProfileVM.IdentityProfile.BannedProfiles = ProfileBanned.Where(w => w.AdminId == viewProfileVM.IdentityProfile.Id).ToList();
+            viewProfileVM.IdentityProfile.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == viewProfileVM.IdentityProfile.Id);
 
             viewProfileVM.FindedProfile = profile;
 

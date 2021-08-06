@@ -96,11 +96,38 @@
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
 
-    @if (false)
+    @if (Model.FindedProfile.Banned is not null)
     {
-        <div style="width: 80%;" class="gap d-flex flex-column">
-            <div class="alert alert-danger p-5 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                <h5 class="m-0">This user is banned <i class="fas fa-ban" style="font-size: 18px;"></i></h5>
+        <div style="width: 100%;" class="gap d-flex flex-column">
+            <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
+                <div>
+                    <h4 class="text-center">@Model.FindedProfile.Name @Model.FindedProfile.Surname has banned</h4>
+                    <hr />
+                    <h5>
+                        Admin / moderator: @if (Model.FindedProfile.Banned.AdminId != Model.IdentityProfile.Id)
+                        {
+                            <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.FindedProfile.Banned.AdminId">@Model.FindedProfile.Banned.Admin.Name @Model.FindedProfile.Banned.Admin.Surname</a>
+                        }
+                        else
+                        {
+                            <a class="text-primary" style="cursor:pointer;" asp-controller="Profile" asp-action="Index">@Model.FindedProfile.Banned.Admin.Name @Model.FindedProfile.Banned.Admin.Surname</a>
+                        }
+                    </h5>
+                    <hr />
+                    <h5>Reason: <a class="text-primary" style="cursor:pointer;">@Model.FindedProfile.Banned.Reason</a></h5>
+                    <hr />
+                    <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@Model.FindedProfile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                    @if (Model.FindedProfile.Banned.IsPermanent)
+                    {
+                        <hr />
+                        <h5>This profile always non-active. Profile on sets permanent banned</h5>
+                    }
+                    else
+                    {
+                        <hr />
+                        <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@Model.FindedProfile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                    }
+                </div>
             </div>
         </div>
     }

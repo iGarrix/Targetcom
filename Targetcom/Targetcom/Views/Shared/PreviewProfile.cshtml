@@ -60,7 +60,14 @@
             }
             else
             {
-                <a asp-controller="Friends" asp-action="AddFriend" asp-route-Id="@Model.User.Id" class="day_color_main" style="font-size: 14px;">Add friends</a>
+                if (Model.User.Banned is null)
+                {
+                    <a asp-controller="Friends" asp-action="AddFriend" asp-route-Id="@Model.User.Id" class="day_color_main" style="font-size: 14px;">Add friends</a>
+                }
+                else
+                {
+                    <a class="text-danger" style="font-size: 14px; cursor:pointer;">User is banned</a>
+                }
             }
         }
     </div>

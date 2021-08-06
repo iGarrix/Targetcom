@@ -28,10 +28,22 @@ namespace Targetcom.Data
 
             /* ------- */
 
+            builder.Entity<Profile>()
+                .HasOne(e => e.Banned)
+                .WithOne(w => w.Profile)
+                .HasForeignKey<BannedProfile>(f => f.ProfileId);
+
+            builder.Entity<Profile>()
+                .HasMany(e => e.BannedProfiles)
+                .WithOne(w => w.Admin)
+                .HasForeignKey(f => f.AdminId);
+                
+
             builder.Entity<Friendship>()
                 .HasOne(fs => fs.Profile)
                 .WithMany(u => u.Friendships)
                 .HasForeignKey(fs => fs.ProfileId);
+                
 
             builder.Entity<Profile>()
                 .HasMany(e => e.ProfilePostages)
@@ -85,5 +97,6 @@ namespace Targetcom.Data
         public DbSet<SharedProfilePostage> SharedProfilePostages { get; set; }
         public DbSet<ProfilePostageComment> ProfilePostageComments { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<BannedProfile> BannedProfiles { get; set; }
     }
 }
