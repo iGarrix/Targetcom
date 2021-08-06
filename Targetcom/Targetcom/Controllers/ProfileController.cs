@@ -86,15 +86,16 @@ namespace Targetcom.Controllers
                 IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
             };
 
+            if (profileVM.IdentityProfile.AfkStatus == Env.Offline)
+            {
+                profileVM.IdentityProfile.AfkStatus = Env.Online;
+            }
+
             var Profiles = _db.Profiles;
             var SharedProfilePostages = _db.SharedProfilePostages;
 
             var LikedProfilePostages = _db.LikedProfilePostages;
 
-            if (profileVM.IdentityProfile.AfkStatus == Env.Offline)
-            {
-                profileVM.IdentityProfile.AfkStatus = Env.Online;
-            }
 
             var ProfilePostages = _db.ProfilePostages;
             ProfilePostages.ToList().ForEach(i =>
@@ -141,7 +142,7 @@ namespace Targetcom.Controllers
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.BannedProfiles = ProfileBanned.Where(w => w.AdminId == profileVM.IdentityProfile.Id).ToList();
-            
+           
             profileVM.IdentityProfile.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == profileVM.IdentityProfile.Id);
 
             // Set ban
