@@ -30,16 +30,42 @@
         <div style="width: 75%;" class="d-flex flex-column rounded">
             <div class="day_back_default d-flex align-items-center p-3" style="background-color: #e8e8e8;">
                 <i class="fas fa-search text-muted" style="font-size: 14px;"></i>
-                <input type="text" placeholder="Enter name" style="width: 100%;" />
+                <input type="text" placeholder="Enter name" id="search" style="width: 100%;" />
             </div>
             <div class="day_back_head">
+                <div id="Finded">
+                    @if (Model.AllUsers.Count() == 0)
+                    {
+                        <div class="border-0 rounded day_back_head p-4 d-flex justify-content-center align-items-center day_color_main">
+                            Not found users
+                        </div>
+                    }
+                    <div id="Forblock">
+                        @foreach (var item in Model.AllUsers)
+                    {
+                        <div class="d-none @item.Name @item.Surname">
+                            @if (item.Id != Model.IdentityUser.Id)
+                            {
+                                Targetcom.Models.ViewModels.PreviewProfileVM vm = new Targetcom.Models.ViewModels.PreviewProfileVM()
+                                {
+                                    IdentityProfile = Model.IdentityUser,
+                                    User = item,
+                                };
+                                <partial name="PreviewProfile" model="vm" />
+                                <hr class="m-0" />
+                            }
+                        </div>
+                    }
+                    </div>
+                </div>
+                <hr class="day_back_main" />
                 <div id="Friends">
                     @if (Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Friend).Count() == 0)
-	                {
-		                <div class="border-0 rounded day_back_head p-4 d-flex justify-content-center align-items-center day_color_main">
+                    {
+                        <div class="border-0 rounded day_back_head p-4 d-flex justify-content-center align-items-center day_color_main">
                             Does not found friends
                         </div>
-	                }
+                    }
                     @foreach (var item in Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Friend))
                     {
                         if (item.Friend.Id != Model.IdentityUser.Id)
@@ -184,6 +210,19 @@
                         <span class="navtabs-indicator"></span>
                     </nav>
                     <script>
+                        const search = document.getElementById("search");
+                        let findblock = document.getElementById("Forblock").children;
+                        search.addEventListener("keyup", () => {
+                            for (var i = 0; i < findblock.length; ++i) {
+                                if (findblock[i].classList.contains(search.value)) {
+                                    findblock[i].classList.remove("d-none");
+                                }
+                                else {
+                                    findblock[i].classList.add("d-none");
+                                }
+                            }
+                        });
+
                         let eventor = document.getElementById("eventor");
                         const indicator = document.querySelector(".navtabs-indicator");
                         const items = document.querySelectorAll(".navtabs-item");
