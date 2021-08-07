@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "News";
+}
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@{ Profile profile = await UserManager.GetUserAsync(User) as Profile; }
+
+<style>
+    #summernote {
+        font-size: 14px;
+        outline: 0 !important;
+        border: 0;
+    }
+
+    .activel {
+        border-left: 3px solid #0094ff;
+    }
+</style>
+<div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+    <partial name="SideBar" />
+
+    <div style="width: 100%" class="d-flex flex-column">
+        <div class="card border-0 day_back_head overflow-auto rounded">
+            <div class="card-body p-2">
+                <h1>Lets Go</h1>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-column">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#summernote').summernote({
+            tabsize: 2,
+            height: 120,
+        });
+    </script>
+}
