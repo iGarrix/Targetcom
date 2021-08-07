@@ -187,7 +187,6 @@ namespace Targetcom.Controllers
 
             return View(viewProfileVM);
         }
-
         private async Task AddFriendMethod(string id)
         {
             if (id != null)
@@ -310,6 +309,69 @@ namespace Targetcom.Controllers
         {
             ChangeFriendMethod(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Images(string id)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
+            string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
+            ViewProfileVM viewProfileVM = new ViewProfileVM()
+            {
+                FindedProfile = new Profile(),
+                IdentityProfile = _db.Profiles.Find(myid),
+            };
+
+            var Profiles = _db.Profiles;
+            var SharedProfilePostages = _db.SharedProfilePostages;
+
+            var LikedProfilePostages = _db.LikedProfilePostages;
+
+            var ProfilePostages = _db.ProfilePostages;
+            ProfilePostages.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Writter = Profiles.Find(i.WritterId);
+                i.LikedProfiles = LikedProfilePostages.Where(l => l.ProfilePostageId == i.Id).ToList();
+                i.SharedProfiles = SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
+            });
+
+            var ProfilePostageComments = _db.ProfilePostageComments;
+            ProfilePostageComments.ToList().ForEach(i =>
+            {
+                i.Postage = ProfilePostages.FirstOrDefault(f => f.Id == i.PostageId);
+                i.ProfileCommentator = Profiles.Find(i.ProfileCommentatorId);
+            });
+
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+
+            var profile = await _userManager.FindByIdAsync(id) as Profile;
+            if (profile == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
+            viewProfileVM.MyRole = _userManager.GetRolesAsync(viewProfileVM.IdentityProfile as IdentityUser).Result.ToList()[0];
+
+            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
+
+            viewProfileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == viewProfileVM.IdentityProfile.Id || w.ProfileId == viewProfileVM.IdentityProfile.Id).ToList();
+            profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
+
+            viewProfileVM.FindedProfile = profile;
+
+            return View(viewProfileVM);
         }
 
         public async Task<IActionResult> ViewAddFriend(string id)

@@ -372,7 +372,7 @@
                                 </span> 
                                 <span class="text-muted">Subscribers</span>
                             </a>
-                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">Demo</span> <span class="text-muted">Images</span></a>
+                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.IdentityProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
                             <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">Demo</span> <span class="text-muted">Songs</span></a>
                         </div>
                     </div>
@@ -796,7 +796,7 @@
                                                             {
                                                                 if (item.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
                                                                 {
-                                                                    <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@item.LikedProfiles.FirstOrDefault(i => i.ProfileId == item.ProfileId).ProfileId" style="outline:0!important;">
+                                                                    <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@item.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
                                                                         <i class="fas fa-heart"></i>
                                                                         @if (item.LikedProfiles.Count != 0)
                                                                         {

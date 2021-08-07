@@ -570,7 +570,7 @@
                                     {
                                         @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                         {
-                                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
+                                            <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
                                         }
                                         @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                         {
@@ -1512,7 +1512,7 @@
                                 {
                                     @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                     {
-                                        <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">745</span> <span class="text-muted">Images</span></a>
+                                        <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
                                     }
                                     @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                     {
