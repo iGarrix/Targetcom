@@ -8,11 +8,11 @@ using Targetcom.Data;
 
 namespace Targetcom.Controllers
 {
-    public class MessangerController : Controller
+    public class CommunitiesController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly TargetDbContext _db;
-        public MessangerController(UserManager<IdentityUser> userManager, TargetDbContext db)
+        public CommunitiesController(UserManager<IdentityUser> userManager, TargetDbContext db)
         {
             _userManager = userManager;
             _db = db;
