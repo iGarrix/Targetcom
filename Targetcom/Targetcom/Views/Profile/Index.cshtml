@@ -99,6 +99,18 @@
     img {
         object-fit: cover;
     }
+    .objf {
+        object-fit: cover;
+        background-size: 116px 120px;
+    }
+    .objfeffect {
+        opacity: 0%;
+        transition: .1s;
+    }
+        .objfeffect:hover {
+            opacity: 100%;
+            background-color: rgba(0, 0, 0, 0.60);
+        }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
@@ -363,13 +375,13 @@
                             <a asp-controller="Friends" asp-action="Index" class="d-flex flex-column align-items-center">
                                 <span class="day_color_main" style="font-size: 18px;">
                                     @Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()
-                                </span> 
+                                </span>
                                 <span class="text-muted">Friends</span>
                             </a>
                             <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center">
                                 <span class="day_color_main" style="font-size: 18px;">
                                     @Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count()
-                                </span> 
+                                </span>
                                 <span class="text-muted">Subscribers</span>
                             </a>
                             <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.IdentityProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
@@ -377,6 +389,20 @@
                         </div>
                     </div>
                 </div>
+                @if (Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                {
+                    <div class="border-0 gap d-flex justify-content-around overflow-hidden">
+                        @foreach (var item in Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
+	                    {
+                            <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
+                                <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
+                                    <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
+                                    <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                </div>
+                            </div>
+	                    }
+                    </div>
+                }
                 @using (Html.BeginForm("PublishPost", "Profile", FormMethod.Post))
                 {
                     <div class="card border-0 day_back_head overflow-auto rounded">
