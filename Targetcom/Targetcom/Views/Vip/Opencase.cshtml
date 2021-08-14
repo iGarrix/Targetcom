@@ -70,17 +70,17 @@
         {
             <div class="day_back_head p-3 rounded d-flex justify-content-between">
                 <h4 class="m-0 day_color_main">Silver case</h4>
-                <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.DefaultCase).CaseCount</span>                
+                <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.DefaultCase).CaseCount</span>
             </div>
         }
         else
         {
-    <div class="day_back_head p-3 rounded d-flex justify-content-between">
-        <h4 class="m-0 day_color_main">Premium case</h4>
-        <div>
-            <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.PremiumCase).CaseCount</span>         
-        </div>
-    </div>
+            <div class="day_back_head p-3 rounded d-flex justify-content-between">
+                <h4 class="m-0 day_color_main">Premium case</h4>
+                <div>
+                    <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.PremiumCase).CaseCount</span>
+                </div>
+            </div>
         }
         @if (Model.Attempts != "0 attempts")
         {
@@ -179,7 +179,7 @@
                         this.x = this.x + (canvas.width / 2);
                         this.y = this.y + (canvas.height);
 
-                        // Determine whether the cannonball should be 
+                        // Determine whether the cannonball should be
                         // fired to the left or right of the cannon
                         if (mouse.x - canvas.width / 2 < 0) {
                             this.dx = -this.dx;
@@ -412,6 +412,256 @@
         {
             <div class="d-flex justify-content-center align-items-center rounded day_back_head rounded p-3">
                 <h4 class="day_color_main m-0">You dont have enought attempts.</h4>
+            </div>
+        }
+        @if (Model.CaseType == Env.DefaultCase)
+        {
+            <div class="shadow bg-success rounded p-3 mt-4 text-light">
+                <h4>Silver case</h4>
+                <hr />
+                <div class="d-flex flex-column align-items-center" style="gap: 1rem;">
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center p-3" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">45</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C40% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">50</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C30% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">60</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C20% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">70</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C10% : R60%</span>
+                        </div>
+                    </div>
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.1 game</span>
+                            <span>C40% : R40%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.2 game</span>
+                            <span>C30% : R40%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.3 game</span>
+                            <span>C20% : R40%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.4 game</span>
+                            <span>C10% : R40%</span>
+                        </div>
+                    </div>
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-info rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Molecular grid</span>
+                            <span>C40% : R10%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-info rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Blick grid</span>
+                            <span>C30% : R10%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-info rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Slime grid</span>
+                            <span>C20% : R10%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-info rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Cogti grid</span>
+                            <span>C10% : R10%</span>
+                        </div>
+                    </div>
+                    <div class="price rounded d-flex flex-column justify-content-center align-items-center p-3" style="width:calc(560px + 3rem);">
+                        <div class="p-3 bg-danger rounded-circle d-flex justify-content-center align-items-center" style="width: 60px; height: 60px;">
+                            <h4 class="m-0">140</h4>
+                        </div>
+                        <span class="mt-2">Jackpot coins</span>
+                        <span>1%</span>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="shadow rounded bg-warning p-3 mt-4 text-light">
+                <h4>Premium case</h4>
+                <hr />
+                <div class="d-flex flex-column align-items-center" style="gap: 1rem;">
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">80</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C40% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">110</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C30% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">140</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C20% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 day_back_main rounded-circle">
+                                <h4 class="m-0">160</h4>
+                            </div>
+                            <span class="mt-2">coins</span>
+                            <span>C10% : R60%</span>
+                        </div>
+                    </div>
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="d-flex" style="gap: 1rem;">
+                            <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                                <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                    <h4 class="m-0 text-center">1</h4>
+                                </div>
+                                <span class="mt-2">Lvl.1 game</span>
+                                <span>C40% : R30%</span>
+                            </div>
+                            <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                                <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                    <h4 class="m-0 text-center">1</h4>
+                                </div>
+                                <span class="mt-2">Lvl.2 game</span>
+                                <span>C30% : R30%</span>
+                            </div>
+                            <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                                <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                    <h4 class="m-0 text-center">1</h4>
+                                </div>
+                                <span class="mt-2">Lvl.3 game</span>
+                                <span>C20% : R30%</span>
+                            </div>
+                            <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                                <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                    <h4 class="m-0 text-center">1</h4>
+                                </div>
+                                <span class="mt-2">Lvl.4 game</span>
+                                <span>C10% : R30%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Heart grid</span>
+                            <span>C40% : R10%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Ghost grid</span>
+                            <span>C30% : R10%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Scan grid</span>
+                            <span>C20% : R10%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 140px; height: 140px;">
+                            <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Shark grid</span>
+                            <span>C10% : R10%</span>
+                        </div>
+                    </div>
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 295px; height: 130px;">
+                            <span class="mt-2 day_color_main day_back_head p-3 rounded font-weight-bold">Image Widget</span>
+                            <span>C5% : R60%</span>
+                        </div>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 295px; height: 130px;">
+                            <span class="mt-2 day_color_main day_back_head p-3 rounded font-weight-bold">Rainbow nickname</span>
+                            <span>C5% : R30%</span>
+                        </div>
+                    </div>
+                    @if (!Model.IdentityProfile.IsPremium)
+                    {
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width:calc(560px + 3rem);">
+                            <div class="p-3 d-flex flex-column align-items-center">
+                                @{ string fragment = "PREMIUM"; }
+                                @if (Model.IdentityProfile.Fragment > 0)
+                                {
+                                    <h3 class="text-center" style="letter-spacing: 1rem;">
+                                        @for (int i = 0; i < Model.IdentityProfile.Fragment; ++i)
+                                        {
+                                            <span>@fragment[i]</span>
+                                        }
+                                    </h3>
+                                }
+                                else
+                                {
+                                    <span>Collect 7 fragments to get a premium subscription</span>
+                                }
+                                @if (Model.IdentityProfile.Fragment == 7)
+                                {
+                                    @using (Html.BeginForm(FormMethod.Post))
+                                    {
+                                        <button asp-controller="Vip" asp-action="GetPremiumPost" class="buybtn font-weight-bold bg-light day_color_main rounded pl-3 pr-3 p-2">GET A PREMIUM PLAN</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="mt-2 text-center">JACKPOT PREMIUM PLAN PERMANENT</span>
+                                }
+                                <span>C5% : R10%</span>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         }
     </div>

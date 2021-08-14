@@ -89,7 +89,7 @@ namespace Targetcom.Controllers
                                 {
                                     IdentityProfile = profile,
                                     CaseType = type,
-                                    Prize = new Tuple<string, int>("Empty", 0),
+                                    Prize = new Tuple<string, int>("coins", 40),
                                     Attempts = "success",
                                 };
                                 profile.Cases.FirstOrDefault(f => f.CaseType == Env.DefaultCase).CaseCount -= 1;
@@ -156,7 +156,7 @@ namespace Targetcom.Controllers
                                 {
                                     IdentityProfile = profile,
                                     CaseType = type,
-                                    Prize = new Tuple<string, int>("Empty", 0),
+                                    Prize = new Tuple<string, int>("coins", 150),
                                     Attempts = "success",
                                 };
                                 profile.Cases.FirstOrDefault(f => f.CaseType == Env.PremiumCase).CaseCount -= 1;
@@ -369,6 +369,8 @@ namespace Targetcom.Controllers
             Random row = new Random();
             Random col = new Random();
 
+            var games = _db.Games.Where(w => w.TargetPrice < 1000).ToList();
+
             int x = col.Next(1, 102);
 
             if (x < 11)
@@ -381,7 +383,11 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("3 game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
                 }
                 else if (j < 101)
                 {
@@ -398,7 +404,11 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("2 game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
                 }
                 else if (j < 101)
                 {
@@ -415,7 +425,11 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("1 game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
                 }
                 else if (j < 101)
                 {
@@ -432,11 +446,15 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("Rnd game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 25);
+                    return new Tuple<string, int>("coins", 45);
                 }
             }
             if (x == 101)
@@ -450,12 +468,18 @@ namespace Targetcom.Controllers
             Random row = new Random();
             Random col = new Random();
 
+            var games = _db.Games.Where(w => w.TargetPrice > 1000).ToList();
+
             int x = col.Next(1, 102);
             if (x < 5)
             {
                 Console.WriteLine("5 row");
                 int j = row.Next(1, 101);
                 if (j < 11)
+                {
+                    return new Tuple<string, int>("Fragment", 1);                   
+                }
+                else if (j < 41)
                 {
                     return new Tuple<string, int>("Rainbow", 1);
                 }
@@ -474,7 +498,11 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("3 game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
                 }
                 else if (j < 101)
                 {
@@ -491,7 +519,11 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("2 game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
                 }
                 else if (j < 101)
                 {
@@ -508,7 +540,11 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("1 game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
                 }
                 else if (j < 101)
                 {
@@ -525,16 +561,16 @@ namespace Targetcom.Controllers
                 }
                 else if (j < 41)
                 {
-                    return new Tuple<string, int>("Rnd game", 1);
+                    if (games.Count > 0)
+                    {
+                        return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
+                    }
+                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
                 }
                 else if (j < 101)
                 {
                     return new Tuple<string, int>("coins", 80);
                 }
-            }
-            if (x == 101)
-            {
-                return new Tuple<string, int>("Fragment", 1);
             }
             return new Tuple<string, int>("Empty", 0);
         }

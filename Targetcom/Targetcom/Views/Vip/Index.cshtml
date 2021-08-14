@@ -119,21 +119,24 @@
                         </div>
                     </div>
                     
-                    <div class="p-4 shadow day_back_head day_color_main" style="border-radius: 2rem 10px 2rem 10px;">
-                        <div class="d-flex align-items-center">
-                            <h5 class="font-weight-bolder mr-auto">Image Widget</h5>               
-                        </div>
-                        <hr />
-                        <div class="d-flex" style="gap:1rem;">
-                            <img src="@Model.Item1.UrlAvatar" class="rounded" alt="" style="width: 180px; height: 180px;" />
-                            <div class="rounded bg-secondary d-flex justify-content-center align-items-center text-light" style="width: 180px; height: 180px;">
-                                Image 2
+                    @if (Model.Item1.ImageVidget)
+	                {
+                        <div class="p-4 shadow day_back_head day_color_main" style="border-radius: 2rem 10px 2rem 10px;">
+                            <div class="d-flex align-items-center">
+                                <h5 class="font-weight-bolder mr-auto">Image Widget</h5>               
                             </div>
-                            <div class="rounded bg-secondary d-flex justify-content-center align-items-center text-light" style="width: 180px; height: 180px;">
-                                Image 3 ...
+                            <hr />
+                            <div class="d-flex" style="gap:1rem;">
+                                <img src="@Model.Item1.UrlAvatar" class="rounded" alt="" style="width: 180px; height: 180px;" />
+                                <div class="rounded bg-secondary d-flex justify-content-center align-items-center text-light" style="width: 180px; height: 180px;">
+                                    Image 2
+                                </div>
+                                <div class="rounded bg-secondary d-flex justify-content-center align-items-center text-light" style="width: 180px; height: 180px;">
+                                    Image 3 ...
+                                </div>
                             </div>
                         </div>
-                    </div>
+	                }
 
                     <div class="p-4 shadow day_back_head day_color_main" style="border-radius: 2rem 10px 2rem 10px;">
                         <div class="d-flex">
@@ -368,7 +371,7 @@
                 <div class="d-flex" style="gap: 1rem;">
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
                         <div class="p-3 day_back_main rounded-circle">
-                            <h4 class="m-0">25</h4>
+                            <h4 class="m-0">45</h4>
                         </div>
                         <span class="mt-2">coins</span>
                     </div>
@@ -396,25 +399,25 @@
                         <div class="p-3 bg-success rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
-                        <span class="mt-2">Random game</span>
+                        <span class="mt-2">Lvl.1 game</span>
                     </div>
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
                         <div class="p-3 bg-success rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
-                        <span class="mt-2">[name 1] game</span>
+                        <span class="mt-2">Lvl.2 game</span>
                     </div>
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
                         <div class="p-3 bg-success rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
-                        <span class="mt-2">[name 2] game</span>
+                        <span class="mt-2">Lvl.3 game</span>
                     </div>
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
                         <div class="p-3 bg-success rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
-                        <span class="mt-2">[name 3] game</span>
+                        <span class="mt-2">Lvl.4 game</span>
                     </div>
                 </div>
                 <div class="d-flex" style="gap: 1rem;">
@@ -482,52 +485,54 @@
                     </div>
                 </div>
                 <div class="d-flex" style="gap: 1rem;">
-                    <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
-                            <h4 class="m-0 text-center">1</h4>
+                    <div class="d-flex" style="gap: 1rem;">
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.1 game</span>
                         </div>
-                        <span class="mt-2">Random game</span>
-                    </div>
-                    <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
-                            <h4 class="m-0 text-center">1</h4>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.2 game</span>
                         </div>
-                        <span class="mt-2">[name 1] game</span>
-                    </div>
-                    <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
-                            <h4 class="m-0 text-center">1</h4>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.3 game</span>
                         </div>
-                        <span class="mt-2">[name 2] game</span>
-                    </div>
-                    <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
-                            <h4 class="m-0 text-center">1</h4>
+                        <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
+                            <div class="p-3 bg-success rounded-circle" style="width: 56px;">
+                                <h4 class="m-0 text-center">1</h4>
+                            </div>
+                            <span class="mt-2">Lvl.4 game</span>
                         </div>
-                        <span class="mt-2">[name 3] game</span>
                     </div>
                 </div>
                 <div class="d-flex" style="gap: 1rem;">
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
+                        <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
                         <span class="mt-2">Heart grid</span>
                     </div>
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
+                        <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
                         <span class="mt-2">Ghost grid</span>
                     </div>
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
+                        <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
                         <span class="mt-2">Scan grid</span>
                     </div>
                     <div class="price rounded d-flex flex-column justify-content-center align-items-center" style="width: 130px; height: 130px;">
-                        <div class="p-3 bg-primary rounded-circle" style="width: 56px;">
+                        <div class="p-3 bg-warning rounded-circle" style="width: 56px;">
                             <h4 class="m-0 text-center">1</h4>
                         </div>
                         <span class="mt-2">Shark grid</span>
