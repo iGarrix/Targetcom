@@ -29,6 +29,11 @@ namespace Targetcom.Data
             /* ------- */
 
             builder.Entity<Profile>()
+                .HasMany(e => e.Cases)
+                .WithOne(w => w.Profile)
+                .HasForeignKey(f => f.ProfileId);
+
+            builder.Entity<Profile>()
                 .HasOne(e => e.Banned)
                 .WithOne(w => w.Profile)
                 .HasForeignKey<BannedProfile>(f => f.ProfileId);
@@ -98,5 +103,6 @@ namespace Targetcom.Data
         public DbSet<ProfilePostageComment> ProfilePostageComments { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<BannedProfile> BannedProfiles { get; set; }
+        public DbSet<Case> Cases { get; set; }
     }
 }

@@ -110,7 +110,38 @@
         .objfeffect:hover {
             opacity: 100%;
             background-color: rgba(0, 0, 0, 0.60);
-        }
+    }
+        
+    .rainbow {
+         animation: textAnimate 12s linear infinite alternate;
+     }
+
+     @@keyframes textAnimate {
+
+         0% {
+             color: #98ff00;
+         }
+         25% {
+             color: #6000ff;
+         }
+         50% {
+             color: #ff6b00;
+         }
+         75% {
+             color: #007aff;
+         }
+         100% {
+             color: #ff0000;
+         }
+     }
+    .grid {
+        top: -6.5%;
+        left: -6.5%;
+        background-size: 106.5% 106.5%;
+        object-fit: cover;
+        width: 106.5%;
+        height: 106.5%;
+    }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
@@ -147,13 +178,35 @@
             <div style="width: 15rem;" class="gap d-flex flex-column">
                 <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden rounded">
                     <div class="align-self-center">
-                        @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                        @if (Model.IdentityProfile.AvatarGridURL != null || Model.IdentityProfile.AvatarGridURL != string.Empty)
                         {
-                            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                            {
+                                <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
+                                    <img src="@Env.DefaultImageUrl" class="img-card rounded" style="width: 200px; height: 200px;" />
+                                    <div class="grid position-absolute rounded" style="background-image: url(@Model.IdentityProfile.AvatarGridURL); ">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
+                                    <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                                    <div class="grid position-absolute rounded" style="background-image: url(@Model.IdentityProfile.AvatarGridURL); ">
+                                    </div>
+                                </div>
+                            }
                         }
                         else
                         {
-                            <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            @if (Model.IdentityProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                            {
+                                <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            }
+                            else
+                            {
+                                <img src="@Model.IdentityProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            }
                         }
                     </div>
                     <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Update</a>
@@ -197,13 +250,13 @@
                 @** If 0 friends *@
                 @if (Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Count() == 0)
                 {
-                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center" style="position: sticky; top: 70px;">
                         You doesnt have subscribers
                     </div>
                 }
                 else
                 {
-                    <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                    <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
                         <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
                         <hr />
                         <div class="d-flex flex-wrap" style="gap: .8rem;">
@@ -216,38 +269,10 @@
                                         <p class="m-0">@item.Profile.Name</p>
                                     </div>
                                 }
-                                @*if (item.ProfileId == Model.IdentityProfile.Id)
-                                {
-                                    <div class="d-flex flex-column align-items-center p-2 overflow-hidden" style="width: 60px;">
-                                        <img src="@item.Friend.UrlAvatar" class="border-0 rounded-circle" alt="Avatar" style="width: 38px; height: 38px;" />
-                                        <p class="m-0">@item.Friend.Name</p>
-                                    </div>
-                                }*@
                             }
                         </div>
                     </div>
-                }
-                @* If 0 friends *@
-                @if (false)
-                {
-
-                }
-                else
-                {
-                    <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                        <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                        <hr />
-                        <div style="gap: .8rem;">
-                            @for (int i = 0; i < 5; i++)
-                            {
-                                <div class="d-flex align-items-center p-2 overflow-hidden">
-                                    <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                    <p class="m-0 ml-2">Name</p>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
+                }            
             </div>
             <div style="width: 100%" class="gap d-flex flex-column overflow-hidden">
 
@@ -256,7 +281,14 @@
                         <div class="d-flex flex-column">
                             <div class="d-flex justify-content-between">
                                 <h4 class="m-0 font-weight-normal d-flex align-items-center" style="font-family: Poppins, sans-serif;">
-                                    @Model.IdentityProfile.Name @Model.IdentityProfile.Surname
+                                    @if (Model.IdentityProfile.RainbowMode == Env.RainbowOn)
+                                    {
+                                        <span class="rainbow">@Model.IdentityProfile.Name @Model.IdentityProfile.Surname</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.IdentityProfile.Name @Model.IdentityProfile.Surname</span>
+                                    }
                                     @if (Model.IdentityProfile.IsVerify)
                                     {<i class="fas fa-check day_color_main ml-2" style="font-size: 13px;"></i>}
                                 </h4>
@@ -286,7 +318,7 @@
                         else
                         {
                             <a asp-controller="Vip" asp-action="Index" class="alert middletabbtn1 border-0 p-2 d-flex justify-content-center align-items-center" style="font-family: Poppins, sans-serif;">
-                                <p class="m-0">Buy premium plan, 30 starter days - free!</p>
+                                <p class="m-0">Buy premium plan for 9999 coins</p>
                             </a>
                         }
                         <hr class="mt-0" style="height: 2px; width: 100%;" />
@@ -384,24 +416,26 @@
                                 </span>
                                 <span class="text-muted">Subscribers</span>
                             </a>
-                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.IdentityProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
-                            <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">Demo</span> <span class="text-muted">Songs</span></a>
+                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.IdentityProfile.Id).Count()</span> <span class="text-muted">Images</span></a>                        
                         </div>
                     </div>
                 </div>
-                @if (Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                @if (Model.IdentityProfile.ImageVidget)
                 {
-                    <div class="border-0 gap d-flex justify-content-around overflow-hidden">
-                        @foreach (var item in Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
-	                    {
-                            <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
-                                <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
-                                    <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
-                                    <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                    if (Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                    {
+                        <div class="border-0 gap d-flex justify-content-around overflow-hidden">
+                            @foreach (var item in Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
+	                        {
+                                <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
+                                    <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
+                                        <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
+                                        <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                    </div>
                                 </div>
-                            </div>
-	                    }
-                    </div>
+	                        }
+                        </div>
+                    }
                 }
                 @using (Html.BeginForm("PublishPost", "Profile", FormMethod.Post))
                 {
@@ -491,7 +525,7 @@
                                                             <div class="d-flex">
                                                                 <a class="day_color_main" style="white-space:nowrap; cursor:pointer;">
                                                                     @item.Writter.Name @item.Writter.Surname
-                                                                    @if (item.Profile.IsVerify)
+                                                                    @if (item.Profile.IsVerify || item.Writter.IsVerify)
                                                                     {
                                                                         <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                     }
@@ -796,7 +830,7 @@
                                                             <div class="d-flex">
                                                                 <a class="day_color_main" style="white-space: nowrap; cursor: pointer;">
                                                                     @item.Writter.Name @item.Writter.Surname
-                                                                    @if (item.Profile.IsVerify)
+                                                                    @if (item.Profile.IsVerify || item.Writter.IsVerify)
                                                                     {
                                                                         <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                     }

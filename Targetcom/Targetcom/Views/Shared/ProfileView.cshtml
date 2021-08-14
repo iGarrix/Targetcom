@@ -51,6 +51,7 @@
         outline: 0 !important;
         border: 0;
     }
+
     .dropbtn {
         color: white;
         border: none;
@@ -91,6 +92,54 @@
 
     img {
         object-fit: cover;
+    }
+    .objf {
+        object-fit: cover;
+        background-size: 116px 120px;
+    }
+
+    .objfeffect {
+        opacity: 0%;
+        transition: .1s;
+    }
+
+        .objfeffect:hover {
+            opacity: 100%;
+            background-color: rgba(0, 0, 0, 0.60);
+        }
+    .rainbow {
+        animation: textAnimate 12s linear infinite alternate;
+    }
+
+    @@keyframes textAnimate {
+
+        0% {
+            color: #98ff00;
+        }
+
+        25% {
+            color: #6000ff;
+        }
+
+        50% {
+            color: #ff6b00;
+        }
+
+        75% {
+            color: #007aff;
+        }
+
+        100% {
+            color: #ff0000;
+        }
+    }
+    .grid {
+        top: -6.5%;
+        left: -6.5%;
+        background-size: 106.5% 106.5%;
+        object-fit: cover;
+        width: 106.5%;
+        height: 106.5%;
     }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
@@ -137,13 +186,35 @@
             <div style="width: 15rem;" class="gap d-flex flex-column">
                 <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden rounded">
                     <div class="align-self-center">
-                        @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                        @if (Model.FindedProfile.AvatarGridURL != null || Model.FindedProfile.AvatarGridURL != string.Empty)
                         {
-                            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                            {
+                                <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
+                                    <img src="@Env.DefaultImageUrl" class="img-card rounded" style="width: 200px; height: 200px;" />
+                                    <div class="grid position-absolute rounded" style="background-image: url(@Model.FindedProfile.AvatarGridURL); ">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
+                                    <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                                    <div class="grid position-absolute rounded" style="background-image: url(@Model.FindedProfile.AvatarGridURL); ">
+                                    </div>
+                                </div>
+                            }
                         }
                         else
                         {
-                            <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                            {
+                                <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            }
+                            else
+                            {
+                                <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            }
                         }
                     </div>
                     @if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.FindedProfile.Id) != null)
@@ -192,7 +263,10 @@
                         }
                         else
                         {
-                            <a asp-controller="Friends" asp-action="ViewAddFriend" asp-route-Id="@Model.FindedProfile.Id" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add friends</a>
+                            if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                            {
+                                <a asp-controller="Friends" asp-action="ViewAddFriend" asp-route-Id="@Model.FindedProfile.Id" class="btn day_back_main text-light pl-4 pr-4" style="font-size: 14px;">Add friends</a>
+                            }
                             <a asp-controller="Friends" asp-action="ViewCreateBlacklistFriend" asp-route-Id="@Model.FindedProfile.Id" class="btn btn-danger text-light pl-4 pr-4" style="font-size: 14px;">Leave in blacklist</a>
                         }
                     }
@@ -209,7 +283,10 @@
                         </div>
                     }
                 </div>
-                @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
+                    Model.IdentityProfile.Friendships
+                        .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                        (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                 {
                     if (Model.IdentityProfile.Friendships
                         .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
@@ -261,13 +338,13 @@
                             {
                                 if (Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count() == 0)
                                 {
-                                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center" style="position: sticky; top: 70px;">
                                         Doesnt found subscribers
                                     </div>
                                 }
                                 else
                                 {
-                                    <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                                    <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
                                         <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span></a>
                                         <hr />
                                         <div class="d-flex flex-wrap" style="gap: .8rem;">
@@ -284,22 +361,6 @@
                                         </div>
                                     </div>
                                 }
-                            }
-                            if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                            {
-                                <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                                    <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                                    <hr />
-                                    <div style="gap: .8rem;">
-                                        @for (int i = 0; i < 5; i++)
-                                        {
-                                            <div class="d-flex align-items-center p-2 overflow-hidden">
-                                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                <p class="m-0 ml-2">Name</p>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
                             }
                         }
                     }
@@ -370,32 +431,15 @@
                                 </div>
                             }
                         }
-                        if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                        {
-                            <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                                <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                                <hr />
-                                <div style="gap: .8rem;">
-                                    @for (int i = 0; i < 5; i++)
-                                    {
-                                        <div class="d-flex align-items-center p-2 overflow-hidden">
-                                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                            <p class="m-0 ml-2">Name</p>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
                     }
                 }
             </div>
             <div style="width: 100%" class="gap d-flex flex-column overflow-hidden">
 
-
                 @if (Model.IdentityProfile.Friendships
-             .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
-             (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id))
-             is not null)
+          .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
+          (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id))
+          is not null)
                 {
                     if (Model.IdentityProfile.Friendships
                     .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
@@ -406,7 +450,14 @@
                                 <div class="d-flex flex-column">
                                     <div class="d-flex justify-content-between">
                                         <h4 class="m-0 font-weight-normal d-flex align-items-center" style="font-family: Poppins, sans-serif;">
-                                            @Model.FindedProfile.Name @Model.FindedProfile.Surname
+                                            @if (Model.FindedProfile.RainbowMode == Env.RainbowOn)
+                                            {
+                                                <span class="rainbow">@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+                                            }
                                             @if (Model.FindedProfile.IsVerify)
                                             {<i class="fas fa-check day_color_main ml-2" style="font-size: 13px;"></i>}
                                         </h4>
@@ -417,7 +468,10 @@
                                         <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.FindedProfile.Quote</p>
                                     }
                                 </div>
-                                @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                                @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
+                                      Model.IdentityProfile.Friendships
+                        .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                        (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                                 {
                                     <hr style="height: 2px; width: 100%;" />
                                     @if (Model.Role == Env.ModerRole)
@@ -566,21 +620,49 @@
                                     {
                                         <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span> <span class="text-muted">Subscribers</span></a>
                                     }
-                                    @if (Model.FindedProfile.Privacy == Env.PublicProfile)
+                                    @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.IdentityProfile.Friendships
+                        .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                        (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                                     {
                                         @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                         {
                                             <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
                                         }
-                                        @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                                        {
-                                            <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
-                                        }
                                     }
                                 </div>
                             </div>
+
                         </div>
-                        @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                        @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
+                                     Model.IdentityProfile.Friendships
+                       .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                       (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
+                        {
+                            if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                            {
+                                if (Model.FindedProfile.ImageVidget)
+                                {
+                                    if (Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                                    {
+                                        <div class="border-0 gap d-flex justify-content-around overflow-hidden">
+                                            @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
+                                            {
+                                                <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
+                                                    <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
+                                                        <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
+                                                        <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+                        @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
+                                      Model.IdentityProfile.Friendships
+                        .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                        (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                         {
                             if (!Model.FindedProfile.IsNessessaredPublishPost || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
@@ -687,7 +769,7 @@
                                                                             <div class="d-flex">
                                                                                 <a class="day_color_main" style="white-space:nowrap; cursor:pointer;">
                                                                                     @item.Writter.Name @item.Writter.Surname
-                                                                                    @if (item.Profile.IsVerify || item.WritterId == Model.IdentityProfile.Id)
+                                                                                    @if (item.Profile.IsVerify || (item.WritterId == Model.IdentityProfile.Id && item.Writter.IsVerify))
                                                                                     {
                                                                                         <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                                     }
@@ -1023,7 +1105,7 @@
                                                                             <div class="d-flex">
                                                                                 <a class="day_color_main" style="white-space:nowrap; cursor:pointer;">
                                                                                     @item.Writter.Name @item.Writter.Surname
-                                                                                    @if (item.Profile.IsVerify || item.WritterId == Model.IdentityProfile.Id)
+                                                                                    @if (item.Profile.IsVerify || (item.WritterId == Model.IdentityProfile.Id && item.Writter.IsVerify))
                                                                                     {
                                                                                         <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                                     }
@@ -1154,7 +1236,7 @@
                                                                                                                                 <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
                                                                                                                             }
                                                                                                                             @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id
-                                                                                                                             || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
+                                                                                                                          || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
                                                                                                                             {
                                                                                                                                 <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                                                     <div class="dropdown">
@@ -1293,7 +1375,7 @@
                                                                                                     </a>
                                                                                                     <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
                                                                                                     @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id
-                                                                                                    || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
+                                                                                                 || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
                                                                                                     {
                                                                                                         <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                             <div class="dropdown">
@@ -1333,12 +1415,12 @@
                                 </div>
                             </div>
                         }
-                    }                   
+                    }
                     else
                     {
-            <div class="alert alert-danger d-flex justify-content-center align-items-center p-4">
-                Until you are blacklisted, browsing and actions between these people will be blocked
-            </div>
+                        <div class="alert alert-danger d-flex justify-content-center align-items-center p-4">
+                            Until you are blacklisted, browsing and actions between these people will be blocked
+                        </div>
                     }
                 }
                 else
@@ -1348,7 +1430,15 @@
                             <div class="d-flex flex-column">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="m-0 font-weight-normal d-flex align-items-center" style="font-family: Poppins, sans-serif;">
-                                        @Model.FindedProfile.Name @Model.FindedProfile.Surname
+                                        @if (Model.FindedProfile.RainbowMode == Env.RainbowOn)
+	                                    {
+                                            <span class="rainbow">@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+	                                    }
+                                        else
+                                        {
+                                            <span>@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+                                        }
+                                        
                                         @if (Model.FindedProfile.IsVerify)
                                         {<i class="fas fa-check day_color_main ml-2" style="font-size: 13px;"></i>}
                                     </h4>
@@ -1514,13 +1604,32 @@
                                     {
                                         <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
                                     }
-                                    @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                                    {
-                                        <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
-                                    }
                                 }
                             </div>
                         </div>
+                        @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                        {
+                            if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
+                            {
+                                if (Model.FindedProfile.ImageVidget)
+                                {
+                                    if (Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                                    {
+                                        <div class="border-0 gap d-flex justify-content-around overflow-hidden">
+                                            @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
+                                            {
+                                                <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
+                                                    <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
+                                                        <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
+                                                        <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
                     </div>
                     @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                     {
@@ -1629,7 +1738,7 @@
                                                                         <div class="d-flex">
                                                                             <a class="day_color_main" style="white-space:nowrap; cursor:pointer;">
                                                                                 @item.Writter.Name @item.Writter.Surname
-                                                                                @if (item.Profile.IsVerify || item.WritterId == Model.IdentityProfile.Id)
+                                                                                @if (item.Profile.IsVerify || (item.WritterId == Model.IdentityProfile.Id && item.Writter.IsVerify))
                                                                                 {
                                                                                     <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                                 }
@@ -1965,7 +2074,7 @@
                                                                         <div class="d-flex">
                                                                             <a class="day_color_main" style="white-space:nowrap; cursor:pointer;">
                                                                                 @item.Writter.Name @item.Writter.Surname
-                                                                                @if (item.Profile.IsVerify || item.WritterId == Model.IdentityProfile.Id)
+                                                                                @if (item.Profile.IsVerify || (item.WritterId == Model.IdentityProfile.Id && item.Writter.IsVerify))
                                                                                 {
                                                                                     <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                                 }
@@ -2096,7 +2205,7 @@
                                                                                                                             <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
                                                                                                                         }
                                                                                                                         @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id
-                                                                                                                        || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
+                                                                                                                     || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
                                                                                                                         {
                                                                                                                             <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                                                 <div class="dropdown">
@@ -2235,7 +2344,7 @@
                                                                                                 </a>
                                                                                                 <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
                                                                                                 @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id
-                                                                                               || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
+                                                                                            || item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Postage.ProfileId == Model.IdentityProfile.Id)
                                                                                                 {
                                                                                                     <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                         <div class="dropdown">
@@ -2280,12 +2389,3 @@
         </div>
     }
 </div>
-
-@*@section Scripts {
-    <script>
-        $('#summernote').summernote({
-            tabsize: 2,
-            height: 120,
-        });
-    </script>
-}*@

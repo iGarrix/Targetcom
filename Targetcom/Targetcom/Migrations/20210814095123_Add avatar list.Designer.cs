@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210814095123_Add avatar list")]
+    partial class Addavatarlist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -554,10 +556,16 @@ namespace Targetcom.Migrations
                     b.Property<bool>("VisibilityCommerceData")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("VisibilityCommunity")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("VisibilityFriends")
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilityImages")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("VisibilityPlaylist")
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilityPostage")
