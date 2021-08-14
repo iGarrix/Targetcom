@@ -107,6 +107,40 @@
             opacity: 100%;
             background-color: rgba(0, 0, 0, 0.60);
         }
+    .rainbow {
+        animation: textAnimate 12s linear infinite alternate;
+    }
+
+    @@keyframes textAnimate {
+
+        0% {
+            color: #98ff00;
+        }
+
+        25% {
+            color: #6000ff;
+        }
+
+        50% {
+            color: #ff6b00;
+        }
+
+        75% {
+            color: #007aff;
+        }
+
+        100% {
+            color: #ff0000;
+        }
+    }
+    .grid {
+        top: -6.5%;
+        left: -6.5%;
+        background-size: 106.5% 106.5%;
+        object-fit: cover;
+        width: 106.5%;
+        height: 106.5%;
+    }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
@@ -152,13 +186,35 @@
             <div style="width: 15rem;" class="gap d-flex flex-column">
                 <div class="day_back_head p-4 d-flex flex-column gap overflow-hidden rounded">
                     <div class="align-self-center">
-                        @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                        @if (Model.FindedProfile.AvatarGridURL != null || Model.FindedProfile.AvatarGridURL != string.Empty)
                         {
-                            <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                            {
+                                <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
+                                    <img src="@Env.DefaultImageUrl" class="img-card rounded" style="width: 200px; height: 200px;" />
+                                    <div class="grid position-absolute rounded" style="background-image: url(@Model.FindedProfile.AvatarGridURL); ">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
+                                    <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                                    <div class="grid position-absolute rounded" style="background-image: url(@Model.FindedProfile.AvatarGridURL); ">
+                                    </div>
+                                </div>
+                            }
                         }
                         else
                         {
-                            <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            @if (Model.FindedProfile.UrlAvatar == Targetcom.Env.DefaultImageUrl)
+                            {
+                                <img src="@Env.DefaultImageUrl" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            }
+                            else
+                            {
+                                <img src="@Model.FindedProfile.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 200px; height: 200px;" />
+                            }
                         }
                     </div>
                     @if (Model.IdentityProfile.Friendships.FirstOrDefault(f => f.FriendId == Model.FindedProfile.Id) != null)
@@ -426,7 +482,14 @@
                                 <div class="d-flex flex-column">
                                     <div class="d-flex justify-content-between">
                                         <h4 class="m-0 font-weight-normal d-flex align-items-center" style="font-family: Poppins, sans-serif;">
-                                            @Model.FindedProfile.Name @Model.FindedProfile.Surname
+                                            @if (Model.FindedProfile.RainbowMode == Env.RainbowOn)
+                                            {
+                                                <span class="rainbow">@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+                                            }
                                             @if (Model.FindedProfile.IsVerify)
                                             {<i class="fas fa-check day_color_main ml-2" style="font-size: 13px;"></i>}
                                         </h4>
@@ -607,25 +670,28 @@
 
                         </div>
                         @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
-                                      Model.IdentityProfile.Friendships
-                        .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
-                        (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
+                                     Model.IdentityProfile.Friendships
+                       .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                       (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                         {
                             if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
-                                @if (Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                                if (Model.FindedProfile.ImageVidget)
                                 {
-                                    <div class="border-0 gap d-flex justify-content-around overflow-hidden">
-                                        @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
-                                        {
-                                            <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
-                                                <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
-                                                    <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
-                                                    <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                    if (Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                                    {
+                                        <div class="border-0 gap d-flex justify-content-around overflow-hidden">
+                                            @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
+                                            {
+                                                <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
+                                                    <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
+                                                        <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
+                                                        <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    </div>
+                                            }
+                                        </div>
+                                    }
                                 }
                             }
                         }
@@ -1400,7 +1466,15 @@
                             <div class="d-flex flex-column">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="m-0 font-weight-normal d-flex align-items-center" style="font-family: Poppins, sans-serif;">
-                                        @Model.FindedProfile.Name @Model.FindedProfile.Surname
+                                        @if (Model.FindedProfile.RainbowMode == Env.RainbowOn)
+	                                    {
+                                            <span class="rainbow">@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+	                                    }
+                                        else
+                                        {
+                                            <span>@Model.FindedProfile.Name @Model.FindedProfile.Surname</span>
+                                        }
+                                        
                                         @if (Model.FindedProfile.IsVerify)
                                         {<i class="fas fa-check day_color_main ml-2" style="font-size: 13px;"></i>}
                                     </h4>
@@ -1577,19 +1651,22 @@
                         {
                             if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
-                                @if (Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                                if (Model.FindedProfile.ImageVidget)
                                 {
-                                    <div class="border-0 gap d-flex justify-content-around overflow-hidden">
-                                        @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
-                                        {
-                                            <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
-                                                <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
-                                                    <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
-                                                    <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                    if (Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).Count() > 0)
+                                    {
+                                        <div class="border-0 gap d-flex justify-content-around overflow-hidden">
+                                            @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject).OrderByDescending(o => o.TimeStamp).Take(4))
+                                            {
+                                                <div class="rounded objf d-flex" style="width: 116px; height:116px; background-image: url(@item.Content);">
+                                                    <div class="d-flex justify-content-center align-items-center rounded objfeffect flex-column" style="width:100%; height:100%;">
+                                                        <i class="far fa-heart text-danger" style="font-size: 35px; transform: translateX(-30%);"></i>
+                                                        <h5 class="text-light mt-1">@item.LikedProfiles.Count</h5>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    </div>
+                                            }
+                                        </div>
+                                    }
                                 }
                             }
                         }

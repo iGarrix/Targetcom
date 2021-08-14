@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210813133347_Add grid avatar")]
+    partial class Addgridavatar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -471,12 +473,6 @@ namespace Targetcom.Migrations
                     b.Property<DateTime>("CreateStamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DroppedAvatar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Fragment")
-                        .HasColumnType("int");
-
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -485,7 +481,7 @@ namespace Targetcom.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("ImageVidget")
+                    b.Property<bool>("InRanbowName")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDark")
@@ -526,9 +522,6 @@ namespace Targetcom.Migrations
                     b.Property<string>("Quote")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RainbowMode")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)

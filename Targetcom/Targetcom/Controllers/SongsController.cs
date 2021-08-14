@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Targetcom.Data;
+using Targetcom.Models;
+using Targetcom.Models.ViewModels;
 
 namespace Targetcom.Controllers
 {
@@ -17,9 +19,14 @@ namespace Targetcom.Controllers
             _userManager = userManager;
             _db = db;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            SongVM songVM = new SongVM()
+            {
+                IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                Friends = new List<Profile>(),
+            };
+            return View(songVM);
         }
     }
 }

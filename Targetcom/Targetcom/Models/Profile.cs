@@ -19,6 +19,7 @@ namespace Targetcom.Models
             ProfilePostageComments = new HashSet<ProfilePostageComment>();
             Friendships = new HashSet<Friendship>();
             BannedProfiles = new HashSet<BannedProfile>();
+            Cases = new HashSet<Case>();
         }
 
         [Required]
@@ -70,6 +71,13 @@ namespace Targetcom.Models
         public bool IsNessessaredPublishPost { get; set; } = false;
         public bool IsNessessaredCommentedPost { get; set; } = false;
 
+        public bool ImageVidget { get; set; } = false;
+        public string RainbowMode { get; set; } = Env.RainbowNone;
+        public bool IsDark { get; set; } = false;
+        public string AvatarGridURL { get; set; } = Env.GridNone;
+        public int Fragment { get; set; } = 0;
+        public string DroppedAvatar { get; set; } = string.Empty;
+
         public int BannedId { get; set; }
         public BannedProfile Banned { get; set; }
         public ICollection<BannedProfile> BannedProfiles { get; set; }
@@ -82,5 +90,6 @@ namespace Targetcom.Models
         public ICollection<SharedProfilePostage> SharedProfilePostages { get; set; }
         public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
         public ICollection<Friendship> Friendships { get; set; }
+        public ICollection<Case> Cases { get; set; }
     }
 }
