@@ -338,13 +338,13 @@
                             {
                                 if (Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count() == 0)
                                 {
-                                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center">
+                                    <div class="border-0 rounded day_back_head day_color_main p-3 overflow-hidden d-flex justify-content-center align-items-center" style="position: sticky; top: 70px;">
                                         Doesnt found subscribers
                                     </div>
                                 }
                                 else
                                 {
-                                    <div class="border-0 rounded day_back_head p-3 overflow-hidden">
+                                    <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
                                         <a asp-controller="Friends" asp-action="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span></a>
                                         <hr />
                                         <div class="d-flex flex-wrap" style="gap: .8rem;">
@@ -361,22 +361,6 @@
                                         </div>
                                     </div>
                                 }
-                            }
-                            if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                            {
-                                <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                                    <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                                    <hr />
-                                    <div style="gap: .8rem;">
-                                        @for (int i = 0; i < 5; i++)
-                                        {
-                                            <div class="d-flex align-items-center p-2 overflow-hidden">
-                                                <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                                <p class="m-0 ml-2">Name</p>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
                             }
                         }
                     }
@@ -446,22 +430,6 @@
                                     </div>
                                 </div>
                             }
-                        }
-                        if (Model.FindedProfile.VisibilityCommunity || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                        {
-                            <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                                <a asp-controller="Communities" asp-action="Index" class="m-0 middletabbtn">Communities: <span class="text-muted">23</span></a>
-                                <hr />
-                                <div style="gap: .8rem;">
-                                    @for (int i = 0; i < 5; i++)
-                                    {
-                                        <div class="d-flex align-items-center p-2 overflow-hidden">
-                                            <div class="bg-dark rounded-circle" style="width: 38px; height: 38px;"></div>
-                                            <p class="m-0 ml-2">Name</p>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
                         }
                     }
                 }
@@ -659,10 +627,6 @@
                                         @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                         {
                                             <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
-                                        }
-                                        @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                                        {
-                                            <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
                                         }
                                     }
                                 </div>
@@ -1639,10 +1603,6 @@
                                     @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                     {
                                         <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
-                                    }
-                                    @if (Model.FindedProfile.VisibilityPlaylist || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
-                                    {
-                                        <a asp-controller="Songs" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">1104</span> <span class="text-muted">Songs</span></a>
                                     }
                                 }
                             </div>

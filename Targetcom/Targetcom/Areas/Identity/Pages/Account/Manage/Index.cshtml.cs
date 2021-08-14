@@ -192,11 +192,6 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                     myprofile.VisibilitySharePostage = Input.profile.VisibilitySharePostage;
                     ischanged = true;
                 }
-                if (usermanagement.VisibilityPlaylist != Input.profile.VisibilityPlaylist)
-                {
-                    myprofile.VisibilityPlaylist = Input.profile.VisibilityPlaylist;
-                    ischanged = true;
-                }
                 if (usermanagement.VisibilityFriends != Input.profile.VisibilityFriends)
                 {
                     myprofile.VisibilityFriends = Input.profile.VisibilityFriends;
@@ -210,11 +205,6 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
                 if (usermanagement.VisibilityImages != Input.profile.VisibilityImages)
                 {
                     myprofile.VisibilityImages = Input.profile.VisibilityImages;
-                    ischanged = true;
-                }
-                if (usermanagement.VisibilityCommunity != Input.profile.VisibilityCommunity)
-                {
-                    myprofile.VisibilityCommunity = Input.profile.VisibilityCommunity;
                     ischanged = true;
                 }
 

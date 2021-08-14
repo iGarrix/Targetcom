@@ -58,10 +58,8 @@ namespace Targetcom.Models
         public bool VisibilityQuote { get; set; } = true;
         public bool VisibilityPostage { get; set; } = true;
         public bool VisibilitySharePostage { get; set; } = true;
-        public bool VisibilityPlaylist { get; set; } = true;
         public bool VisibilityFriends { get; set; } = true;
         public bool VisibilityImages { get; set; } = true;
-        public bool VisibilityCommunity { get; set; } = true;
         public bool VisibilitySubscribers { get; set; } = true;
         public bool VisibilityAboutMe { get; set; } = true;
         public bool VisibilityCommerceData { get; set; } = true;
