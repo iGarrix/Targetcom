@@ -25,7 +25,7 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/ThemeColors.css" />
+    @*<link href="~/css/ThemeColors.css" rel="stylesheet" />*@
     <link href="~/css/Tabs.css" rel="stylesheet" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,137 +35,346 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        .day_color_head {
+            color: #ffffff;
+        }
+
+        .day_back_head {
+            background-color: #ffffff;
+        }
+
+        .day_color_default {
+            color: #eeeeee;
+        }
+
+        .day_back_default {
+            background-color: #eeeeee;
+        }
+
+        .day_color_main {
+            color: #4f90db;
+        }
+
+        .day_back_main {
+            background-color: #4f90db;
+        }
+
+        .day_color_mainlight {
+            color: #6ba8ed;
+        }
+
+        .day_back_mainlight {
+            background-color: #6ba8ed;
+        }
+
+        .day_color_font {
+            color: #2a3036;
+        }
+
+
+        .night .day_color_default {
+            color: #222426;
+        }
+
+        .night .day_back_default {
+            background-color: #222426;
+        }
+
+        .night .day_color_head {
+            color: #181a1b;
+        }
+
+        .night .day_back_head {
+            background-color: #181a1b;
+        }
+
+        .night .day_color_font {
+            color: #d3d2d0;
+        }
+
+        .night .day_color_default {
+            color: #222426;
+        }
+
+        .night.day_back_default {
+            background-color: #222426;
+        }
+
+        .night.day_color_head {
+            color: #181a1b;
+        }
+
+        .night.day_back_head {
+            background-color: #181a1b;
+        }
+
+        .night.day_color_font {
+            color: #d3d2d0;
+        }
+
         img {
             object-fit: cover;
         }
     </style>
 </head>
-<body class="day_back_default">
-    <style>
-        .gap {
-            gap: 1rem;
-        }
+@if (profile.IsDark)
+{
+    <body class="day_back_default night">
+        <style>
+            .gap {
+                gap: 1rem;
+            }
 
-        .bars1 svg, .bars1 {
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: .5px;
-            font-weight: normal;
-            font-size: 14px;
-            color: #9b9b9b;
-        }
+            .bars1 svg, .bars1 {
+                font-family: 'Poppins', sans-serif;
+                letter-spacing: .5px;
+                font-weight: normal;
+                font-size: 14px;
+                color: #9b9b9b;
+            }
 
-        .bars1:hover {
-            text-decoration: none;
-        }
+                .bars1:hover {
+                    text-decoration: none;
+                }
 
-            .bars1:hover svg, .bars1 {
-                color: #5181b8;
-            }           
+                    .bars1:hover svg, .bars1 {
+                        color: #5181b8;
+                    }
 
-        #searcher, #searcher:active, #searcher:hover {
-            outline: 0 !important;
-        }
+            #searcher, #searcher:active, #searcher:hover {
+                outline: 0 !important;
+            }
 
-        .targetbar:active {
-            transform: translateY(1.5px);
-        }
-    </style>
-    <header class="position-fixed w-100" style="z-index:100;">
-        <nav class="navbar navbar-expand-sm border-0 navbar-toggleable-sm day_back_head border-bottom box-shadow p-0 day_color_font" style="font-family: 'Poppins', sans-serif;">
-            <div class="container m-auto" style="max-width: 75%;">
-                <a class="navbar-brand d-flex align-items-center targetbar day_color_font" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 800; font-size: 18px; height: 54px; font-family: 'Montserrat', sans-serif;">
-                    <i class="fas fa-tenge day_color_main mr-2" style="font-size: 25px;"></i> @Env.WebName.ToUpper()
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav d-flex gap" style="margin-left: 10%;">
-                            <li class="nav-item">
-                                <div class="input-group day_back_default rounded-pill pt-1 pb-1">
-                                    <div class="input-group-prepend ">
-                                        <span class="input-group-text bg-transparent p-2 border-0" id="basic-addon1"><i class="fas fa-search text-muted" style="font-size: 14px;"></i></span>
+            .targetbar:active {
+                transform: translateY(1.5px);
+            }
+        </style>
+        <header class="position-fixed w-100" style="z-index:100;">
+            <nav class="navbar navbar-expand-sm border-0 navbar-toggleable-sm day_back_head border-bottom box-shadow p-0 day_color_font" style="font-family: 'Poppins', sans-serif;">
+                <div class="container m-auto" style="max-width: 75%;">
+                    <a class="navbar-brand d-flex align-items-center targetbar day_color_font" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 800; font-size: 18px; height: 54px; font-family: 'Montserrat', sans-serif;">
+                        <i class="fas fa-tenge day_color_main mr-2" style="font-size: 25px;"></i> @Env.WebName.ToUpper()
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav d-flex gap" style="margin-left: 10%;">
+                                <li class="nav-item">
+                                    <div class="input-group day_back_default rounded-pill pt-1 pb-1">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text bg-transparent p-2 border-0" id="basic-addon1"><i class="fas fa-search text-muted" style="font-size: 14px;"></i></span>
+                                        </div>
+                                        <input type="text" id="searcher" class="day_back_default day_color_font border-0 rounded-pill" placeholder="Search people, friends ..." aria-describedby="basic-addon1" style="font-size: 14px;">
                                     </div>
-                                    <input type="text" id="searcher" class="day_back_default day_color_font border-0 rounded-pill" placeholder="Search people, friends ..." aria-describedby="basic-addon1" style="font-size: 14px;">
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-controller="Vip" asp-action="Coins" class="bars1 d-flex align-items-center pt-2" style="font-family: Poppins, sans-serif;">@profile.TargetCoins coins</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <partial name="_LoginPartial" model="profile" />
-                            </li>
-                        </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Vip" asp-action="Coins" class="bars1 d-flex align-items-center pt-2" style="font-family: Poppins, sans-serif;">@profile.TargetCoins coins</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <partial name="_LoginPartial" model="profile" />
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item ml-auto">
+                                    <a class="nav-link day_color_font d-flex align-items-center" style="font-family: Poppins, sans-serif;">Welcome <i class="fas fa-grin ml-2 day_color_main" style="font-size: 25px;"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </nav>
+        </header>
+        <div class="container m-auto" style="max-width: 75%; padding-top: 1rem; padding-bottom: 1rem;">
+            <div style="height: 54px;"></div>
+            <div>
+                @if (profile.Banned is not null)
+                {
+                    <div style="width: 100%;" class="gap d-flex flex-column">
+                        <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
+                            <div>
+                                <h4 class="text-center">@profile.Name @profile.Surname has banned</h4>
+                                <hr />
+                                <h5>Admin / moderator: <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@profile.Banned.AdminId">@profile.Banned.Admin.Name @profile.Banned.Admin.Surname</a></h5>
+                                <hr />
+                                <h5>Reason: <a class="text-primary" style="cursor:pointer;">@profile.Banned.Reason</a></h5>
+                                <hr />
+                                <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                                @if (profile.Banned.IsPermanent)
+                                {
+                                    <hr />
+                                    <h5>This profile always non-active. Profile on sets permanent banned</h5>
+                                }
+                                else
+                                {
+                                    <hr />
+                                    <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                                }
+                            </div>
+                        </div>
                     </div>
+                    await SignInManager.SignOutAsync();
+                    IgnoreBody();
                 }
                 else
                 {
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item ml-auto">
-                                <a class="nav-link day_color_font d-flex align-items-center" style="font-family: Poppins, sans-serif;">Welcome <i class="fas fa-grin ml-2 day_color_main" style="font-size: 25px;"></i></a>
-                            </li>
-                        </ul>
-                    </div>
+                    @RenderBody()
                 }
             </div>
-        </nav>
-    </header>
-    <div class="container m-auto" style="max-width: 75%; padding-top: 1rem; padding-bottom: 1rem;">
-        <div style="height: 54px;"></div>
-        <div>
-            @if (profile.Banned is not null)
-            {
-                <div style="width: 100%;" class="gap d-flex flex-column">
-                    <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
-                        <div>
-                            <h4 class="text-center">@profile.Name @profile.Surname has banned</h4>
-                            <hr />
-                            <h5>Admin / moderator: <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@profile.Banned.AdminId">@profile.Banned.Admin.Name @profile.Banned.Admin.Surname</a></h5>
-                            <hr />
-                            <h5>Reason: <a class="text-primary" style="cursor:pointer;">@profile.Banned.Reason</a></h5>
-                            <hr />
-                            <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
-                            @if (profile.Banned.IsPermanent)
-                            {
+        </div>
+        <footer class="footer text-muted bg-transparent">
+            <div class="container m-auto d-flex justify-content-between" style="max-width: 75%;">
+                <p class="m-0">TARGET.COM <span style="font-size: 14px;">&copy;</span> 2021 - More...</p>
+                <p class="m-0">SOCIAL WEB-SITE</p>
+                <p class="m-0">PRIMARY 30 DAYS - FREE ALL</p>
+                <p class="m-0">ASP.NET DEVELOPMENT</p>
+                <p class="m-0">API IN FUTURE TIME</p>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+}
+else
+{
+    <body class="day_back_default">
+        <style>
+            .gap {
+                gap: 1rem;
+            }
+
+            .bars1 svg, .bars1 {
+                font-family: 'Poppins', sans-serif;
+                letter-spacing: .5px;
+                font-weight: normal;
+                font-size: 14px;
+                color: #9b9b9b;
+            }
+
+                .bars1:hover {
+                    text-decoration: none;
+                }
+
+                    .bars1:hover svg, .bars1 {
+                        color: #5181b8;
+                    }
+
+            #searcher, #searcher:active, #searcher:hover {
+                outline: 0 !important;
+            }
+
+            .targetbar:active {
+                transform: translateY(1.5px);
+            }
+        </style>
+        <header class="position-fixed w-100" style="z-index:100;">
+            <nav class="navbar navbar-expand-sm border-0 navbar-toggleable-sm day_back_head border-bottom box-shadow p-0 day_color_font" style="font-family: 'Poppins', sans-serif;">
+                <div class="container m-auto" style="max-width: 75%;">
+                    <a class="navbar-brand d-flex align-items-center targetbar day_color_font" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 800; font-size: 18px; height: 54px; font-family: 'Montserrat', sans-serif;">
+                        <i class="fas fa-tenge day_color_main mr-2" style="font-size: 25px;"></i> @Env.WebName.ToUpper()
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav d-flex gap" style="margin-left: 10%;">
+                                <li class="nav-item">
+                                    <div class="input-group day_back_default rounded-pill pt-1 pb-1">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text bg-transparent p-2 border-0" id="basic-addon1"><i class="fas fa-search text-muted" style="font-size: 14px;"></i></span>
+                                        </div>
+                                        <input type="text" id="searcher" class="day_back_default day_color_font border-0 rounded-pill" placeholder="Search people, friends ..." aria-describedby="basic-addon1" style="font-size: 14px;">
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Vip" asp-action="Coins" class="bars1 d-flex align-items-center pt-2" style="font-family: Poppins, sans-serif;">@profile.TargetCoins coins</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <partial name="_LoginPartial" model="profile" />
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item ml-auto">
+                                    <a class="nav-link day_color_font d-flex align-items-center" style="font-family: Poppins, sans-serif;">Welcome <i class="fas fa-grin ml-2 day_color_main" style="font-size: 25px;"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </nav>
+        </header>
+        <div class="container m-auto" style="max-width: 75%; padding-top: 1rem; padding-bottom: 1rem;">
+            <div style="height: 54px;"></div>
+            <div>
+                @if (profile.Banned is not null)
+                {
+                    <div style="width: 100%;" class="gap d-flex flex-column">
+                        <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
+                            <div>
+                                <h4 class="text-center">@profile.Name @profile.Surname has banned</h4>
                                 <hr />
-                                <h5>This profile always non-active. Profile on sets permanent banned</h5>
-                            }
-                            else
-                            {
+                                <h5>Admin / moderator: <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@profile.Banned.AdminId">@profile.Banned.Admin.Name @profile.Banned.Admin.Surname</a></h5>
                                 <hr />
-                                <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
-                            }
+                                <h5>Reason: <a class="text-primary" style="cursor:pointer;">@profile.Banned.Reason</a></h5>
+                                <hr />
+                                <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                                @if (profile.Banned.IsPermanent)
+                                {
+                                    <hr />
+                                    <h5>This profile always non-active. Profile on sets permanent banned</h5>
+                                }
+                                else
+                                {
+                                    <hr />
+                                    <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@profile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
-                await SignInManager.SignOutAsync();
-                IgnoreBody();
-            }
-            else
-            {
-                @RenderBody()
-            }
+                    await SignInManager.SignOutAsync();
+                    IgnoreBody();
+                }
+                else
+                {
+                    @RenderBody()
+                }
+            </div>
         </div>
-    </div>
-
-    <footer class="footer text-muted bg-transparent">
-        <div class="container m-auto d-flex justify-content-between" style="max-width: 75%;">
-            <p class="m-0">TARGET.COM <span style="font-size: 14px;">&copy;</span> 2021 - More...</p>
-            <p class="m-0">SOCIAL WEB-SITE</p>
-            <p class="m-0">PRIMARY 30 DAYS - FREE ALL</p>
-            <p class="m-0">ASP.NET DEVELOPMENT</p>
-            <p class="m-0">API IN FUTURE TIME</p>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <footer class="footer text-muted bg-transparent">
+            <div class="container m-auto d-flex justify-content-between" style="max-width: 75%;">
+                <p class="m-0">TARGET.COM <span style="font-size: 14px;">&copy;</span> 2021 - More...</p>
+                <p class="m-0">SOCIAL WEB-SITE</p>
+                <p class="m-0">PRIMARY 30 DAYS - FREE ALL</p>
+                <p class="m-0">ASP.NET DEVELOPMENT</p>
+                <p class="m-0">API IN FUTURE TIME</p>
+            </div>
+        </footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+}
 </html>

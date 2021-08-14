@@ -9,7 +9,7 @@
     }
 </style>
 <div class="d-flex justify-content-center" style="font-family: Roboto, sans-serif;">
-    <div class="border day_back_head rounded p-4" style="min-width: 35vw;">
+    <div class="border-0 day_back_head rounded p-4" style="min-width: 35vw;">
         <h4 class="day_color_font text-center">Registration</h4>
         <hr />
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="gap d-flex flex-column">
@@ -18,19 +18,19 @@
                 <div class="d-flex gap">
                     <div style="width: 50%">
                         @*<label asp-for="Input.Profile.Name"></label>*@
-                        <input asp-for="Input.Profile.Name" placeholder="Enter Name" class="form-control" style="font-size: 14px;" />
+                        <input asp-for="Input.Profile.Name" placeholder="Enter Name" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
                         <span asp-validation-for="Input.Profile.Name" class="text-danger" style="font-size: 14px;"></span>
                     </div>
                     <div style="width: 50%">
                         @*<label asp-for="Input.Profile.Surname"></label>*@
-                        <input asp-for="Input.Profile.Surname" placeholder="Enter Surname" class="form-control" style="font-size: 14px;" />
+                        <input asp-for="Input.Profile.Surname" placeholder="Enter Surname" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
                         <span asp-validation-for="Input.Profile.Surname" class="text-danger" style="font-size: 14px;"></span>
                     </div>
 
                 </div>
                 <div>
                     @*<label asp-for="Input.Profile.Surname"></label>*@
-                    <select asp-for="Input.Profile.Gender" class="form-control" style="font-size: 14px;">
+                    <select asp-for="Input.Profile.Gender" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;">
                         <option disabled selected>Select Genger</option>
                         <option value="Female">Famale</option>
                         <option value="Male">Male</option>
@@ -39,22 +39,22 @@
                 </div>
                 <div>
                     @*<label asp-for="Input.Profile.Surname"></label>*@
-                    <input asp-for="Input.Profile.Age" placeholder="Enter date birtday" class="form-control" style="font-size: 14px;" />
+                    <input asp-for="Input.Profile.Age" placeholder="Enter date birtday" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
                     <span asp-validation-for="Input.Profile.Age" class="text-danger" style="font-size: 14px;"></span>
                 </div>
                 <div>
                     @*<label asp-for="Input.Email"></label>*@
-                    <input asp-for="Input.Email" class="form-control" placeholder="Enter email" style="font-size: 14px;" />
+                    <input asp-for="Input.Email" class="form-control day_back_default day_color_font border-0" placeholder="Enter email" style="font-size: 14px;" />
                     <span asp-validation-for="Input.Email" class="text-danger" style="font-size: 14px;"></span>
                 </div>
                 <div>
                     @*<label asp-for="Input.Password"></label>*@
-                    <input asp-for="Input.Password" class="form-control" placeholder="Enter password" style="font-size: 14px;" />
+                    <input asp-for="Input.Password" class="form-control day_back_default day_color_font border-0" placeholder="Enter password" style="font-size: 14px;" />
                     <span asp-validation-for="Input.Password" class="text-danger" style="font-size: 14px;"></span>
                 </div>
                 <div>
                     @*<label asp-for="Input.ConfirmPassword"></label>*@
-                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm password" style="font-size: 14px;" />
+                    <input asp-for="Input.ConfirmPassword" class="form-control day_back_default day_color_font border-0" placeholder="Confirm password" style="font-size: 14px;" />
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger" style="font-size: 14px;"></span>
                 </div>
             </div>

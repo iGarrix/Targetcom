@@ -22,6 +22,10 @@
             background-color: #eeeeee;
             text-decoration: none;
         }
+       .night .viewallbtn:hover {
+            background-color: #1f1f1f;
+            text-decoration: none;
+        }
 
     .disable {
         display: none;
@@ -149,15 +153,15 @@
     @if (Model.IdentityProfile.Banned is not null)
     {
         <div style="width: 100%;" class="gap d-flex flex-column">
-            <div class="alert alert-light shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
+            <div class="alert day_back_head shadow-lg p-5 d-flex justify-content-center align-items-center flex-column" style="font-family: Poppins, sans-serif;">
                 <div>
                     <h4 class="text-center">@Model.IdentityProfile.Name @Model.IdentityProfile.Surname has banned</h4>
                     <hr />
-                    <h5>Admin / moderator: <a class="text-primary" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.IdentityProfile.Banned.AdminId">@Model.IdentityProfile.Banned.Admin.Name @Model.IdentityProfile.Banned.Admin.Surname</a></h5>
+                    <h5>Admin / moderator: <a class="day_color_main" style="cursor:pointer;" asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.IdentityProfile.Banned.AdminId">@Model.IdentityProfile.Banned.Admin.Name @Model.IdentityProfile.Banned.Admin.Surname</a></h5>
                     <hr />
-                    <h5>Reason: <a class="text-primary" style="cursor:pointer;">@Model.IdentityProfile.Banned.Reason</a></h5>
+                    <h5>Reason: <a class="day_color_main" style="cursor:pointer;">@Model.IdentityProfile.Banned.Reason</a></h5>
                     <hr />
-                    <h5>Banned date/time: <a class="text-primary" style="cursor:pointer;">@Model.IdentityProfile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                    <h5>Banned date/time: <a class="day_color_main" style="cursor:pointer;">@Model.IdentityProfile.Banned.TimeStamp.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
                     @if (Model.IdentityProfile.Banned.IsPermanent)
                     {
                         <hr />
@@ -166,7 +170,7 @@
                     else
                     {
                         <hr />
-                        <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@Model.IdentityProfile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                        <h5>Reason end date/time: <a class="day_color_main" style="cursor:pointer;">@Model.IdentityProfile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
                     }
                 </div>
             </div>
@@ -223,7 +227,7 @@
                 {
                     <div class="border-0 rounded day_back_head">
                         <div class="p-3 overflow-hidden">
-                            <a asp-controller="Friends" asp-action="Index" class="m-0 middletabbtn">Friends: <span class="text-muted">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span></a>
+                            <a asp-controller="Friends" asp-action="Index" class="m-0 day_color_main middletabbtn">Friends: <span class="day_color_font">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span></a>
                             <hr />
                             <div class="d-flex flex-wrap" style="gap: .8rem;">
                                 @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend))
@@ -257,7 +261,7 @@
                 else
                 {
                     <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                        <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="m-0 middletabbtn">Subscribers: <span class="text-muted">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
+                        <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="m-0 day_color_main middletabbtn">Subscribers: <span class="day_color_font">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
                         <hr />
                         <div class="d-flex flex-wrap" style="gap: .8rem;">
                             @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe))
@@ -441,7 +445,7 @@
                 {
                     <div class="card border-0 day_back_head overflow-auto rounded">
                         <div class="card-body p-2">
-                            <textarea class="form-control item-font m-0 rounded-0 border-0" id="summer" name="content" placeholder="Tell us what's new?"></textarea>
+                            <textarea class="form-control day_back_head day_color_font item-font m-0 rounded-0 border-0" id="summer" name="content" placeholder="Tell us what's new?"></textarea>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
@@ -686,7 +690,7 @@
                                                                                                             <div class="dropdown">
                                                                                                                 <a class="dropbtn day_color_main" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                                 <div class="dropdown-content day_back_head rounded p-2 shadow">
-                                                                                                                    <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                                                                                    <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
@@ -781,7 +785,7 @@
                                                                                     <div class="dropdown">
                                                                                         <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                         <div class="dropdown-content day_back_head rounded p-2 shadow">
-                                                                                            <button type="submit" class="btn-link border-0 bg-transparent" asp-controller="Profile" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                                                            <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-controller="Profile" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -797,7 +801,7 @@
                                                         {
                                                             <div class="d-flex align-items-center">
                                                                 <img src="@Model.IdentityProfile.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
-                                                                <input name="youcomment" class="ml-2 bg-transparent border-0" placeholder="Enter your commentaries" style="outline: 0!important; width: 100%;" />
+                                                                <input name="youcomment" class="ml-2 day_color_font bg-transparent border-0" placeholder="Enter your commentaries" style="outline: 0!important; width: 100%;" />
                                                                 <button type="submit" class="btn day_back_main text-light ml-auto" style="font-size: 14px; max-height: 2.5rem;" asp-action="CommentPublishPost" asp-route-id="@item.Id">Comment</button>
                                                             </div>
                                                         }
@@ -921,8 +925,8 @@
                                                                                                 <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                        <button type="button" class="close text-danger bg-danger" data-dismiss="modal" aria-label="Close">
+                                                                                            <span aria-hidden="true" class="text-danger bg-danger">&times;</span>
                                                                                         </button>
                                                                                     </div>
                                                                                     <hr class="mt-3 mb-3 ml-0 mr-0" />
@@ -954,7 +958,7 @@
                                                                                                                 <div class="dropdown">
                                                                                                                     <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
                                                                                                                     <div class="dropdown-content day_back_head rounded p-2 shadow">
-                                                                                                                        <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                                                                                        <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>

@@ -1,6 +1,6 @@
 ﻿
 
-.day_color_head {
+/*.day_color_head {
     color: #ffffff;
 }
 .day_back_head {
@@ -12,60 +12,35 @@
 .day_back_default {
     background-color: #eeeeee;
 }
-
 .day_color_main {
     color: #4f90db;
 }
 .day_back_main {
     background-color: #4f90db;
 }
-
 .day_color_mainlight {
     color: #6ba8ed;
 }
-
 .day_back_mainlight {
     background-color: #6ba8ed;
 }
-
 .day_color_font {
     color: #2a3036;
 }
 
-
-
-.dark .day_color_default {
+.night.day_color_default {
     color: #222426;
 }
-.dark .day_back_default {
+.night.day_back_default {
     background-color: #222426;
+    background-image: url(https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/788100/8454554bc0a8bb82ac3991002fb71801b17596ff.gif);
 }
-.dark .day_color_head {
+.night.day_color_head {
     color: #181a1b;
 }
-.dark .day_back_head {
+.night.day_back_head {
     background-color: #181a1b;
 }
-.dark .day_color_font {
+.night.day_color_font {
     color: #d3d2d0;
-}
-
-.dark .day_color_default {
-    color: #222426;
-}
-
-.dark.day_back_default {
-    background-color: #222426;
-}
-
-.dark.day_color_head {
-    color: #181a1b;
-}
-
-.dark.day_back_head {
-    background-color: #181a1b;
-}
-
-.dark.day_color_font {
-    color: #d3d2d0;
-}
+}*/

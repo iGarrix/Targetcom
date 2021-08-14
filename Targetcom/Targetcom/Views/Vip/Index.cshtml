@@ -118,12 +118,12 @@
                             <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.Item1.Quote</p>
                         </div>
                     </div>
-                    
+
                     @if (Model.Item1.ImageVidget)
-	                {
+                    {
                         <div class="p-4 shadow day_back_head day_color_main" style="border-radius: 2rem 10px 2rem 10px;">
                             <div class="d-flex align-items-center">
-                                <h5 class="font-weight-bolder mr-auto">Image Widget</h5>               
+                                <h5 class="font-weight-bolder mr-auto">Image Widget</h5>
                             </div>
                             <hr />
                             <div class="d-flex" style="gap:1rem;">
@@ -136,7 +136,20 @@
                                 </div>
                             </div>
                         </div>
-	                }
+                    }
+                    <div class="p-4 shadow day_back_head day_color_main" style="border-radius: 2rem 10px 2rem 10px;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="font-weight-bolder mr-auto">Dark theme</h5>
+                            @if (Model.Item1.IsDark)
+                            {
+                                <button asp-controller="Vip" asp-action="SetColorTheme" class="buybtn font-weight-bold bg-light day_color_main rounded">DAY</button>
+                            }
+                            else
+                            {
+                                <button asp-controller="Vip" asp-action="SetColorTheme" class="buybtn font-weight-bold bg-light day_color_main rounded">NIGHT</button>
+                            }
+                        </div>
+                    </div>
 
                     <div class="p-4 shadow day_back_head day_color_main" style="border-radius: 2rem 10px 2rem 10px;">
                         <div class="d-flex">
@@ -195,7 +208,7 @@
                                     }
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between mt-3">
                                 <div class="d-flex flex-column">
                                     <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
                                         <img src="@Model.Item1.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 180px; height: 180px;" />
@@ -242,7 +255,7 @@
                                     }
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between mt-3">
                                 <div class="d-flex flex-column">
                                     <div class="position-relative overflow-hidden p-1 d-flex justify-content-center align-items-center rounded">
                                         <img src="@Model.Item1.UrlAvatar" alt="Avatar" class="img-card rounded" style="width: 180px; height: 180px;" />
@@ -584,7 +597,7 @@
         
         <div class="modal fade" id="default" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content day_back_head">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Silver case</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -604,7 +617,7 @@
                             else
                             {
                                 <div>
-                                    <input type="number" class="form-control" id="dcasecounter" name="dcasecounter" placeholder="Enter count case" min="1" max="20" value="1">
+                                    <input type="number" class="form-control border-0 day_back_head day_color_font" id="dcasecounter" name="dcasecounter" placeholder="Enter count case" min="1" max="20" value="1">
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <p class="m-0">Total: <strong><span id="defid">60</span> coins</strong></p>
                                         <button asp-controller="Vip" asp-action="BuyDefCasePost" class="buybtn rounded p-2 pl-3 pr-3 day_back_main text-light">Buy</button>
@@ -628,7 +641,7 @@
         </div>
         <div class="modal fade" id="premium" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content">
+                    <div class="modal-content day_back_head">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Diamond case</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -648,7 +661,7 @@
                                 else
                                 {
                                     <div>
-                                        <input type="number" class="form-control" id="pcasecounter" name="pcasecounter" placeholder="Enter count case" min="1" max="20" value="1">
+                                        <input type="number" class="form-control border-0 day_back_head day_color_font" id="pcasecounter" name="pcasecounter" placeholder="Enter count case" min="1" max="20" value="1">
                                         <div class="d-flex justify-content-between align-items-center mt-3">
                                             <p class="m-0">Total: <strong><span id="premid">140</span> coins</strong></p>
                                             <button asp-controller="Vip" asp-action="BuyPremCasePost" class="buybtn rounded p-2 pl-3 pr-3 day_back_main text-light">Buy</button>

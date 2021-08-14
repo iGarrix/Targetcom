@@ -363,6 +363,21 @@ namespace Targetcom.Controllers
             await _userManager.UpdateAsync(profile);
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public async Task<IActionResult> SetColorTheme()
+        {
+            var profile = await _userManager.GetUserAsync(User) as Profile;
+            if (profile.IsDark)
+            {
+                profile.IsDark = false;
+            }
+            else
+            {
+                profile.IsDark = true;
+            }
+            await _userManager.UpdateAsync(profile);
+            return RedirectToAction(nameof(Index));
+        }
 
         private Tuple<string, int> GetSilverPrize()
         {
