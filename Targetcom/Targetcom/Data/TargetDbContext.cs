@@ -29,6 +29,16 @@ namespace Targetcom.Data
             /* ------- */
 
             builder.Entity<Profile>()
+                .HasMany(m => m.ToMessageGroups)
+                .WithOne(w => w.Admin)
+                .HasForeignKey(f => f.AdminId);
+
+            builder.Entity<Profile>()
+                .HasMany(m => m.WithMessageGroups)
+                .WithOne(w => w.Friend)
+                .HasForeignKey(f => f.FriendId);
+
+            builder.Entity<Profile>()
                 .HasMany(e => e.Cases)
                 .WithOne(w => w.Profile)
                 .HasForeignKey(f => f.ProfileId);
@@ -104,5 +114,7 @@ namespace Targetcom.Data
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<BannedProfile> BannedProfiles { get; set; }
         public DbSet<Case> Cases { get; set; }
+        public DbSet<MessageGroup> MessageGroups { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

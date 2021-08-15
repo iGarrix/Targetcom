@@ -536,7 +536,7 @@
                                                                 </a>
                                                                 <p class="m-0 ml-2 text-muted">@item.Alert</p>
                                                             </div>
-                                                            <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                            <p class="m-0 text-muted">@item.TimeStamp.ToString("dd.MM.yyyy")</p>
                                                         </div>
                                                         <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                             <div class="dropdown">
@@ -656,7 +656,7 @@
                                                                                                     }
                                                                                                     <span class="text-muted ml-2">@item.Alert</span>
                                                                                                 </a>
-                                                                                                <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                                <p class="m-0 text-muted">@item.TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                             </div>
                                                                                         </div>
                                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -680,11 +680,11 @@
                                                                                                         </a>
                                                                                                         @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                                                         {
-                                                                                                            <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                                            <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                                         }
                                                                                                         else
                                                                                                         {
-                                                                                                            <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                                            <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                                         }
                                                                                                         <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                                             <div class="dropdown">
@@ -780,7 +780,7 @@
                                                                                         <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                                     }
                                                                                 </a>
-                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                 <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                     <div class="dropdown">
                                                                                         <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
@@ -841,7 +841,7 @@
                                                                 </a>
                                                                 <p class="m-0 ml-2 text-muted">Shared with <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@item.Profile.Id">@item.Profile.Name</a></p>
                                                             </div>
-                                                            <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                            <p class="m-0 text-muted">@item.TimeStamp.ToString("dd.MM.yyyy")</p>
                                                         </div>
                                                     </div>
                                                     @if (item.IsObject)
@@ -922,7 +922,7 @@
                                                                                                     }
                                                                                                     <span class="text-muted ml-2">Shared post</span>
                                                                                                 </a>
-                                                                                                <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                                <p class="m-0 text-muted">@item.TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                             </div>
                                                                                         </div>
                                                                                         <button type="button" class="close text-danger bg-danger" data-dismiss="modal" aria-label="Close">
@@ -946,11 +946,11 @@
                                                                                                         </a>
                                                                                                         @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                                                         {
-                                                                                                            <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                                            <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                                         }
                                                                                                         else
                                                                                                         {
-                                                                                                            <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                                            <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                                         }
                                                                                                         @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id)
                                                                                                         {
@@ -1054,7 +1054,7 @@
                                                                                         <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                                                                                     }
                                                                                 </a>
-                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                                 @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id)
                                                                                 {
                                                                                     <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">

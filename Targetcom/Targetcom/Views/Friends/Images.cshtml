@@ -107,7 +107,7 @@
     <div style="width: 100%" class="d-flex flex-column">
         <div class="border-0 rounded">
             <div class="d-flex flex-wrap" style="gap: 1.2rem;">
-                @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id))
+                @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Reverse())
                 {
                     var id = $"item{item.Id}";
                     <div class="d-flex flex-column rounded">
@@ -189,7 +189,7 @@
                                                                         }
                                                                         <span class="text-muted ml-2">@item.Alert</span>
                                                                     </a>
-                                                                    <p class="m-0 text-muted">@item.TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                    <p class="m-0 text-muted">@item.TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                 </div>
                                                             </div>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -213,11 +213,11 @@
                                                                             </a>
                                                                             @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
                                                                             {
-                                                                                <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                             }
                                                                             else
                                                                             {
-                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("MM.dd.yyyy")</p>
+                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
                                                                             }
                                                                             <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
                                                                                 @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id)

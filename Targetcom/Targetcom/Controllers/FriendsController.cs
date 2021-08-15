@@ -650,5 +650,36 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+    
+        public async Task<IActionResult> WriteMessage (string id)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
+            var finder = await _userManager.FindByIdAsync(id) as Profile;
+            if (finder is null)
+            {
+                return NotFound();
+            }
+
+            var identity = await _userManager.GetUserAsync(User) as Profile;
+
+            if (_db.MessageGroups.FirstOrDefault(w => (w.AdminId == identity.Id && w.FriendId == finder.Id) || (w.AdminId == finder.Id && w.FriendId == identity.Id)) is null)
+            {
+                _db.MessageGroups.Add(new MessageGroup()
+                {
+                    Admin = identity,
+                    Friend = finder,
+                    IsInvite = false,
+                    TimeStamp = DateTime.Now,
+                    Name = "Private",
+                });
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index), "Messanger");
+        }
     }
 }

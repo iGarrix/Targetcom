@@ -20,6 +20,9 @@ namespace Targetcom.Models
             Friendships = new HashSet<Friendship>();
             BannedProfiles = new HashSet<BannedProfile>();
             Cases = new HashSet<Case>();
+            ToMessageGroups = new HashSet<MessageGroup>();
+            WithMessageGroups = new HashSet<MessageGroup>();
+            Messages = new HashSet<Message>();
         }
 
         [Required]
@@ -89,5 +92,8 @@ namespace Targetcom.Models
         public ICollection<ProfilePostageComment> ProfilePostageComments { get; set; }
         public ICollection<Friendship> Friendships { get; set; }
         public ICollection<Case> Cases { get; set; }
+        public ICollection<MessageGroup> ToMessageGroups { get; set; }
+        public ICollection<MessageGroup> WithMessageGroups { get; set; }
+        public ICollection<Message> Messages { get; set; }
     }
 }

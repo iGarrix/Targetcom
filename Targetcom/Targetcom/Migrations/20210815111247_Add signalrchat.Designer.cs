@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210815111247_Add signalrchat")]
+    partial class Addsignalrchat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,12 +394,6 @@ namespace Targetcom.Migrations
                     b.Property<string>("AdminId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("FriendId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsInvite")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -407,8 +403,6 @@ namespace Targetcom.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
-
-                    b.HasIndex("FriendId");
 
                     b.ToTable("MessageGroups");
                 });
@@ -769,16 +763,10 @@ namespace Targetcom.Migrations
             modelBuilder.Entity("Targetcom.Models.MessageGroup", b =>
                 {
                     b.HasOne("Targetcom.Models.Profile", "Admin")
-                        .WithMany("ToMessageGroups")
+                        .WithMany("MessageGroups")
                         .HasForeignKey("AdminId");
 
-                    b.HasOne("Targetcom.Models.Profile", "Friend")
-                        .WithMany("WithMessageGroups")
-                        .HasForeignKey("FriendId");
-
                     b.Navigation("Admin");
-
-                    b.Navigation("Friend");
                 });
 
             modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
@@ -882,6 +870,8 @@ namespace Targetcom.Migrations
 
                     b.Navigation("LikedProfilePostages");
 
+                    b.Navigation("MessageGroups");
+
                     b.Navigation("Messages");
 
                     b.Navigation("ProfileGames");
@@ -891,10 +881,6 @@ namespace Targetcom.Migrations
                     b.Navigation("ProfilePostages");
 
                     b.Navigation("SharedProfilePostages");
-
-                    b.Navigation("ToMessageGroups");
-
-                    b.Navigation("WithMessageGroups");
 
                     b.Navigation("WritterPostages");
                 });
