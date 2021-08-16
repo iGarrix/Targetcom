@@ -672,14 +672,14 @@ namespace Targetcom.Controllers
                 {
                     Admin = identity,
                     Friend = finder,
-                    IsInvite = false,
+                    IsInvite = true,
                     TimeStamp = DateTime.Now,
                     Name = "Private",
                 });
                 _db.SaveChanges();
             }
 
-            return RedirectToAction(nameof(Index), "Messanger");
+            return RedirectToAction(nameof(Index), "Messanger", new { id = id });
         }
     }
 }

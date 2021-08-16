@@ -79,12 +79,23 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
             var rooms = _db.MessageGroups.Where(w => w.AdminId == myprofile.Id || w.FriendId == myprofile.Id);
             var messages = _db.Messages.Where(w => w.ProfileId == myprofile.Id);
             var friendships = _db.Friendships.Where(w => w.FriendId == myprofile.Id || w.ProfileId == myprofile.Id);
+            var cases = _db.Cases.Where(w => w.ProfileId == myprofile.Id);
+            var likes = _db.LikedProfilePostages.Where(w => w.ProfileId == myprofile.Id);
+            var comments = _db.ProfilePostageComments.Where(w => w.ProfileCommentatorId == myprofile.Id);
+            var banned = _db.BannedProfiles.Where(w => w.ProfileId == myprofile.Id);
+            var games = _db.ProfileGames.Where(w => w.ProfileId == myprofile.Id);
+            var shareds = _db.SharedProfilePostages.Where(w => w.ProfileId == myprofile.Id);
 
+            _db.SharedProfilePostages.RemoveRange(shareds);
+            _db.ProfileGames.RemoveRange(games);
+            _db.BannedProfiles.RemoveRange(banned);
+            _db.ProfilePostageComments.RemoveRange(comments);
+            _db.LikedProfilePostages.RemoveRange(likes);
+            _db.Cases.RemoveRange(cases);
             _db.Friendships.RemoveRange(friendships);
             _db.Messages.RemoveRange(messages);
             _db.MessageGroups.RemoveRange(rooms);
             _db.ProfilePostageComments.RemoveRange(_db.ProfilePostageComments.Where(i => i.ProfileCommentatorId == myprofile.Id));
-            //_db.SaveChanges();
             _db.ProfilePostages.RemoveRange(postages);
             _db.SaveChanges();
 

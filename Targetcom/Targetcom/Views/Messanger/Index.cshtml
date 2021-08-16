@@ -67,15 +67,15 @@
                     <div class="pt-2 pb-2 pl-3 pr-3 d-flex align-items-center day_back_head rounded">
                         <img src="@Model.SelectedProfile.UrlAvatar" class="rounded-circle" style="width: 38px; height: 38px;" />
                         <div class="d-flex align-items-center ml-2" style="width: 100%;">
-                            <a class="btn-link m-0 border-0 day_color_main" asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.SelectedProfile.Id"><strong class="m-0 day_color_main">@Model.SelectedProfile.Name @Model.SelectedProfile.Surname</strong></a>                         
+                            <a class="btn-link m-0 border-0 day_color_main" asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.SelectedProfile.Id"><strong class="m-0 day_color_main">@Model.SelectedProfile.Name @Model.SelectedProfile.Surname</strong></a>
                             @if (Model.SelectedProfile.IsVerify)
                             {
                                 <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
                             }
                             @if (Room is not null)
-	                        {	 
+                            {
                                 <a class="ml-auto mr-3 btne" asp-controller="Messanger" asp-action="RemoveRoom" asp-route-id="@Room.Id" style="outline:0!important;"><i class="fas fa-trash-alt"></i></a>
-	                        }
+                            }
                         </div>
                     </div>
                     <div class="pt-2 pb-2 pl-3 pr-3 d-flex flex-column" id="messageList" style="gap: 1rem; overflow-y: auto; height:100%;">
@@ -121,7 +121,8 @@
                             <p class="text-danger m-0 ml-3" font>Message sending is blocked</p>
                         </div>
                     }
-                    else {
+                    else
+                    {
                         <div class="pt-2 pb-2 pl-3 pr-3 mt-auto d-flex align-items-center day_back_head rounded">
                             <input class="form-control day_back_default day_color_font border-0" placeholder="Enter message ..." type="text" id="message" value="" autocomplete="off" style="font-size: 14px;" />
                             <button type="button" id="sendButton" class="m-0 ml-2 border-0 bg-transparent day_color_main" style="outline:0;"><i class="far fa-envelope" style="font-size: 25px;"></i></button>
@@ -136,10 +137,15 @@
                 <h3>Select room</h3>
             </div>
         }
-        <div class="rounded shadow" style="width: 33%;">
-            @if (Model.IdentityProfile.ToMessageGroups.Count > 0)
+    <div class="rounded shadow" style="width: 33%;">
+        @if (Model.IdentityProfile.ToMessageGroups.Count > 0)
+        {
+            @if (Model.IdentityProfile.ToMessageGroups.Where(w => !w.IsInvite).Count() > 0)
             {
-                @foreach (var item in Model.IdentityProfile.ToMessageGroups)
+                <hr class="m-0" />
+                <h5 class="m-0 mt-3 day_color_font text-center">Privat Message</h5>
+                <hr />
+                @foreach (var item in Model.IdentityProfile.ToMessageGroups.Where(w => !w.IsInvite))
                 {
                     string lastmessage = "None";
                     if (item.Messages.Count > 0)
@@ -187,10 +193,44 @@
             else
             {
                 <div class="p-2">
-                    <h5 class="m-0 day_color_font font-weight-bold text-center">You dont have a message rooms</h5>
+                    <h5 class="m-0 mt-3 day_color_font font-weight-bold text-center">You dont have a message rooms</h5>
                 </div>
             }
-        </div>
+            @if (Model.IdentityProfile.ToMessageGroups.Where(w => w.IsInvite && w.FriendId == Model.IdentityProfile.Id).Count() > 0)
+            {
+                <hr />
+                <h5 class="m-0 mt-3 day_color_font text-center">Invites</h5>
+                <hr />
+                @foreach (var item in Model.IdentityProfile.ToMessageGroups.Where(w => w.IsInvite))
+                {
+                    if (item.FriendId == Model.IdentityProfile.Id)
+                    {
+                        <a asp-action="AcceptInvite" asp-route-id="@item.Id" class="d-flex align-items-start p-2 hovever rounded">
+                            <img src="@item.Admin.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
+                            <div class="d-flex flex-column ml-2">
+                                <div class="d-flex align-items-center">
+                                    <h6 class="day_color_main m-0">
+                                        <span class="text-decoration-none">@item.Admin.Name @item.Admin.Surname</span>
+                                        @if (item.Admin.IsVerify)
+                                        {
+                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
+                                        }
+                                    </h6>
+                                </div>
+                                <p class="m-0 text-decoration-none text-muted">Invite</p>
+                            </div>
+                        </a>
+                    }
+                }
+            }
+        }
+        else
+        {
+            <div class="p-2">
+                <h5 class="m-0 mt-3 day_color_font font-weight-bold text-center">You dont have a message rooms</h5>
+            </div>
+        }
+    </div>
     </div>
 </div>
 
@@ -279,7 +319,7 @@
                 messagewrap.appendChild(messagep);
                 wrapper.appendChild(image);
 
-                document.getElementById(receiverEmail).innerText = "You: " + msg.substring(0, 15) + "...";;
+                document.getElementById(receiverEmail).innerText = "You: " + msg.substring(0, 15) + "...";
             }
 
             usernames = "";

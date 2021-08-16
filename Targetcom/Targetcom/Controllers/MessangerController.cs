@@ -92,14 +92,32 @@ namespace Targetcom.Controllers
         public async Task<IActionResult> RemoveRoom (int? id)
         {
             var myprofile = await _userManager.GetUserAsync(User) as Profile;
-            var rooms = _db.MessageGroups.Where(w => w.AdminId == myprofile.Id || w.FriendId == myprofile.Id);
-            var messages = _db.Messages.Where(w => w.ProfileId == myprofile.Id);
-            if (rooms is not null && messages is not null)
+            if (id is not null)
             {
-                if (id is not null)
+                var room = _db.MessageGroups.Find(id);
+                if (room is not null)
                 {
-                    _db.Messages.RemoveRange(messages);
-                    _db.MessageGroups.RemoveRange(rooms);
+                    var messages = _db.Messages.Where(w => w.MessageGroupId == room.Id);
+                    if (messages is not null)
+                    {
+                        _db.Messages.RemoveRange(messages);
+                        _db.MessageGroups.Remove(room);
+                        _db.SaveChanges();
+                    }
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> AcceptInvite(int? id)
+        {
+            var myprofile = await _userManager.GetUserAsync(User) as Profile;
+            if (id is not null)
+            {
+                var room = _db.MessageGroups.Find(id);
+                if (room is not null)
+                {
+                    room.IsInvite = false;
+                    _db.MessageGroups.Update(room);
                     _db.SaveChanges();
                 }
             }

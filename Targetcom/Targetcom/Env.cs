@@ -7,7 +7,7 @@ namespace Targetcom
 {
     public class Env
     {
-        public static string WebName = "Target";
+        public static string WebName = "Tracelight";
 
         /* Roles */
         public static string UserRole = "DefaultUser";
