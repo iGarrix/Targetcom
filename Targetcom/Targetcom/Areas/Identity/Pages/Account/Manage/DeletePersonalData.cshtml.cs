@@ -76,6 +76,13 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
 
             var myprofile = user as Profile;
             var postages = _db.ProfilePostages.Where(i => i.ProfileId == myprofile.Id);
+            var rooms = _db.MessageGroups.Where(w => w.AdminId == myprofile.Id || w.FriendId == myprofile.Id);
+            var messages = _db.Messages.Where(w => w.ProfileId == myprofile.Id);
+            var friendships = _db.Friendships.Where(w => w.FriendId == myprofile.Id || w.ProfileId == myprofile.Id);
+
+            _db.Friendships.RemoveRange(friendships);
+            _db.Messages.RemoveRange(messages);
+            _db.MessageGroups.RemoveRange(rooms);
             _db.ProfilePostageComments.RemoveRange(_db.ProfilePostageComments.Where(i => i.ProfileCommentatorId == myprofile.Id));
             //_db.SaveChanges();
             _db.ProfilePostages.RemoveRange(postages);

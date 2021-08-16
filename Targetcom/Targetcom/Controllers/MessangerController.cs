@@ -41,8 +41,8 @@ namespace Targetcom.Controllers
                 i.Admin = _db.Profiles.Find(i.AdminId);
             });
 
-            var ProfileGroup = _db.MessageGroups;
-            ProfileGroup.ToList().ForEach(i =>
+            var ProfileGroups = _db.MessageGroups;
+            ProfileGroups.ToList().ForEach(i =>
             {
                 i.Admin = Profiles.Find(i.AdminId);
                 i.Friend = Profiles.Find(i.FriendId);
@@ -51,16 +51,22 @@ namespace Targetcom.Controllers
             var ProfileMessages = _db.Messages;
             ProfileMessages.ToList().ForEach(i => 
             {
-                i.MessageGroup = ProfileGroup.Find(i.MessageGroupId);
+                i.MessageGroup = ProfileGroups.Find(i.MessageGroupId);
                 i.Profile = Profiles.Find(i.ProfileId);
             });
-           
+
+            ProfileGroups.ToList().ForEach(i =>
+            {
+                i.Messages = ProfileMessages.Where(w => w.MessageGroupId == i.Id).ToList();
+            });
+
+
             profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
             profile.BannedProfiles = ProfileBanned.Where(w => w.AdminId == profile.Id).ToList();
             profile.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == profile.Id);
 
-            profile.ToMessageGroups = ProfileGroup.Where(w => w.AdminId == profile.Id || w.FriendId == profile.Id).ToList();
-            profile.WithMessageGroups = ProfileGroup.Where(w => w.FriendId == profile.Id).ToList();
+            profile.ToMessageGroups = ProfileGroups.Where(w => w.AdminId == profile.Id || w.FriendId == profile.Id).ToList();
+            profile.WithMessageGroups = ProfileGroups.Where(w => w.FriendId == profile.Id).ToList();
             profile.Messages = ProfileMessages.Where(w => w.ProfileId == profile.Id).ToList();
        
             MessageVM messageVM = new MessageVM()
@@ -72,13 +78,32 @@ namespace Targetcom.Controllers
             if (id is not null)
             {
                 var selectprofile = Profiles.Find(id);
-                selectprofile.ToMessageGroups = ProfileGroup.Where(w => w.AdminId == selectprofile.Id || w.FriendId == selectprofile.Id).ToList();
-                selectprofile.WithMessageGroups = ProfileGroup.Where(w => w.FriendId == selectprofile.Id).ToList();
-                selectprofile.Messages = ProfileMessages.Where(w => w.ProfileId == selectprofile.Id).ToList();
-                messageVM.SelectedProfile = selectprofile;
+                if (selectprofile is not null)
+                {
+                    selectprofile.ToMessageGroups = ProfileGroups.Where(w => w.AdminId == selectprofile.Id || w.FriendId == selectprofile.Id).ToList();
+                    selectprofile.WithMessageGroups = ProfileGroups.Where(w => w.FriendId == selectprofile.Id).ToList();
+                    selectprofile.Messages = ProfileMessages.Where(w => w.ProfileId == selectprofile.Id).ToList();
+                    messageVM.SelectedProfile = selectprofile;
+                }
             }
 
             return View(messageVM);
+        }
+        public async Task<IActionResult> RemoveRoom (int? id)
+        {
+            var myprofile = await _userManager.GetUserAsync(User) as Profile;
+            var rooms = _db.MessageGroups.Where(w => w.AdminId == myprofile.Id || w.FriendId == myprofile.Id);
+            var messages = _db.Messages.Where(w => w.ProfileId == myprofile.Id);
+            if (rooms is not null && messages is not null)
+            {
+                if (id is not null)
+                {
+                    _db.Messages.RemoveRange(messages);
+                    _db.MessageGroups.RemoveRange(rooms);
+                    _db.SaveChanges();
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

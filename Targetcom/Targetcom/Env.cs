@@ -73,6 +73,9 @@ namespace Targetcom
         public static string RainbowOn = "Rainbowon";
         public static string RainbowOff = "Rainbowoff";
 
+        /* Max messages room */
+        public static long MAX_MESSAGES = 50;
+
         /* Avatar Grid */
 
         public static string GridNone = "None";
