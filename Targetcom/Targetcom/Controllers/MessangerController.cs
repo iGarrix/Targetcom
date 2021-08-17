@@ -119,6 +119,7 @@ namespace Targetcom.Controllers
                     room.IsInvite = false;
                     _db.MessageGroups.Update(room);
                     _db.SaveChanges();
+                    return RedirectToAction(nameof(Index), new { id = room.AdminId });
                 }
             }
             return RedirectToAction(nameof(Index));

@@ -665,8 +665,8 @@ namespace Targetcom.Controllers
             }
 
             var identity = await _userManager.GetUserAsync(User) as Profile;
-
-            if (_db.MessageGroups.FirstOrDefault(w => (w.AdminId == identity.Id && w.FriendId == finder.Id) || (w.AdminId == finder.Id && w.FriendId == identity.Id)) is null)
+            var room = _db.MessageGroups.FirstOrDefault(w => (w.AdminId == identity.Id && w.FriendId == finder.Id) || (w.AdminId == finder.Id && w.FriendId == identity.Id));
+            if (room is null)
             {
                 _db.MessageGroups.Add(new MessageGroup()
                 {
@@ -677,8 +677,12 @@ namespace Targetcom.Controllers
                     Name = "Private",
                 });
                 _db.SaveChanges();
+                return RedirectToAction(nameof(Index), "Messanger");
             }
-
+            if (room.IsInvite)
+            {
+                return RedirectToAction(nameof(Index), "Messanger");
+            }
             return RedirectToAction(nameof(Index), "Messanger", new { id = id });
         }
     }
