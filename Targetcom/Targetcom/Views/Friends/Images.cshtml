@@ -99,7 +99,7 @@
 
     img {
         object-fit: cover;
-    }
+    }    
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" />
@@ -120,28 +120,28 @@
                                     if (!item.IsNessessaredLikedPost)
                                     {
                                         @if (!item.IsNessessaredLikedPost)
-                                {
-                                    if (item.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.FindedProfile.Id) != null)
-                                    {
-                                        <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@item.LikedProfiles.FirstOrDefault(i => i.ProfileId == item.ProfileId).ProfileId" style="outline:0!important;">
-                                            <i class="fas fa-heart"></i>
-                                            @if (item.LikedProfiles.Count != 0)
+                                        {
+                                            if (item.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.FindedProfile.Id) != null)
                                             {
-                                                <strong class="ml-1">@item.LikedProfiles.Count</strong>
+                                                <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@item.LikedProfiles.FirstOrDefault(i => i.ProfileId == item.ProfileId).ProfileId" style="outline:0!important;">
+                                                    <i class="fas fa-heart"></i>
+                                                    @if (item.LikedProfiles.Count != 0)
+                                                    {
+                                                        <strong class="ml-1">@item.LikedProfiles.Count</strong>
+                                                    }
+                                                </button>
                                             }
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none" asp-action="LikePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
-                                            <i class="far fa-heart"></i>
-                                            @if (item.LikedProfiles.Count != 0)
+                                            else
                                             {
-                                                <strong class="ml-1">@item.LikedProfiles.Count</strong>
+                                                <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none" asp-action="LikePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
+                                                    <i class="far fa-heart"></i>
+                                                    @if (item.LikedProfiles.Count != 0)
+                                                    {
+                                                        <strong class="ml-1">@item.LikedProfiles.Count</strong>
+                                                    }
+                                                </button>
                                             }
-                                        </button>
-                                    }
-                                }
+                                        }
                                     }
                                 }
                             }
@@ -294,28 +294,28 @@
                                     if (!item.IsNessessaredSharedPost)
                                     {
                                         @if (!item.IsNessessaredSharedPost)
-                            {
-                                if (item.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
-                                {
-                                    <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none ml-4" asp-controller="Friends" asp-action="DissharePostagePost" asp-route-id="@item.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
-                                        <i class="fas fa-share-alt"></i>
-                                        @if (item.SharedProfiles.Count != 0)
                                         {
-                                            <strong class="ml-1">@item.SharedProfiles.Count</strong>
+                                            if (item.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
+                                            {
+                                                <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none ml-4" asp-controller="Friends" asp-action="DissharePostagePost" asp-route-id="@item.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
+                                                    <i class="fas fa-share-alt"></i>
+                                                    @if (item.SharedProfiles.Count != 0)
+                                                    {
+                                                        <strong class="ml-1">@item.SharedProfiles.Count</strong>
+                                                    }
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none ml-4" asp-controller="Friends" asp-action="SharePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
+                                                    <i class="fas fa-share-alt"></i>
+                                                    @if (item.SharedProfiles.Count != 0)
+                                                    {
+                                                        <strong class="ml-1">@item.SharedProfiles.Count</strong>
+                                                    }
+                                                </button>
+                                            }
                                         }
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none ml-4" asp-controller="Friends" asp-action="SharePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
-                                        <i class="fas fa-share-alt"></i>
-                                        @if (item.SharedProfiles.Count != 0)
-                                        {
-                                            <strong class="ml-1">@item.SharedProfiles.Count</strong>
-                                        }
-                                    </button>
-                                }
-                            }
                                     }
                                 }
                             }
@@ -326,4 +326,3 @@
         </div>
     </div>
 </div>
-

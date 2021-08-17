@@ -2,7 +2,7 @@
     ViewData["Title"] = "Messanger";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model Targetcom.Models.ViewModels.MessageVM; 
+@model Targetcom.Models.ViewModels.MessageVM;
 <style>
     #summernote {
         font-size: 14px;
@@ -13,19 +13,23 @@
     .activel {
         border-left: 3px solid #0094ff;
     }
+
     .messagewrap {
         width: 13rem;
         word-wrap: break-word;
         font-size: 14.5px;
         /*word-break: break-all;*/
     }
+
     #sendButton:active {
         color: #6dbffb;
     }
+
     .night .hovever:hover {
         background-color: #2b2b2b;
         text-decoration: none;
     }
+
     .night .hovever:active {
         background-color: #454545;
         text-decoration: none;
@@ -40,12 +44,15 @@
         background-color: #d3d3d3;
         text-decoration: none;
     }
+
     .btne i {
         color: #2b2b2b;
     }
+
     .night .btne i {
         color: #d5d5d5;
     }
+
     .btne:hover i {
         color: #e43838;
     }
@@ -137,56 +144,90 @@
                 <h3>Select room</h3>
             </div>
         }
-    <div class="rounded shadow" style="width: 33%;">
-        @if (Model.IdentityProfile.ToMessageGroups.Count > 0)
-        {
-            @if (Model.IdentityProfile.ToMessageGroups.Where(w => !w.IsInvite).Count() > 0)
+        <div class="rounded shadow" style="width: 33%;">
+            @if (Model.IdentityProfile.ToMessageGroups.Count > 0)
             {
-                <hr class="m-0" />
-                <h5 class="m-0 mt-3 day_color_font text-center">Privat Message</h5>
-                <hr />
-                @foreach (var item in Model.IdentityProfile.ToMessageGroups.Where(w => !w.IsInvite))
+                @if (Model.IdentityProfile.ToMessageGroups.Where(w => !w.IsInvite).Count() > 0)
                 {
-                    string lastmessage = "None";
-                    if (item.Messages.Count > 0)
+                    <hr class="m-0" />
+                    <h5 class="m-0 mt-3 day_color_font text-center">Privat Message</h5>
+                    <hr />
+                    @foreach (var item in Model.IdentityProfile.ToMessageGroups.Where(w => !w.IsInvite))
                     {
-                        lastmessage = item.Messages.LastOrDefault().Content;
-                    }
-                    if (item.FriendId == Model.IdentityProfile.Id)
-                    {
-                        <a asp-action="Index" asp-route-id="@item.AdminId" class="d-flex align-items-start p-2 hovever rounded">
-                            <img src="@item.Admin.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
-                            <div class="d-flex flex-column ml-2">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="day_color_main m-0">
-                                        <span class="text-decoration-none">@item.Admin.Name @item.Admin.Surname</span>
-                                        @if (item.Admin.IsVerify)
-                                        {
-                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
-                                        }
-                                    </h6>
+                        string lastmessage = "None";
+                        if (item.Messages.Count > 0)
+                        {
+                            lastmessage = item.Messages.LastOrDefault().Content;
+                        }
+                        if (item.FriendId == Model.IdentityProfile.Id)
+                        {
+                            <a asp-action="Index" asp-route-id="@item.AdminId" class="d-flex align-items-start p-2 hovever rounded">
+                                <img src="@item.Admin.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
+                                <div class="d-flex flex-column ml-2">
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="day_color_main m-0">
+                                            <span class="text-decoration-none">@item.Admin.Name @item.Admin.Surname</span>
+                                            @if (item.Admin.IsVerify)
+                                            {
+                                                <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
+                                            }
+                                        </h6>
+                                    </div>
+                                    <p class="m-0 text-decoration-none text-muted" id="@item.Admin.Email">@lastmessage</p>
                                 </div>
-                                <p class="m-0 text-decoration-none text-muted" id="@item.Admin.Email">@lastmessage</p>
-                            </div>
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Index" asp-route-id="@item.FriendId" class="d-flex align-items-start p-2 hovever rounded">
-                            <img src="@item.Friend.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
-                            <div class="d-flex flex-column ml-2" style="width: 100%;">
-                                <div class="d-flex align-items-center" style="width: 100%;">
-                                    <h6 class="day_color_main m-0">
-                                        <span class="text-decoration-none">@item.Friend.Name @item.Friend.Surname</span>
-                                        @if (item.Friend.IsVerify)
-                                        {
-                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
-                                        }
-                                    </h6>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Index" asp-route-id="@item.FriendId" class="d-flex align-items-start p-2 hovever rounded">
+                                <img src="@item.Friend.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
+                                <div class="d-flex flex-column ml-2" style="width: 100%;">
+                                    <div class="d-flex align-items-center" style="width: 100%;">
+                                        <h6 class="day_color_main m-0">
+                                            <span class="text-decoration-none">@item.Friend.Name @item.Friend.Surname</span>
+                                            @if (item.Friend.IsVerify)
+                                            {
+                                                <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
+                                            }
+                                        </h6>
+                                    </div>
+                                    <p class="m-0 text-decoration-none text-muted" id="@item.Friend.Email">@lastmessage</p>
                                 </div>
-                                <p class="m-0 text-decoration-none text-muted" id="@item.Friend.Email">@lastmessage</p>
-                            </div>
-                        </a>
+                            </a>
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="p-2">
+                        <h5 class="m-0 mt-3 day_color_font font-weight-bold text-center">You dont have a message rooms</h5>
+                    </div>
+                }
+                @if (Model.IdentityProfile.ToMessageGroups.Where(w => w.IsInvite && w.FriendId == Model.IdentityProfile.Id).Count() > 0)
+                {
+                    <hr />
+                    <h5 class="m-0 mt-3 day_color_font text-center">Invites</h5>
+                    <hr />
+                    @foreach (var item in Model.IdentityProfile.ToMessageGroups.Where(w => w.IsInvite))
+                    {
+                        if (item.FriendId == Model.IdentityProfile.Id)
+                        {
+                            <a asp-action="AcceptInvite" asp-route-id="@item.Id" class="d-flex align-items-start p-2 hovever rounded">
+                                <img src="@item.Admin.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
+                                <div class="d-flex flex-column ml-2">
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="day_color_main m-0">
+                                            <span class="text-decoration-none">@item.Admin.Name @item.Admin.Surname</span>
+                                            @if (item.Admin.IsVerify)
+                                            {
+                                                <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
+                                            }
+                                        </h6>
+                                    </div>
+                                    <p class="m-0 text-decoration-none text-muted">Invite</p>
+                                </div>
+                            </a>
+                        }
                     }
                 }
             }
@@ -196,41 +237,7 @@
                     <h5 class="m-0 mt-3 day_color_font font-weight-bold text-center">You dont have a message rooms</h5>
                 </div>
             }
-            @if (Model.IdentityProfile.ToMessageGroups.Where(w => w.IsInvite && w.FriendId == Model.IdentityProfile.Id).Count() > 0)
-            {
-                <hr />
-                <h5 class="m-0 mt-3 day_color_font text-center">Invites</h5>
-                <hr />
-                @foreach (var item in Model.IdentityProfile.ToMessageGroups.Where(w => w.IsInvite))
-                {
-                    if (item.FriendId == Model.IdentityProfile.Id)
-                    {
-                        <a asp-action="AcceptInvite" asp-route-id="@item.Id" class="d-flex align-items-start p-2 hovever rounded">
-                            <img src="@item.Admin.UrlAvatar" class="rounded-circle" style="width: 48px; height: 48px;" />
-                            <div class="d-flex flex-column ml-2">
-                                <div class="d-flex align-items-center">
-                                    <h6 class="day_color_main m-0">
-                                        <span class="text-decoration-none">@item.Admin.Name @item.Admin.Surname</span>
-                                        @if (item.Admin.IsVerify)
-                                        {
-                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 13px;"></i>
-                                        }
-                                    </h6>
-                                </div>
-                                <p class="m-0 text-decoration-none text-muted">Invite</p>
-                            </div>
-                        </a>
-                    }
-                }
-            }
-        }
-        else
-        {
-            <div class="p-2">
-                <h5 class="m-0 mt-3 day_color_font font-weight-bold text-center">You dont have a message rooms</h5>
-            </div>
-        }
-    </div>
+        </div>
     </div>
 </div>
 
@@ -354,9 +361,9 @@
     connection.start().then(function () {
         document.getElementById("sendButton").disabled = false;
     })
-    .catch(function (err) {
-        return console.error(err.toString());
-    });
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
 
     document.getElementById("sendButton").addEventListener("click", function (event) {
         var message = document.getElementById("message").value;
@@ -404,11 +411,11 @@
                     document.getElementById("useravatar").value,
                     document.getElementById("useremail").value,
                     document.getElementById("selectedemail").value).then(function () {
-                document.getElementById("message").value = "";
-            })
-            .catch(function (err) {
-                return console.error(err.toString());
-            });
+                        document.getElementById("message").value = "";
+                    })
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
         }
         event.preventDefault();
     });

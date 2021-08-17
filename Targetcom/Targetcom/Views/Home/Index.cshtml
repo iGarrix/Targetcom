@@ -11,11 +11,13 @@
     .gap {
         gap: 1rem;
     }
+
     #summernote {
         font-size: 14px;
         outline: 0 !important;
         border: 0;
     }
+
     .activel {
         border-left: 3px solid #0094ff;
     }
@@ -60,6 +62,38 @@
 
     img {
         object-fit: cover;
+    }
+
+    .anim {
+        transition: 2s;
+        animation: ocean 10s ease-in-out alternate infinite;
+    }
+
+    @@keyframes ocean {
+        0% {
+            color: #b3e536;
+            text-shadow: 0 0 40px #b3e536;
+        }
+
+        100% {
+            color: #0094ff;
+            text-shadow: 0 0 40px #0094ff;
+        }
+    }
+
+    .down {
+        animation: loadDown 1s ease-in-out forwards;
+    }
+
+    @@keyframes loadDown {
+        0% {
+            opacity: 100%;
+        }
+
+        100% {
+            opacity: 0%;
+            visibility: hidden;
+        }
     }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
@@ -1254,3 +1288,25 @@
         </div>
     </div>
 </div>
+
+<div class="position-fixed" id="downid" style="top: 0; left:0; width: 100vw; height: 100vh; z-index: 999;">
+    <div class="d-flex justify-content-center align-items-center flex-column day_back_head w-100 h-100">
+        <i class="far fa-newspaper d-flex justify-content-center anim" style="width: 100%; font-size: 10vw;"></i>
+        <h2 class="day_color_font mt-4 font-weight-bold" style="letter-spacing: 2px; font-family: Montserrat, sans-serif;">News</h2>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var before_loadtime = new Date().getTime();
+        window.onload = Pageloadtime;
+        function Pageloadtime() {
+            var aftr_loadtime = new Date().getTime();
+            pgloadtime = (aftr_loadtime - before_loadtime) / 1000
+            setTimeout(() => {
+                var loadscreen = document.getElementById("downid");
+                loadscreen.classList.add("down");
+            }, pgloadtime);
+        }
+    </script>
+}
