@@ -1,9 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Help";
 }
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<IdentityUser> UserManager
-@{ Profile profile = await UserManager.GetUserAsync(User) as Profile; }
+@model Profile;
 
 <style>
     #summernote {
@@ -43,7 +41,7 @@
     }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.Id),0)" />
 
     <div style="width: 100%; gap:1rem;" class="d-flex flex-column">
         <div class="border-0 day_back_head overflow-auto rounded p-3">

@@ -102,7 +102,7 @@
     }    
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityProfile.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityProfile.Id),0)" />
 
     <div style="width: 100%" class="d-flex flex-column">
         <div class="border-0 rounded">

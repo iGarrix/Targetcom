@@ -111,9 +111,18 @@ namespace Targetcom.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Rules()
+        public async Task<IActionResult> Rules()
         {
-            return View();
+            var Profiles = _db.Profiles;
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+            var profile = await _userManager.GetUserAsync(User) as Profile;
+            profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
+            return View(profile);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

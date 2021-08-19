@@ -188,7 +188,7 @@
     }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityProfile.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityProfile.Id),0)" />
     @*Banned*@
     @if (Model.IdentityProfile.Banned is not null)
     {

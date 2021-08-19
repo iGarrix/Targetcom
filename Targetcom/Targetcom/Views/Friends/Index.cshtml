@@ -56,7 +56,7 @@
     <link href="~/css/VTabs.css" rel="stylesheet" />
 </head>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityUser.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityUser.Id),0)" />
     <input type="hidden" id="eventor" value="@Model.EventSetter" />
     <div class="d-flex gap" style="width: 100%;">
         <div style="width: 75%;" class="d-flex flex-column rounded">

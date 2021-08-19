@@ -46,7 +46,7 @@
     }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.Id),0)" />
     <div class="d-flex flex-column rounded" style="width: 100%;">
         <div class="p-3 alert alert-light d-flex justify-content-center align-items-center rounded">
             <h4 class="m-0">Buy target coins</h4>

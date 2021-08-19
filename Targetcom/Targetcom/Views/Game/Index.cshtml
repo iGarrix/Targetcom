@@ -64,7 +64,7 @@
     }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityProfile.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityProfile.Id),0)" />
 
     <div style="width: 100%; height: 100%;" class="d-flex flex-column gap">
         <div class="rounded overflow-hidden day_back_head">
@@ -156,28 +156,28 @@
             <div class="pt-4 pr-4 pl-4 pb-2">
                 <h4>New games</h4>
             </div>
-            @if (Model.Games.Count() > 0)
+            @if (Model.Games.Reverse().Count() > 0)
             {
                 @*@foreach (var item in Model.Games)*@
-                @for (int item = 0; item < Model.Games.Count(); ++item)
+                @for (int item = 0; item < Model.Games.Reverse().Count(); ++item)
                 {
                     @if (item < 3)
                     {
-                        @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id) != null)
+                        @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.Reverse().ToList()[item].Id) != null)
                         {
                             <a href="@Url.Action("StartGame", "Game", new
                                 {
-                                    url = Model.Games.ToList()[item].GameUrl,
-                                    name = Model.Games.ToList()[item].Name
+                                    url = Model.Games.Reverse().ToList()[item].GameUrl,
+                                    name = Model.Games.Reverse().ToList()[item].Name
                                 })" class="position-relative bg-dark btngame" style="width: 100%; height: 30vh;">
-                                <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
+                                <img src="@Model.Games.Reverse().ToList()[item].ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
                                 <div class="d-flex align-items-center" style="height: 100%;">
                                     <div class="ml-5">
-                                        <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
+                                        <img src="@Model.Games.Reverse().ToList()[item].ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
                                     </div>
                                     <div class="ml-4 d-flex flex-column">
-                                        <h5 class="text-light">@Model.Games.ToList()[item].Name</h5>
-                                        <p class="text-light">@Model.Games.ToList()[item].Description</p>
+                                        <h5 class="text-light">@Model.Games.Reverse().ToList()[item].Name</h5>
+                                        <p class="text-light">@Model.Games.Reverse().ToList()[item].Description</p>
                                     </div>
                                 </div>
                             </a>
@@ -185,42 +185,42 @@
                         else
                         {
                             <a class="position-relative bg-dark btngame" style="width: 100%; height: 30vh;">
-                                <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
+                                <img src="@Model.Games.Reverse().ToList()[item].ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
                                 <div class="d-flex align-items-center" style="height: 100%;">
                                     <div class="ml-5">
-                                        <img src="@Model.Games.ToList()[item].ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
+                                        <img src="@Model.Games.Reverse().ToList()[item].ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
                                     </div>
                                     <div class="ml-4 d-flex flex-column">
-                                        <h5 class="text-light">@Model.Games.ToList()[item].Name</h5>
-                                        <p class="text-light">@Model.Games.ToList()[item].Description</p>
+                                        <h5 class="text-light">@Model.Games.Reverse().ToList()[item].Name</h5>
+                                        <p class="text-light">@Model.Games.Reverse().ToList()[item].Description</p>
                                     </div>
                                 </div>
                             </a>
                         }
                         <div class="bg-dark">
                             <form method="post">
-                                @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id) != null)
+                                @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.Reverse().ToList()[item].Id) != null)
                                 {
-                                    @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id).Status == Env.GameStatusBuyed)
+                                    @if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.Reverse().ToList()[item].Id).Status == Env.GameStatusBuyed)
                                     {
-                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Add to Follow</button>
+                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.Reverse().ToList()[item].Id">Add to Follow</button>
                                     }
-                                    else if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.ToList()[item].Id).Status == Env.GameStatusFollowed)
+                                    else if (Model.IdentityProfile.ProfileGames.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id && i.GameId == Model.Games.Reverse().ToList()[item].Id).Status == Env.GameStatusFollowed)
                                     {
-                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Remove with Follow</button>
+                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.Reverse().ToList()[item].Id">Remove with Follow</button>
                                     }
                                 }
                                 else
                                 {
                                     if (Model.IdentityProfile.IsPremium)
                                     {
-                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Get for free</button>
+                                        <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.Reverse().ToList()[item].Id">Get for free</button>
                                     }
                                     else
                                     {
-                                        @if (Model.IdentityProfile.TargetCoins >= Model.Games.ToList()[item].TargetPrice)
+                                        @if (Model.IdentityProfile.TargetCoins >= Model.Games.Reverse().ToList()[item].TargetPrice)
                                         {
-                                            <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.ToList()[item].Id">Buy game for @Model.Games.ToList()[item].TargetPrice target coins</button>
+                                            <button class="btn btn-outline-light rounded-0 pointer ml-5" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@Model.Games.Reverse().ToList()[item].Id">Buy game for @Model.Games.Reverse().ToList()[item].TargetPrice target coins</button>
                                         }
                                         else
                                         {

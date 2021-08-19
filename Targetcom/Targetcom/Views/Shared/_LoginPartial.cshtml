@@ -59,7 +59,7 @@
         <div class="dropdown-divider"></div>
         @if (role == Env.AdminRole)
         {
-            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" href="#">Root panel</a>
+            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Admin" asp-action="Index">Root panel</a>
         }
         <a class="dropdown-item rounded-0 day_color_font d-flex align-items-center" id="manage" asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a>
         <a class="dropdown-item rounded-0 day_color_font d-flex align-items-center" asp-controller="Help" asp-action="Index">Help</a>

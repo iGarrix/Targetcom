@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "Root panel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .block {
+        text-decoration:none;
+        transition: .3s;
+    }
+    .block:hover {
+        filter: invert(100%);
+        text-decoration: none;
+    }
+</style>
+<div class="d-flex flex-column justify-content-center align-items-center p-4" style="font-family: Poppins, sans-serif; height: calc(100vh - 160px); gap: 1rem;">
+    <div class="d-flex" style="gap: 1rem;">
+        <a href="#" class="p-4 rounded d-flex flex-column justify-content-center align-items-center text-light day_back_main block" style="width: 230px; height:220px;">
+            <i class="fas fa-users d-flex justify-content-center" style="width: 100%; font-size: 40px;"></i>
+            <h4 class="m-0 mt-2">Users</h4>
+        </a>
+        <a href="#" class="p-4 rounded d-flex flex-column justify-content-center align-items-center text-light bg-danger block" style="width: 230px; height: 220px;">
+            <i class="fab fa-facebook-messenger d-flex justify-content-center" style="width: 100%; font-size: 40px;"></i>
+            <h4 class="m-0 mt-2">Messenger</h4>
+        </a>
+        <a asp-action="Games" class="p-4 rounded d-flex flex-column justify-content-center align-items-center text-light bg-success block" style="width: 230px; height: 220px;">
+            <i class="fas fa-gamepad d-flex justify-content-center" style="width: 100%; font-size: 40px;"></i>
+            <h4 class="m-0 mt-2">Games</h4>
+        </a>
+        <a asp-action="News" class="p-4 rounded d-flex flex-column justify-content-center align-items-center text-light bg-info block" style="width: 230px; height: 220px;">
+            <i class="fas fa-newspaper d-flex justify-content-center" style="width: 100%; font-size: 40px;"></i>
+            <h4 class="m-0 mt-2">News</h4>
+        </a>
+    </div>
+</div>
+

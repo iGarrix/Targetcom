@@ -21,7 +21,6 @@ namespace Targetcom.Controllers
             _db = db;
             _userManager = userManager;
         }
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             GameVM gameVM = new GameVM()
@@ -29,11 +28,18 @@ namespace Targetcom.Controllers
                 IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
                 Games = _db.Games,
             };
+            var Profiles = _db.Profiles;
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+            gameVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == gameVM.IdentityProfile.Id || w.ProfileId == gameVM.IdentityProfile.Id).ToList();
             gameVM.IdentityProfile.ProfileGames = _db.ProfileGames.Where(i => i.ProfileId == gameVM.IdentityProfile.Id).ToList();
             return View(gameVM);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> IndexPost(int? id)
         {

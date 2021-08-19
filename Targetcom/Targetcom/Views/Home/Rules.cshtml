@@ -2,7 +2,7 @@
     ViewData["Title"] = "Rules";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@model Profile;
 <style>
     .rulebtn {
         font-size: 18px;
@@ -52,7 +52,7 @@
 @if (User.Identity.IsAuthenticated)
 {
     <div class="d-flex" style="gap: 1rem;">
-        <partial name="SideBar" />
+        <partial name="SideBar" model="new Tuple<int, int>(Model.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.Id),0)" />
         <div class="border rounded p-4 day_back_head border-0" style="width: 100%;">
             <h3 style="font-family: Roboto, sans-serif;" class="day_color_font text-center">Rules <i class="fas fa-hand-sparkles" style="color: #e14b4b"></i></h3>
             <hr />

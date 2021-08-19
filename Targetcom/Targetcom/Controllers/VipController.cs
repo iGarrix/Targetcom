@@ -43,7 +43,15 @@ namespace Targetcom.Controllers
                 }
             }
             _db.Cases.RemoveRange(_db.Cases.Where(w => w.ProfileId == profile.Id && w.CaseCount == 0));
-            _db.SaveChanges();
+            _db.SaveChanges(); 
+            var Profiles = _db.Profiles;
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+            profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
             profile.Cases = _db.Cases.Where(w => w.ProfileId == profile.Id).ToList();
             return View(new Tuple<Profile, string>(profile, error_message));
         }
@@ -51,12 +59,20 @@ namespace Targetcom.Controllers
         public async Task<IActionResult> Coins()
         {
             var profile = await _userManager.GetUserAsync(User) as Profile;
+            var Profiles = _db.Profiles;
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+            profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
             return View(profile);
         }
 
         public async Task<IActionResult> Opencase(string type)
         {
-            var profile = await _userManager.GetUserAsync(User) as Profile;
+            var profile = await _userManager.GetUserAsync(User) as Profile;          
             profile.Cases = _db.Cases.Where(w => w.ProfileId == profile.Id).ToList();
             CaseVM defVM = new CaseVM()
             {
@@ -125,6 +141,14 @@ namespace Targetcom.Controllers
                             {
                                 profile.TargetCoins += prize.Item2;
                             }
+                            else
+                            {
+                                var game = _db.Games.FirstOrDefault(f => f.Name == prize.Item1);
+                                if (game is not null)
+                                {
+                                    await GiveGame(game.Id);
+                                }
+                            }
                             profile.Cases.FirstOrDefault(f => f.CaseType == Env.DefaultCase).CaseCount -= 1;
                             await _userManager.UpdateAsync(profile);
                             return View(caseVM);
@@ -192,22 +216,30 @@ namespace Targetcom.Controllers
                             {
                                 profile.TargetCoins += prize.Item2;
                             }
-                            if (prize.Item1 == "Fragment")
+                            else if (prize.Item1 == "Fragment")
                             {
                                 if (profile.Fragment < 7)
                                 {
                                     profile.Fragment += 1;
                                 }
                             }
-                            if (prize.Item1 == "Rainbow")
+                            else if (prize.Item1 == "Rainbow")
                             {
                                 profile.RainbowMode = Env.RainbowDropped;
                             }
-                            if (!profile.ImageVidget)
+                            else if (!profile.ImageVidget)
                             {
                                 if (prize.Item1 == "Widget")
                                 {
                                     profile.ImageVidget = true;
+                                }
+                            }
+                            else
+                            {
+                                var game = _db.Games.FirstOrDefault(f => f.Name == prize.Item1);
+                                if (game is not null)
+                                {
+                                    await GiveGame(game.Id);
                                 }
                             }
                             profile.Cases.FirstOrDefault(f => f.CaseType == Env.PremiumCase).CaseCount -= 1;
@@ -217,6 +249,15 @@ namespace Targetcom.Controllers
                     }
                 }
             }
+
+            var Profiles = _db.Profiles;
+            var ProfileFriendship = _db.Friendships;
+            ProfileFriendship.ToList().ForEach(i =>
+            {
+                i.Profile = Profiles.Find(i.ProfileId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+            profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
             return View(defVM);
         }
 
@@ -377,6 +418,45 @@ namespace Targetcom.Controllers
             }
             await _userManager.UpdateAsync(profile);
             return RedirectToAction(nameof(Index));
+        }
+        
+        public async Task GiveGame(int? id)
+        {
+            var profile = await _userManager.GetUserAsync(User) as Profile;
+            var game = _db.Games.Find(id);
+
+            if (game == null)
+            {
+                return;
+            }
+            if (profile != null)
+            {
+                var finded = _db.ProfileGames.FirstOrDefault(i => i.GameId == game.Id && i.ProfileId == profile.Id);
+                if (finded != null)
+                {
+                    profile.ProfileGames.Remove(finded);
+                    if (finded.Status == Env.GameStatusBuyed)
+                    {
+                        finded.Status = Env.GameStatusFollowed;
+                    }
+                    else
+                    {
+                        finded.Status = Env.GameStatusBuyed;
+                    }
+                    profile.ProfileGames.Add(finded);
+                }
+                else
+                {
+                    profile.ProfileGames.Add(new ProfileGame()
+                    {
+                        Game = game,
+                        Profile = profile,
+                        Status = Env.GameStatusBuyed,
+                    });
+
+                }
+                await _userManager.UpdateAsync(profile);
+            }
         }
 
         private Tuple<string, int> GetSilverPrize()

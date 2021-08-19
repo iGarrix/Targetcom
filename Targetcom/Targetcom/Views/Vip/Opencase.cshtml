@@ -62,23 +62,41 @@
     .price {
         background-color: rgba(0, 0, 0, 0.30);
     }
+    .effect {
+        transition: .2s;
+        text-decoration: none;
+    }
+    .night .effect:hover {
+        background-color: white;
+        color: #34a8ff;
+        text-decoration: none;
+    }
+    .effect:hover {
+        background-color: #222222;
+        color: #34a8ff;
+        text-decoration: none;
+    }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
-    <partial name="SideBar" />
+    <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityProfile.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityProfile.Id),0)" />
     <div style="width: 100%" class="d-flex flex-column">
         @if (Model.CaseType == Env.DefaultCase)
         {
             <div class="day_back_head p-3 rounded d-flex justify-content-between">
                 <h4 class="m-0 day_color_main">Silver case</h4>
-                <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.DefaultCase).CaseCount</span>
+                <div class="d-flex align-items-center">
+                    <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.DefaultCase).CaseCount</span>
+                    <a class="border-0 day_color_font day_back_main font-weight-bold rounded ml-2 p-2 effect" asp-controller="Vip" asp-action="Opencase" asp-route-type="@Model.CaseType" style="outline:0;">Open</a>
+                </div>
             </div>
         }
         else
         {
             <div class="day_back_head p-3 rounded d-flex justify-content-between">
                 <h4 class="m-0 day_color_main">Premium case</h4>
-                <div>
+                <div class="d-flex align-items-center">
                     <span class="m-0 day_color_main">Count opening: @Model.IdentityProfile.Cases.FirstOrDefault(f => f.CaseType == Env.PremiumCase).CaseCount</span>
+                    <a class="border-0 day_color_font day_back_main font-weight-bold rounded ml-2 p-2 effect" asp-controller="Vip" asp-action="Opencase" asp-route-type="@Model.CaseType" style="outline:0;">Open</a>
                 </div>
             </div>
         }

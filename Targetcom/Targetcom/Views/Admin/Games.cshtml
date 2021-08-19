@@ -1,0 +1,234 @@
+﻿@{
+    ViewData["Title"] = "Games management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@model IEnumerable<Targetcom.Models.Game>;*@
+@model Targetcom.Models.ViewModels.ManagementGames;
+
+<style>
+    .searcher{
+        border: 0;
+        background-color: transparent;
+        outline: 0 !important;
+        font-size: 15px;
+    }
+    .gap {
+        gap: 1rem;
+    }
+    .back {
+        width: 100%;
+        height: 100%;
+        background-size: 100% 100%;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+        transition: .3s;
+        filter: blur(2px);
+    }
+    img {
+        object-fit: cover;
+    }
+    .effect {
+        transition: .3s;
+        height: 7rem;
+    }
+    .effect:hover {
+        height: 15rem;
+    }
+    .effect:hover img {
+        filter: blur(0px);
+    }
+    .close:hover i {
+        border: 0;
+        outline: 0;
+        color: #ff0000;
+    }
+</style>
+<div class="d-flex overflow-hidden" style="width: 100%; gap: 1rem; font-family: Roboto, sans-serif;">
+    <div class="d-flex flex-column rounded day_back_head" style="width: 30%; height: calc(100vh - 150px);">
+        <div class="day_back_head d-flex align-items-center p-3 border-bottom rounded">
+            <i class="fas fa-search day_color_font" style="font-size: 14px;"></i>
+            <input type="text" placeholder="Enter name" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
+        </div>
+        <div class="d-none flex-column gap p-4 overflow-auto" id="findgames">
+            @foreach (var item in Model.Games)
+            {
+                <a class="d-none flex-column gap position-relative rounded effect @item.Name" onclick="Init(@item.Id)" id="@item.Id" style="width: 100%;">
+                    <input type="hidden" value="@item.GameUrl @item.ImageUrl @item.Id @item.TargetPrice" />
+                    <input type="hidden" value="@item.Description" />
+                    <input type="hidden" value="@item.Name" />
+                    <img src="@item.ImageUrl" class="position-absolute back rounded" alt="Alternate Text" />
+                    <div class="position-absolute back rounded" style="background-color: rgba(0,0,0,0.60)"></div>
+                    <div class="d-flex flex-column justify-content-center align-items-center effect pt-3 pb-3" style="width: 100%; z-index: 2;">
+                        <h5 class="text-light">@item.Name</h5>
+                        <h4 class="text-danger">ID @item.Id </h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="d-flex flex-column gap p-4 overflow-auto" id="allgames">
+            @foreach (var item in Model.Games)
+            {
+                <a class="d-flex flex-column gap position-relative rounded effect text-decoration-none" onclick="Init(@item.Id)" id="@item.Id" style="width: 100%; cursor:pointer;">
+                    <input type="hidden" value="@item.GameUrl @item.ImageUrl @item.Id @item.TargetPrice" />
+                    <input type="hidden" value="@item.Description" />
+                    <input type="hidden" value="@item.Name" />
+                    <img src="@item.ImageUrl" class="position-absolute back rounded" alt="Alternate Text" />
+                    <div class="position-absolute back rounded" style="background-color: rgba(0,0,0,0.60)"></div>
+                    <div class="d-flex flex-column justify-content-center align-items-center effect pt-3 pb-3" style="width: 100%; z-index: 2;">
+                        <h5 class="text-light">@item.Name</h5>
+                        <h4 class="text-danger">ID @item.Id </h4>
+                    </div>
+                </a>
+            }
+        </div>
+        <script>
+            var findblock = document.getElementById("findgames").children;
+            document.getElementById("search").addEventListener("keyup", () => {
+                if (document.getElementById("search").value == "") {
+                    document.getElementById("allgames").classList.remove("d-none");
+                    document.getElementById("allgames").classList.add("d-flex");
+
+                    document.getElementById("findgames").classList.remove("d-flex");
+                    document.getElementById("findgames").classList.add("d-none");
+                }
+                else {
+                    document.getElementById("findgames").classList.remove("d-none");
+                    document.getElementById("findgames").classList.add("d-flex");
+
+                    document.getElementById("allgames").classList.remove("d-flex");
+                    document.getElementById("allgames").classList.add("d-none");
+
+                    for (var i = 0; i < findblock.length; ++i) {
+                        if (findblock[i].classList.contains(document.getElementById("search").value)) {
+                            findblock[i].classList.remove("d-none");
+                            findblock[i].classList.add("d-flex");
+                        }
+                        else {
+                            findblock[i].classList.remove("d-flex");
+                            findblock[i].classList.add("d-none");
+                        }
+                    }
+
+                }
+            });
+
+        </script>
+    </div>
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        <div class="p-3 day_back_head rounded d-flex flex-column" style="width: 100%; height: calc(100vh - 150px);">
+            <div class="d-flex justify-content-end mb-3">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none m-0 mr-2 close"><i class="fas fa-times d-flex justify-content-center day_color_font" style="width: 100%; font-size: 25px;"></i></a>
+            </div>
+
+            <div class="d-flex gap">
+                <div class="d-flex flex-column gap">
+                    <img src="@Env.DefaultImageUrl" class="rounded" id="image" style="width: 220px; height: 220px;" alt="Alternate Text" />
+                    <input type="text" class="form-control day_back_default border-0 day_color_font" name="gameurlimage" id="urlimage" placeholder="Url Image" />
+                    <input type="text" class="form-control day_back_default border-0 day_color_font" name="gameurlgame" id="urlgame" placeholder="Url Game" />
+                </div>
+                <div class="d-flex flex-column gap" style="width: 100%;">
+                    <input type="text" class="form-control day_back_default border-0 day_color_font" id="name" name="gamename" placeholder="Game name" style="width: 100%;" />
+                    <input type="text" class="form-control day_back_default border-0 day_color_font" id="desc" name="gamedesc" placeholder="Game description" style="width: 100%;" />
+                    <div class="d-flex gap">
+                        <input type="hidden" name="gameid" id="hideid" />
+                        <input type="text" class="form-control day_back_default border-0 day_color_font" disabled id="id" placeholder="Game Id" style="width: 100%;" />
+                        <input type="text" class="form-control day_back_default border-0 day_color_font" id="price" name="gameprice" placeholder="Game price" style="width: 100%;" />
+                    </div>
+                    <div class="alert day_color_font day_back_default m-0 d-flex justify-content-center align-items-center" id="alert" style="height: 100%; font-size:25px;">@Model.Alert</div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-auto">
+                <a data-toggle="modal" data-target="#acceptRemoved" id="removebtn" class="text-decoration-none d-none m-0 mr-2 text-light bg-danger m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0; cursor:pointer">Remove</a>
+                <a data-toggle="modal" data-target="#addNewgame" class="text-decoration-none m-0 mr-2 text-light day_back_main m-0 rounded pr-3 pl-3 pt-2 pb-2" style="outline:0; cursor:pointer">Add</a>
+                <button type="submit" asp-controller="Admin" id="savebtn" asp-action="SaveSelectedGame" class="text-decoration-none d-none m-0 mr-2 text-light day_back_main m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Save</button>
+                <div class="modal fade" id="acceptRemoved" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="font-family: Roboto,sans-serif;">
+                    <div class="modal-dialog day_back_head day_color_font">
+                        <div class="modal-content">
+                            <div class="modal-header day_back_head day_color_font">
+                                <h5 class="modal-title" id="exampleModalLabel">Remove game</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" class="day_color_font">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body day_back_head day_color_font">
+                                <h4 class="text-danger m-0 text-center">Delete this game with DB</h4>
+                            </div>
+                            <div class="modal-footer day_back_head day_color_font">
+                                <button type="submit" asp-controller="Admin" asp-action="RemoveSelectedGame" class="text-decoration-none m-0 mr-2 text-light bg-danger m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="addNewgame" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="font-family: Roboto,sans-serif;">
+                    <div class="modal-dialog modal-lg day_back_head day_color_font">
+                        <div class="modal-content">
+                            <div class="modal-header day_back_head day_color_font">
+                                <h5 class="modal-title" id="exampleModalLabel">Add new game</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" class="day_color_font">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body day_back_head day_color_font">
+                                <div class="d-flex gap">
+                                    <div class="d-flex flex-column gap">
+                                        <img src="@Env.DefaultImageUrl" class="rounded" id="newimage" style="width: 220px; height: 220px;" alt="Icorrect link to image" />                                        
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center gap" style="width: 100%;">
+                                        <input type="text" class="form-control day_back_default border-0 day_color_font" name="newname" placeholder="Game name" style="width: 100%;" />
+                                        <input type="text" class="form-control day_back_default border-0 day_color_font" name="newdesc" placeholder="Game description" style="width: 100%;" />
+                                        <input type="text" class="form-control day_back_default border-0 day_color_font" name="newprice" placeholder="Game price" style="width: 100%;" />
+                                        <div class="d-flex gap">
+                                            <input type="text" class="form-control day_back_default border-0 day_color_font" id="newurlimage" name="newurlimage" placeholder="Url Image" />
+                                            <input type="text" class="form-control day_back_default border-0 day_color_font" name="newurlgame" placeholder="Url Game" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    document.getElementById("newurlimage").addEventListener("keyup", () => {
+                                        if (document.getElementById("newurlimage").value == "") {
+                                            document.getElementById("newimage").src = "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331257_960_720.png";                      
+                                        }
+                                        else {
+                                            document.getElementById("newimage").src = document.getElementById("newurlimage").value;
+                                        }
+                                    });
+                                </script>
+                            </div>
+                            <div class="modal-footer day_back_head day_color_font">
+                                <button type="submit" asp-controller="Admin" asp-action="Addnewgame" id="addedgame" class="text-decoration-none m-0 mr-2 text-light day_back_main m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function Init(id) {
+        var data = document.getElementById(id).children[0].value.split(" ");
+        var desc = document.getElementById(id).children[1].value;
+        var name = document.getElementById(id).children[2].value;
+        document.getElementById("urlgame").value = data[0];
+        document.getElementById("urlimage").value = data[1];
+        document.getElementById("image").src = data[1];
+        document.getElementById("id").value = data[2];
+        document.getElementById("hideid").value = data[2];
+        document.getElementById("price").value = data[3];
+        document.getElementById("desc").value = desc;
+        document.getElementById("name").value = name;
+
+        document.getElementById("alert").classList.remove("d-flex");
+        document.getElementById("alert").classList.add("d-none");
+
+        document.getElementById("removebtn").classList.remove("d-none");
+        document.getElementById("removebtn").classList.add("d-flex");
+        document.getElementById("savebtn").classList.remove("d-none");
+        document.getElementById("savebtn").classList.add("d-flex");
+    }
+</script>
+
