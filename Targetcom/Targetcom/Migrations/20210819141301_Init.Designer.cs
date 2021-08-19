@@ -10,8 +10,8 @@ using Targetcom.Data;
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    [Migration("20210813121235_Add case count")]
-    partial class Addcasecount
+    [Migration("20210819141301_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -353,6 +353,68 @@ namespace Targetcom.Migrations
                     b.ToTable("LikedProfilePostages");
                 });
 
+            modelBuilder.Entity("Targetcom.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MessageGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProfileId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isurlmessage")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageGroupId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Targetcom.Models.MessageGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AdminId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FriendId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsInvite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("MessageGroups");
+                });
+
             modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
                 {
                     b.Property<string>("ProfileId")
@@ -464,11 +526,20 @@ namespace Targetcom.Migrations
                     b.Property<DateTime>("Age")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("AvatarGridURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("BannedId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateStamp")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("DroppedAvatar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Fragment")
+                        .HasColumnType("int");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -477,6 +548,12 @@ namespace Targetcom.Migrations
                     b.Property<string>("Hobbies")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("ImageVidget")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDark")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsNessessaredCommentedPost")
                         .HasColumnType("bit");
@@ -514,6 +591,9 @@ namespace Targetcom.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("RainbowMode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -538,16 +618,10 @@ namespace Targetcom.Migrations
                     b.Property<bool>("VisibilityCommerceData")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("VisibilityCommunity")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("VisibilityFriends")
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilityImages")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("VisibilityPlaylist")
                         .HasColumnType("bit");
 
                     b.Property<bool>("VisibilityPostage")
@@ -677,6 +751,38 @@ namespace Targetcom.Migrations
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("Targetcom.Models.Message", b =>
+                {
+                    b.HasOne("Targetcom.Models.MessageGroup", "MessageGroup")
+                        .WithMany("Messages")
+                        .HasForeignKey("MessageGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Targetcom.Models.Profile", "Profile")
+                        .WithMany("Messages")
+                        .HasForeignKey("ProfileId");
+
+                    b.Navigation("MessageGroup");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("Targetcom.Models.MessageGroup", b =>
+                {
+                    b.HasOne("Targetcom.Models.Profile", "Admin")
+                        .WithMany("ToMessageGroups")
+                        .HasForeignKey("AdminId");
+
+                    b.HasOne("Targetcom.Models.Profile", "Friend")
+                        .WithMany("WithMessageGroups")
+                        .HasForeignKey("FriendId");
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Friend");
+                });
+
             modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
                 {
                     b.HasOne("Targetcom.Models.Game", "Game")
@@ -752,6 +858,11 @@ namespace Targetcom.Migrations
                     b.Navigation("ProfileGames");
                 });
 
+            modelBuilder.Entity("Targetcom.Models.MessageGroup", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("Targetcom.Models.ProfilePostage", b =>
                 {
                     b.Navigation("LikedProfiles");
@@ -773,6 +884,8 @@ namespace Targetcom.Migrations
 
                     b.Navigation("LikedProfilePostages");
 
+                    b.Navigation("Messages");
+
                     b.Navigation("ProfileGames");
 
                     b.Navigation("ProfilePostageComments");
@@ -780,6 +893,10 @@ namespace Targetcom.Migrations
                     b.Navigation("ProfilePostages");
 
                     b.Navigation("SharedProfilePostages");
+
+                    b.Navigation("ToMessageGroups");
+
+                    b.Navigation("WithMessageGroups");
 
                     b.Navigation("WritterPostages");
                 });

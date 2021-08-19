@@ -13,6 +13,7 @@ using Targetcom.Models.ViewModels;
 
 namespace Targetcom.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -24,8 +25,7 @@ namespace Targetcom.Controllers
             _logger = logger;
             _userManager = userManager;
             _db = db;
-        }
-        [Authorize]
+        }      
         public async Task<IActionResult> Index()
         {
             NewsVM newsVM = new NewsVM()
