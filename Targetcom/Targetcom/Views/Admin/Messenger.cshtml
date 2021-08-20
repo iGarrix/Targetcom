@@ -1,0 +1,214 @@
+﻿@{
+    ViewData["Title"] = "Management Messenger";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Targetcom.Models.ViewModels.ManagementMessenger;
+
+<style>
+    .searcher {
+        border: 0;
+        background-color: transparent;
+        outline: 0 !important;
+        font-size: 15px;
+    }
+
+    .gap {
+        gap: 1rem;
+    }
+
+    .back {
+        width: 100%;
+        height: 100%;
+        background-size: 100% 100%;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+        transition: .3s;
+        filter: blur(2px);
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    .effect {
+        transition: .3s;
+    }
+
+        .effect:hover {
+            transform: scale(1.050);
+        }
+
+            .effect:hover img {
+                filter: blur(0px);
+            }
+
+    .close:hover i {
+        border: 0;
+        outline: 0;
+        color: #ff0000;
+    }
+    .eff {
+        text-decoration: none;
+        transition: .2s;
+    }
+        .eff:hover {
+            text-decoration: none;
+            transform:scale(1.1);
+        }
+</style>
+<div class="d-flex overflow-hidden" style="width: 100%; gap: 1rem; font-family: Roboto, sans-serif;">
+    <div class="d-flex flex-column rounded day_back_head" style="width: 30%; height: calc(100vh - 150px);">
+        <div class="day_back_head d-flex align-items-center p-3 border-bottom rounded">
+            <i class="fas fa-search day_color_font" style="font-size: 14px;"></i>
+            <input type="text" placeholder="Enter name / surname" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
+        </div>
+        <div class="d-none flex-column align-items-center gap p-4 overflow-auto" id="finduser">
+            @if (!Model.Profiles.OrderByDescending(o => o.CreateStamp).ToList().Any())
+            {
+                <h4 class="m-0 text-center day_color_font">Not found</h4>
+            }
+            @foreach (var item in Model.Profiles.OrderByDescending(o => o.CreateStamp))
+            {
+                <div class="d-flex pt-2 pb-2 flex-column day_back_default justify-content-center day_color_font text-decoration-none effect @item.Name @item.Surname" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
+                    <div class="d-flex align-items-center">
+                        <img src="@item.UrlAvatar" class="rounded-circle ml-2" style="width: 48px; height: 48px;" />
+                        <div class="d-flex flex-column day_color_font p-2">
+                            <p class="m-0 day_color_main">
+                                @item.Name @item.Surname
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="mt-2 mb-1 m-0" />
+                    <div class="d-flex flex-column gap p-2">
+                        @foreach (var room in item.ToMessageGroups.ToList().OrderByDescending(o => o.TimeStamp))
+                        {
+                            @if (room.AdminId == item.Id)
+                            {
+                                <a asp-controller="Admin" asp-action="Messenger" asp-route-user1id="@room.FriendId" asp-route-user2id="@room.AdminId" class="day_color_font day_back_head p-2 d-flex flex-column align-items-center eff">
+                                    <span class="day_color_main"><i class="far fa-comments"></i> @room.Friend.Name @room.Friend.Surname</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Admin" asp-action="Messenger" asp-route-user1id="@room.AdminId" asp-route-user2id="@room.FriendId" class="day_color_font day_back_head p-2 d-flex flex-column align-items-center eff">
+                                    <span class="day_color_main"><i class="far fa-comments"></i> @room.Admin.Name @room.Admin.Surname</span>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="d-flex flex-column align-items-center gap p-4 overflow-auto" id="alluser">
+            @if (!Model.Profiles.OrderByDescending(o => o.CreateStamp).ToList().Any())
+            {
+                <h4 class="m-0 text-center day_color_font">Not found</h4>
+            }
+            @foreach (var item in Model.Profiles.OrderByDescending(o => o.CreateStamp))
+            {
+                <div class="d-flex pt-2 pb-2 flex-column day_back_default justify-content-center day_color_font text-decoration-none effect" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
+                    <div class="d-flex align-items-center">
+                        <img src="@item.UrlAvatar" class="rounded-circle ml-2" style="width: 48px; height: 48px;" />
+                        <div class="d-flex flex-column day_color_font p-2">
+                            <p class="m-0 day_color_main">
+                                @item.Name @item.Surname
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="mt-2 mb-1 m-0" />
+                    <div class="d-flex flex-column gap p-2">
+                        @foreach (var room in item.ToMessageGroups.ToList().OrderByDescending(o => o.TimeStamp))
+                        {
+                            @if (room.AdminId == item.Id)
+                            {
+                                <a asp-controller="Admin" asp-action="Messenger" asp-route-user1id="@room.FriendId" asp-route-user2id="@room.AdminId" class="day_color_font day_back_head p-2 d-flex flex-column align-items-center eff">
+                                    <span class="day_color_main"><i class="far fa-comments"></i> @room.Friend.Name @room.Friend.Surname</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Admin" asp-action="Messenger" asp-route-user1id="@room.AdminId" asp-route-user2id="@room.FriendId" class="day_color_font day_back_head p-2 d-flex flex-column align-items-center eff">
+                                    <span class="day_color_main"><i class="far fa-comments"></i> @room.Admin.Name @room.Admin.Surname</span>
+                                </a>
+                            }
+
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <script>
+            var findblock = document.getElementById("finduser").children;
+            document.getElementById("search").addEventListener("keyup", () => {
+                if (document.getElementById("search").value == "") {
+                    document.getElementById("alluser").classList.remove("d-none");
+                    document.getElementById("alluser").classList.add("d-flex");
+
+                    document.getElementById("finduser").classList.remove("d-flex");
+                    document.getElementById("finduser").classList.add("d-none");
+                }
+                else {
+                    document.getElementById("finduser").classList.remove("d-none");
+                    document.getElementById("finduser").classList.add("d-flex");
+
+                    document.getElementById("alluser").classList.remove("d-flex");
+                    document.getElementById("alluser").classList.add("d-none");
+
+                    for (var i = 0; i < findblock.length; ++i) {
+                        for (var j = 0; j < document.getElementById("search").value.split(" ").length; ++j) {
+                            if (findblock[i].classList.contains(document.getElementById("search").value.split(" ")[j])) {
+                                findblock[i].classList.remove("d-none");
+                                findblock[i].classList.add("d-flex");
+                            }
+                            else {
+                                findblock[i].classList.remove("d-flex");
+                                findblock[i].classList.add("d-none");
+                            }
+                        }
+                    }
+
+                }
+            });
+        </script>
+    </div>
+    <div style="width: 70%;">
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+        <div class="rounded p-3 day_back_head d-flex flex-column" style="width: 100%; height: calc(100vh - 150px);">
+            <div class="d-flex  justify-content-end mb-3">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none m-0 mr-2 close"><i class="fas fa-times d-flex justify-content-center day_color_font" style="width: 100%; font-size: 25px;"></i></a>
+            </div>
+            <div class="d-flex flex-column gap overflow-auto" style="width: 100%; height: 100%;">
+                @if (Model.SelectRoom is not null)
+                {
+                    @foreach (var item in Model.SelectRoom.Messages)
+                    {
+                        <div class="shadow p-2 rounded d-flex" style="width: 100%;">
+                            <img src="@item.Profile.UrlAvatar" class="rounded-circle" alt="Alternate Text" style="width: 48px; height: 48px;" />
+                            <div class="d-flex flex-column justify-content-center ml-2">
+                                <span class="text-muted" style="font-size: 13px;"><strong class="day_color_main" style="font-size: 16px;">@item.Profile.Name @item.Profile.Surname</strong> @item.TimeStamp.ToString("dd.MM.yyyy")</span>
+                                <span class="day_color_font">@item.Content</span>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center" style="width: 100%; height: 100%;">
+                        <h3 class="m-0 day_color_font">@Model.State</h3>
+                    </div>
+                }
+            </div>
+            @if (Model.SelectRoom is not null)
+            {
+                <div class="d-flex justify-content-end mt-auto">           
+                    <button type="submit" asp-controller="Admin" asp-action="Savelog" asp-route-id="@Model.SelectRoom.Id" id="downloadbtn" class="text-decoration-none m-0 text-light day_back_main m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Download messages</button>        
+                </div>
+            }
+        </div>
+        }
+    </div>
+</div>
+

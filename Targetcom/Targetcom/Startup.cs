@@ -37,7 +37,14 @@ namespace Targetcom
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(opt => 
+            {
+                opt.Password.RequiredLength = 8;   // минимальная длина
+                opt.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
+                opt.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре
+                opt.Password.RequireUppercase = false; // требуются ли символы в верхнем регистре
+                opt.Password.RequireDigit = false; // требуются ли цифры
+            })
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<TargetDbContext>();

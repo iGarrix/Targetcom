@@ -68,6 +68,10 @@
             }
         </div>
         <div class="d-flex flex-column gap p-4 overflow-auto" id="allgames">
+            @if (!Model.Games.Any())
+            {
+                <h4 class="m-0 text-center day_color_font">Not found</h4>
+            }
             @foreach (var item in Model.Games)
             {
                 <a class="d-flex flex-column gap position-relative rounded effect text-decoration-none" onclick="Init(@item.Id)" id="@item.Id" style="width: 100%; cursor:pointer;">

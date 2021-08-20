@@ -7,7 +7,7 @@ namespace Targetcom
 {
     public class Env
     {
-        public static string WebName = "Tracelight";
+        public static string WebName = "Trace lighter";
 
         /* Roles */
         public static string UserRole = "DefaultUser";
@@ -39,7 +39,7 @@ namespace Targetcom
 
         /* Premium Price */
 
-        public static int PremiumPrice = 9999;
+        public static int PremiumPrice = 199;
 
         /* Target coins buy */
 
@@ -59,7 +59,7 @@ namespace Targetcom
         public static string Subscribe = "Subscribe";
         public static string Blacklist = "Blacklist";
 
-        public static int VerifySubscribe = 2;
+        public static int VerifySubscribe = 50;
 
         /* Case Type */
 
@@ -75,6 +75,27 @@ namespace Targetcom
 
         /* Max messages room */
         public static long MAX_MESSAGES = 50;
+
+        /* Case Price */
+
+        public static int SilverCasePrice = 40;
+        public static int PremiumCasePrice = 60;
+
+        /* Coin prize cases*/
+
+        public static int SilverLvl1PrizeCoin = 20;
+        public static int SilverLvl2PrizeCoin = 30;
+        public static int SilverLvl3PrizeCoin = 40;
+        public static int SilverLvl4PrizeCoin = 50;
+        public static int SilverJackpotPrizeCoin = 120;
+        public static int SilverRangeGamePrice = 100;
+
+        public static int PremiumLvl1PrizeCoin = 40;
+        public static int PremiumLvl2PrizeCoin = 50;
+        public static int PremiumLvl3PrizeCoin = 60;
+        public static int PremiumLvl4PrizeCoin = 70;
+        public static int PremiumRangeGamePrice = 100;
+
 
         /* Avatar Grid */
 

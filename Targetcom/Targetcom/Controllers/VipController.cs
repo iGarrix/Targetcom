@@ -314,9 +314,9 @@ namespace Targetcom.Controllers
         public async Task<IActionResult> BuyDefCasePost(int dcasecounter)
         {
             var prof = await _userManager.GetUserAsync(User) as Profile;
-            if (prof.TargetCoins >= (dcasecounter * 60))
+            if (prof.TargetCoins >= (dcasecounter * Env.SilverCasePrice))
             {
-                prof.TargetCoins -= (dcasecounter * 60);
+                prof.TargetCoins -= (dcasecounter * Env.SilverCasePrice);
                 await _userManager.UpdateAsync(prof);
             }
             else 
@@ -345,9 +345,9 @@ namespace Targetcom.Controllers
         public async Task<IActionResult> BuyPremCasePost(int pcasecounter)
         {
             var prof = await _userManager.GetUserAsync(User) as Profile;
-            if (prof.TargetCoins >= (pcasecounter * 140))
+            if (prof.TargetCoins >= (pcasecounter * Env.PremiumCasePrice))
             {
-                prof.TargetCoins -= (pcasecounter * 140);
+                prof.TargetCoins -= (pcasecounter * Env.PremiumCasePrice);
                 await _userManager.UpdateAsync(prof);
             }
             else
@@ -464,7 +464,7 @@ namespace Targetcom.Controllers
             Random row = new Random();
             Random col = new Random();
 
-            var games = _db.Games.Where(w => w.TargetPrice < 1000).ToList();
+            var games = _db.Games.Where(w => w.TargetPrice <= Env.SilverRangeGamePrice).ToList();
 
             int x = col.Next(1, 102);
 
@@ -482,11 +482,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.SilverCasePrice + Env.SilverLvl4PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 70);
+                    return new Tuple<string, int>("coins", Env.SilverLvl4PrizeCoin);
                 }
             }
             else if (x < 31)
@@ -503,11 +503,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.SilverCasePrice + Env.SilverLvl3PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 60);
+                    return new Tuple<string, int>("coins", Env.SilverLvl3PrizeCoin);
                 }
             }
             else if (x < 61)
@@ -524,11 +524,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.SilverCasePrice + Env.SilverLvl2PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 50);
+                    return new Tuple<string, int>("coins", Env.SilverLvl2PrizeCoin);
                 }
             }
             else if (x < 101)
@@ -545,16 +545,16 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 100));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.SilverCasePrice + Env.SilverLvl1PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 45);
+                    return new Tuple<string, int>("coins", Env.SilverLvl1PrizeCoin);
                 }
             }
             if (x == 101)
             {
-                return new Tuple<string, int>("Jackpot", 140);
+                return new Tuple<string, int>("Jackpot", Env.SilverJackpotPrizeCoin);
             }
             return new Tuple<string, int>("Empty", 0);
         }
@@ -563,7 +563,7 @@ namespace Targetcom.Controllers
             Random row = new Random();
             Random col = new Random();
 
-            var games = _db.Games.Where(w => w.TargetPrice > 1000).ToList();
+            var games = _db.Games.Where(w => w.TargetPrice >= Env.PremiumRangeGamePrice).ToList();
 
             int x = col.Next(1, 102);
             if (x < 5)
@@ -597,11 +597,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.PremiumCasePrice + Env.PremiumLvl4PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 160);
+                    return new Tuple<string, int>("coins", Env.PremiumLvl4PrizeCoin);
                 }
             }
             else if (x < 31)
@@ -618,11 +618,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.PremiumCasePrice + Env.PremiumLvl3PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 140);
+                    return new Tuple<string, int>("coins", Env.PremiumLvl3PrizeCoin);
                 }
             }
             else if (x < 61)
@@ -639,11 +639,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.PremiumCasePrice + Env.PremiumLvl2PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 110);
+                    return new Tuple<string, int>("coins", Env.PremiumLvl2PrizeCoin);
                 }
             }
             else if (x < 101)
@@ -660,11 +660,11 @@ namespace Targetcom.Controllers
                     {
                         return new Tuple<string, int>(games[new Random().Next(0, games.Count)].Name, 1);
                     }
-                    return new Tuple<string, int>("coins", new Random().Next(10, 200));
+                    return new Tuple<string, int>("coins", new Random().Next(10, Env.PremiumCasePrice + Env.PremiumLvl1PrizeCoin));
                 }
                 else if (j < 101)
                 {
-                    return new Tuple<string, int>("coins", 80);
+                    return new Tuple<string, int>("coins", Env.PremiumLvl1PrizeCoin);
                 }
             }
             return new Tuple<string, int>("Empty", 0);

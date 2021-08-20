@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Targetcom.Data;
 using Targetcom.Models;
 using Targetcom.Models.ViewModels;
+using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Targetcom.Controllers
 {
@@ -27,10 +32,115 @@ namespace Targetcom.Controllers
         {
             return View();
         }
-        public IActionResult Messenger()
+
+        #region Messanger
+        public IActionResult Messenger(string user1id = null, string user2id = null, string state = null)
         {
-            return View();
+            var Profiles = _db.Profiles;
+
+            var ProfileGroups = _db.MessageGroups;
+            ProfileGroups.ToList().ForEach(i =>
+            {
+                i.Admin = Profiles.Find(i.AdminId);
+                i.Friend = Profiles.Find(i.FriendId);
+            });
+
+            var ProfileMessages = _db.Messages;
+            ProfileMessages.ToList().ForEach(i =>
+            {
+                i.MessageGroup = ProfileGroups.Find(i.MessageGroupId);
+                i.Profile = Profiles.Find(i.ProfileId);
+            });
+
+            ProfileGroups.ToList().ForEach(i =>
+            {
+                i.Messages = ProfileMessages.Where(w => w.MessageGroupId == i.Id).ToList();
+            });
+
+            Profiles.ToList().ForEach(f =>
+            {
+                f.Messages = ProfileMessages.Where(w => w.ProfileId == f.Id).ToList();
+                f.ToMessageGroups = ProfileGroups.Where(w => w.AdminId == f.Id || w.FriendId == f.Id).ToList();
+            });
+
+            MessageGroup room = null;
+            if (user1id is not null && user2id is not null)
+            {
+                var find = ProfileGroups.FirstOrDefault(f => (f.AdminId == user1id && f.FriendId == user2id) || (f.FriendId == user1id && f.AdminId == user2id));
+                if (find is not null)
+                {
+                    room = find;
+                }
+            }
+
+
+            var allowstate = "Select a room";
+            if (state is not null)
+            {
+                allowstate = state;
+            }
+            ManagementMessenger managementMessenger = new ManagementMessenger()
+            {
+                Profiles = Profiles.ToList(),
+                SelectRoom = room,
+                State = allowstate,
+            };
+            return View(managementMessenger);
         }
+
+        public IActionResult Savelog(int ? id)
+        {
+            if (id is not null)
+            {
+                var room = _db.MessageGroups.FirstOrDefault(f => f.Id == id);
+                if (room is not null)
+                {
+                    room.Messages = _db.Messages.Where(w => w.MessageGroupId == room.Id).ToList();
+                    room.Messages.ToList().ForEach(f =>
+                    {
+                        f.Profile = _db.Profiles.Find(f.ProfileId);
+                    });
+
+                    List<MessageDataJSON> messageJSON = new List<MessageDataJSON>();
+                    room.Messages.ToList().ForEach(f =>
+                    {
+                        messageJSON.Add(new MessageDataJSON()
+                        {
+                            Sender = new Sender()
+                            {
+                                Name = f.Profile.Name,
+                                Surname = f.Profile.Surname,
+                                Email = f.Profile.Email,
+                                HashedPassword = f.Profile.PasswordHash,
+                            },
+                            Message = f.Content,
+                            SendedStamp = f.TimeStamp.ToString("ss:HH::dd.MM.yyyy"),
+                        });
+                    });
+
+                    List<string> jsondata = new List<string>();
+
+                    messageJSON.ForEach(f =>
+                    {
+                        jsondata.Add(JsonSerializer.Serialize(f));
+                    });
+
+                    string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    string path = Path.Combine(desktop + $@"\data{DateTime.Now.ToString("ss.mm.hh.dd.MM.yyy")}.json");
+
+                    using (StreamWriter fs = new StreamWriter(path))
+                    {
+                        jsondata.ForEach(f =>
+                        {
+                            fs.WriteLine(JObject.Parse(f));
+                        });
+                    }
+                }
+            }
+
+            return RedirectToAction(nameof(Messenger), new { user1id = string.Empty, user2id = string.Empty, state = "Messages downloaded" });
+        }
+        #endregion
         
         #region News
         public IActionResult News(int? id)
