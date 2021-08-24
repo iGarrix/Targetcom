@@ -270,7 +270,7 @@
                             <a asp-controller="Friends" asp-action="Index" class="m-0 day_color_main middletabbtn">Friends: <span class="day_color_font">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Count()</span></a>
                             <hr />
                             <div class="d-flex flex-wrap" style="gap: .8rem;">
-                                @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend))
+                                @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Friend).Take(6))
                                 {
                                     if (item.FriendId == Model.IdentityProfile.Id)
                                     {
@@ -304,7 +304,7 @@
                         <a asp-controller="Friends" asp-action="Subscribers" asp-route-eventSelector="Subscribers" class="m-0 day_color_main middletabbtn">Subscribers: <span class="day_color_font">@Model.IdentityProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count()</span></a>
                         <hr />
                         <div class="d-flex flex-wrap" style="gap: .8rem;">
-                            @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe))
+                            @foreach (var item in Model.IdentityProfile.Friendships.Where(w => w.FriendId == Model.IdentityProfile.Id && w.FriendStatus == Env.Subscribe).Take(6))
                             {
                                 if (item.FriendId == Model.IdentityProfile.Id)
                                 {
