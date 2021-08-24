@@ -61,12 +61,14 @@ namespace Targetcom.Controllers
             var profile = await _userManager.GetUserAsync(User) as Profile;
             var Profiles = _db.Profiles;
             var ProfileFriendship = _db.Friendships;
+            var PaypalHistory = _db.PaypalHistories;
             ProfileFriendship.ToList().ForEach(i =>
             {
                 i.Profile = Profiles.Find(i.ProfileId);
                 i.Friend = Profiles.Find(i.FriendId);
             });
             profile.Friendships = ProfileFriendship.Where(w => w.FriendId == profile.Id || w.ProfileId == profile.Id).ToList();
+            profile.PaypalHistories = PaypalHistory.Where(w => w.ProfileId == profile.Id).ToList();
             return View(profile);
         }
 
@@ -261,6 +263,122 @@ namespace Targetcom.Controllers
             return View(defVM);
         }
 
+        public async Task<IActionResult> Cryptocoins()
+        {           
+            if (!_db.Cryptohistories.Any())
+            {
+                int rate = new Random().Next(Env.LowRangeCryptoGenerated, Env.UpperRangeCryptoGenerated);
+                int singe = new Random().Next((int)rate * 3000, (int)rate * 6000);
+                _db.Cryptohistories.Add(new Cryptohistory()
+                {
+                    CreateTime = DateTime.Now,
+                    Rate = rate.ToString(),
+                    SingleCrypt = singe,
+                });
+                _db.SaveChanges();
+            }
+            if (DateTime.Now >= _db.Cryptohistories.OrderByDescending(o => o.CreateTime).FirstOrDefault().CreateTime.AddDays(Env.FrequencyGenerateCryptRate))
+            {
+                int rate = new Random().Next(Env.LowRangeCryptoGenerated, Env.UpperRangeCryptoGenerated);
+                int singe = new Random().Next(rate * 3000, rate * 6000);
+                _db.Cryptohistories.Add(new Cryptohistory()
+                {
+                    CreateTime = DateTime.Now,
+                    Rate = rate.ToString(),
+                    SingleCrypt = singe,
+                });
+                if (_db.Cryptohistories.Count() >= Env.CRYPTRATE_LIMIT)
+                {
+                    var old = _db.Cryptohistories.OrderBy(o => o.CreateTime).FirstOrDefault();
+                    if (old is not null)
+                    {
+                        _db.Cryptohistories.Remove(old);
+                    }
+                }
+                _db.SaveChanges();
+            }
+
+            CryptVM cryptVM = new CryptVM()
+            {
+                IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                Cryptohistories = _db.Cryptohistories.ToList(),
+            };
+            return View(cryptVM);
+        }
+
+        public async Task<IActionResult> BuyCrypt(string buycoins, string buycryptcoins)
+        {
+            int buycoin = int.Parse(buycoins);
+            int buycryptcoin = int.Parse(buycryptcoins);
+
+            var identity = await _userManager.GetUserAsync(User) as Profile;
+            var currency = _db.Cryptohistories.OrderByDescending(o => o.CreateTime).FirstOrDefault();
+            if (currency is not null)
+            {
+                if (identity.TargetCoins >= buycoin)
+                {
+                    if (currency.SingleCrypt >= buycryptcoin)
+                    {
+                        identity.TargetCoins -= buycoin;
+                        identity.CryptCoins += buycryptcoin;
+                        currency.SingleCrypt -= buycryptcoin;
+                        _db.Cryptohistories.Update(currency);
+                        _db.SaveChanges();
+                        await _userManager.UpdateAsync(identity);
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            else
+            {
+                return NoContent();
+            }
+            return RedirectToAction(nameof(Cryptocoins));
+        }
+
+        public async Task<IActionResult> SellCrypt(string countercrypts, string countercoins)
+        {
+            int coin = int.Parse(countercoins);
+            int crypt = int.Parse(countercrypts);
+
+            var identity = await _userManager.GetUserAsync(User) as Profile;
+            var currency = _db.Cryptohistories.OrderByDescending(o => o.CreateTime).FirstOrDefault();
+
+            if (currency is not null)
+            {
+                if (coin > 0)
+                {
+                    if (identity.CryptCoins >= crypt)
+                    {
+                        identity.CryptCoins -= crypt;
+                        identity.TargetCoins += coin;
+                        _db.Cryptohistories.Update(currency);
+                        _db.SaveChanges();
+                        await _userManager.UpdateAsync(identity);
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            else
+            {
+                return NoContent();
+            }
+            return RedirectToAction(nameof(Cryptocoins));
+        }
         [HttpPost]
         public async Task<IActionResult> Coins(string package)
         {
@@ -269,18 +387,58 @@ namespace Targetcom.Controllers
             if (package == Env.LitePackage)
             {
                 profile.TargetCoins += Env.LitePackageCoin;
+                _db.PaypalHistories.Add(new PaypalHistory()
+                {
+                    Profile = profile,
+                    PaySummary = "1.00",
+                    Currency = "USD",
+                    TransactionTime = DateTime.Now,
+                    ValueName = "coins",
+                    ValueCount = Env.LitePackageCoin,                  
+                });
+                _db.SaveChanges();
             }
             else if (package == Env.MiddlePackage)
             {
                 profile.TargetCoins += Env.MiddlePackageCoin;
+                _db.PaypalHistories.Add(new PaypalHistory()
+                {
+                    Profile = profile,
+                    PaySummary = "1.50",
+                    Currency = "USD",
+                    TransactionTime = DateTime.Now,
+                    ValueName = "coins",
+                    ValueCount = Env.MiddlePackageCoin,
+                });
+                _db.SaveChanges();
             }
             else if (package == Env.SuperPackage)
             {
                 profile.TargetCoins += Env.SuperPackageCoin;
+                _db.PaypalHistories.Add(new PaypalHistory()
+                {
+                    Profile = profile,
+                    PaySummary = "4.50",
+                    Currency = "USD",
+                    TransactionTime = DateTime.Now,
+                    ValueName = "coins",
+                    ValueCount = Env.SuperPackageCoin,
+                });
+                _db.SaveChanges();
             }
             else if (package == Env.RichPackage)
             {
                 profile.TargetCoins += Env.RichPackageCoin;
+                _db.PaypalHistories.Add(new PaypalHistory()
+                {
+                    Profile = profile,
+                    PaySummary = "14.00",
+                    Currency = "USD",
+                    TransactionTime = DateTime.Now,
+                    ValueName = "coins",
+                    ValueCount = Env.RichPackageCoin,
+                });
+                _db.SaveChanges();
             }
             await _userManager.UpdateAsync(profile);
             return RedirectToAction(nameof(Coins));

@@ -178,7 +178,14 @@
                     else
                     {
                         <hr />
-                        <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@Model.FindedProfile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                        @if (DateTime.Now > Model.FindedProfile.Banned.ReasonDate)
+                        {
+                            <h5 class="text-success">Unblocked after authorization account!</h5>
+                        }
+                        else
+                        {
+                            <h5>Reason end date/time: <a class="text-primary" style="cursor:pointer;">@Model.FindedProfile.Banned.ReasonDate.ToString("dd/MM/yyyy - HH:mm") ua</a></h5>
+                        }
                     }
                 </div>
             </div>
@@ -1671,7 +1678,7 @@
                             {
                                 <div class="card border-0 day_back_head overflow-auto rounded">
                                     <div class="card-body p-2">
-                                        <textarea class="form-control item-font m-0 rounded-0 border-0" id="summer" name="content" placeholder="Tell us what's new?"></textarea>
+                                        <textarea class="form-control day_back_head item-font m-0 rounded-0 border-0" id="summer" name="content" placeholder="Tell us what's new?"></textarea>
                                     </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">

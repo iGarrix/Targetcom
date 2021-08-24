@@ -136,17 +136,6 @@ namespace Targetcom.Controllers
                 i.Admin = _db.Profiles.Find(i.AdminId);
             });
 
-            // Set ban
-            //string id = "712dc151-fd77-4857-a227-c6ed1b663ebe";
-            //var ban = Profiles.Find(id);
-            //_db.BannedProfiles.Add(new BannedProfile()
-            //{
-            //    Profile = ban,
-            //    Admin = profileVM.IdentityProfile,
-                
-            //});
-            //_db.SaveChanges();
-
             profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();

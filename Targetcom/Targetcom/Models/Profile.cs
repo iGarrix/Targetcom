@@ -23,6 +23,7 @@ namespace Targetcom.Models
             ToMessageGroups = new HashSet<MessageGroup>();
             WithMessageGroups = new HashSet<MessageGroup>();
             Messages = new HashSet<Message>();
+            PaypalHistories = new HashSet<PaypalHistory>();
         }
 
         [Required]
@@ -53,6 +54,8 @@ namespace Targetcom.Models
         public string MusicListening { get; set; }
         [NotMapped]
         public string AfkStatus { get; set; } = "offline";
+
+        public int CryptCoins { get; set; } = 0;
 
         /*Privacy*/
 
@@ -95,5 +98,6 @@ namespace Targetcom.Models
         public ICollection<MessageGroup> ToMessageGroups { get; set; }
         public ICollection<MessageGroup> WithMessageGroups { get; set; }
         public ICollection<Message> Messages { get; set; }
+        public ICollection<PaypalHistory> PaypalHistories { get; set; }
     }
 }

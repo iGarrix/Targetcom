@@ -1,7 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Management news";
+﻿
+@{
+    ViewData["Title"] = "News management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @model Targetcom.Models.ViewModels.ManagementNews;
 <style>
     .searcher {
@@ -79,10 +81,10 @@
             <input type="text" placeholder="Enter user name / post" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
         </div>
         <div class="d-none flex-column align-items-center gap p-4 overflow-auto" id="findpost">
-           
+
             @foreach (var item in Model.ProfilePostages.OrderByDescending(o => o.TimeStamp))
             {
-                <a class="d-none day_back_default align-items-center day_color_font text-decoration-none effect @item.Content @item.Profile.Name @item.Profile.Surname" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
+                <a class="d-none day_back_default align-items-center day_color_font text-decoration-none effect @item.Content @item.Profile.Name @item.Profile.Surname" asp-controller="Moder" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
                     @if (item.IsObject)
                     {
                         <img src="@item.Content" class="bg-danger rounded ml-2" style="width: 48px; height: 48px;" />
@@ -121,7 +123,7 @@
             }
             @foreach (var item in Model.ProfilePostages.OrderByDescending(o => o.TimeStamp))
             {
-                <a class="d-flex day_back_default align-items-center day_color_font text-decoration-none effect" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
+                <a class="d-flex day_back_default align-items-center day_color_font text-decoration-none effect" asp-controller="Moder" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
                     @if (item.IsObject)
                     {
                         <img src="@item.Content" class="bg-danger rounded ml-2" style="width: 48px; height: 48px;" />
@@ -191,11 +193,11 @@
     <div style="width: 70%;">
         @using (Html.BeginForm(FormMethod.Post))
         {
-            
-        <div class="rounded d-flex flex-column" style="width: 100%; height: calc(100vh - 150px);">
-            <div class="d-flex p-3 rounded day_back_head justify-content-end mb-3">
-                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none m-0 mr-2 close"><i class="fas fa-times d-flex justify-content-center day_color_font" style="width: 100%; font-size: 25px;"></i></a>
-            </div>
+
+            <div class="rounded d-flex flex-column" style="width: 100%; height: calc(100vh - 150px);">
+                <div class="d-flex p-3 rounded day_back_head justify-content-end mb-3">
+                    <a asp-controller="Moder" asp-action="Index" class="text-decoration-none m-0 mr-2 close"><i class="fas fa-times d-flex justify-content-center day_color_font" style="width: 100%; font-size: 25px;"></i></a>
+                </div>
 
                 @if (Model.SelectedProfilePostage is not null)
                 {
@@ -217,7 +219,7 @@
                                             <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                 @using (Html.BeginForm(FormMethod.Post))
                                                 {
-                                                    <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-controller="Admin" asp-action="DeletePostagePost" asp-route-id="@Model.SelectedProfilePostage.Id" style="outline:0!important;">Delete post</button>
+                                                    <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-controller="Moder" asp-action="DeletePostagePost" asp-route-id="@Model.SelectedProfilePostage.Id" style="outline:0!important;">Delete post</button>
                                                 }
                                             </div>
                                         </div>
@@ -235,14 +237,14 @@
                                 @using (Html.BeginForm(FormMethod.Post))
                                 {
                                     <div class="d-flex mt-3 align-items-center justify-content-around" style="gap: 5px; height: 100%;">
-                                        <button type="button" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" data-toggle="modal" data-target="#likemodal" style="outline:0!important;">            
+                                        <button type="button" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" data-toggle="modal" data-target="#likemodal" style="outline:0!important;">
                                             <h6 class="text-danger ml-2 d-flex align-items-center"><i class="fas fa-heart mr-2" style="font-size: 23px;"></i> @Model.SelectedProfilePostage.LikedProfiles.Count</h6>
                                         </button>
                                         <button type="button" class="btn-link border-0 bg-transparent day_color_main d-flex align-items-center text-decoration-none" data-toggle="modal" data-target="#commentariesmodal" style="outline:0!important;">
-                                            <h6 class="day_color_main ml-2 d-flex align-items-center"><i class="far fa-comment-alt mr-2" style="font-size: 23px;"></i> @Model.SelectedProfilePostage.ProfilePostageComments.Count</h6>                                          
+                                            <h6 class="day_color_main ml-2 d-flex align-items-center"><i class="far fa-comment-alt mr-2" style="font-size: 23px;"></i> @Model.SelectedProfilePostage.ProfilePostageComments.Count</h6>
                                         </button>
                                         <button type="button" class="btn-link border-0 bg-transparent text-success d-flex align-items-center text-decoration-none" data-toggle="modal" data-target="#sharedmodal" style="outline:0!important;">
-                                            <h6 class="text-success ml-2 d-flex align-items-center"> <i class="fas fa-share-alt mr-2" style="font-size: 23px;"></i> @Model.SelectedProfilePostage.SharedProfiles.Count</h6>                                          
+                                            <h6 class="text-success ml-2 d-flex align-items-center"> <i class="fas fa-share-alt mr-2" style="font-size: 23px;"></i> @Model.SelectedProfilePostage.SharedProfiles.Count</h6>
                                         </button>
                                     </div>
                                 }
@@ -351,7 +353,7 @@
                                                                             <div class="dropdown-content day_back_head rounded p-2 shadow">
                                                                                 @using (Html.BeginForm(FormMethod.Post))
                                                                                 {
-                                                                                    <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-controller="Admin" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.Id" asp-route-post="@Model.SelectedProfilePostage.Id" style="outline:0!important;">Delete comment</button>
+                                                                                    <button type="submit" class="btn-link day_color_main border-0 bg-transparent" asp-controller="Moder" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.Id" asp-route-post="@Model.SelectedProfilePostage.Id" style="outline:0!important;">Delete comment</button>
                                                                                 }
                                                                             </div>
                                                                         </div>
@@ -387,7 +389,7 @@
                         <h2 class="m-0 day_color_font">Select a post</h2>
                     </div>
                 }
-        </div>
+            </div>
         }
     </div>
 </div>

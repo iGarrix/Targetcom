@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Targetcom.Data;
 
 namespace Targetcom.Migrations
 {
     [DbContext(typeof(TargetDbContext))]
-    partial class TargetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210821153119_Cryptohistory")]
+    partial class Cryptohistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -434,38 +436,6 @@ namespace Targetcom.Migrations
                     b.ToTable("MessageGroups");
                 });
 
-            modelBuilder.Entity("Targetcom.Models.PaypalHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Currency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaySummary")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfileId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("TransactionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ValueCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ValueName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
-
-                    b.ToTable("PaypalHistories");
-                });
-
             modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
                 {
                     b.Property<string>("ProfileId")
@@ -837,15 +807,6 @@ namespace Targetcom.Migrations
                     b.Navigation("Friend");
                 });
 
-            modelBuilder.Entity("Targetcom.Models.PaypalHistory", b =>
-                {
-                    b.HasOne("Targetcom.Models.Profile", "Profile")
-                        .WithMany("PaypalHistories")
-                        .HasForeignKey("ProfileId");
-
-                    b.Navigation("Profile");
-                });
-
             modelBuilder.Entity("Targetcom.Models.ProfileGame", b =>
                 {
                     b.HasOne("Targetcom.Models.Game", "Game")
@@ -948,8 +909,6 @@ namespace Targetcom.Migrations
                     b.Navigation("LikedProfilePostages");
 
                     b.Navigation("Messages");
-
-                    b.Navigation("PaypalHistories");
 
                     b.Navigation("ProfileGames");
 

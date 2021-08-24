@@ -125,7 +125,7 @@
                     @*<label asp-for="Input.PhoneNumber"></label>*@
                     <select asp-for="Input.profile.Gender" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;">
                         <option disabled>Select Genger</option>
-                        <option value="Male">Famale</option>
+                        <option value="Female">Famale</option>
                         <option value="Male">Male</option>
                     </select>
                     <span asp-validation-for="Input.profile.Gender" class="text-danger" style="font-size: 14px;"></span>
@@ -164,11 +164,14 @@
                 <span asp-validation-for="Input.profile.UrlAvatar" class="text-danger" style="font-size: 14px;"></span>
             </div>
 
-            <h4 class="text-center mt-4">Pay planes</h4>
-            <hr />
-            <div class="form-group d-flex">
-                <a asp-controller="Vip" asp-action="Index" class="viewallbtn rounded day_color_main p-2 text-center">You dont have plane. Buy premium plane for free</a>
-            </div>
+            @if (!Model.Input.profile.IsPremium)
+	        {	 
+                <h4 class="text-center mt-4">Buy plan</h4>
+                <hr />
+                <div class="form-group d-flex">
+                    <a asp-controller="Vip" asp-action="Index" class="viewallbtn rounded day_color_main p-2 text-center">You dont have plane. Buy premium plane for @Targetcom.Env.PremiumPrice coins</a>
+                </div>
+	        }
 
             <h4 class="text-center mt-4">Privacy</h4>
             <hr />

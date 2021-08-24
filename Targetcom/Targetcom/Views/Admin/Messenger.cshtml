@@ -65,11 +65,11 @@
             <input type="text" placeholder="Enter name / surname" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
         </div>
         <div class="d-none flex-column align-items-center gap p-4 overflow-auto" id="finduser">
-            @if (!Model.Profiles.OrderByDescending(o => o.CreateStamp).ToList().Any())
+            @if (!Model.Profiles.Where(w => w.ToMessageGroups.Count > 0).OrderByDescending(o => o.CreateStamp).ToList().Any())
             {
                 <h4 class="m-0 text-center day_color_font">Not found</h4>
             }
-            @foreach (var item in Model.Profiles.OrderByDescending(o => o.CreateStamp))
+            @foreach (var item in Model.Profiles.Where(w => w.ToMessageGroups.Count > 0).OrderByDescending(o => o.CreateStamp))
             {
                 <div class="d-flex pt-2 pb-2 flex-column day_back_default justify-content-center day_color_font text-decoration-none effect @item.Name @item.Surname" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
                     <div class="d-flex align-items-center">
@@ -102,11 +102,11 @@
             }
         </div>
         <div class="d-flex flex-column align-items-center gap p-4 overflow-auto" id="alluser">
-            @if (!Model.Profiles.OrderByDescending(o => o.CreateStamp).ToList().Any())
+            @if (!Model.Profiles.Where(w => w.ToMessageGroups.Count > 0).OrderByDescending(o => o.CreateStamp).ToList().Any())
             {
                 <h4 class="m-0 text-center day_color_font">Not found</h4>
             }
-            @foreach (var item in Model.Profiles.OrderByDescending(o => o.CreateStamp))
+            @foreach (var item in Model.Profiles.Where(w => w.ToMessageGroups.Count > 0).OrderByDescending(o => o.CreateStamp))
             {
                 <div class="d-flex pt-2 pb-2 flex-column day_back_default justify-content-center day_color_font text-decoration-none effect" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
                     <div class="d-flex align-items-center">

@@ -29,6 +29,11 @@ namespace Targetcom.Data
             /* ------- */
 
             builder.Entity<Profile>()
+                .HasMany(m => m.PaypalHistories)
+                .WithOne(w => w.Profile)
+                .HasForeignKey(f => f.ProfileId);
+
+            builder.Entity<Profile>()
                 .HasMany(m => m.ToMessageGroups)
                 .WithOne(w => w.Admin)
                 .HasForeignKey(f => f.AdminId);
@@ -116,5 +121,7 @@ namespace Targetcom.Data
         public DbSet<Case> Cases { get; set; }
         public DbSet<MessageGroup> MessageGroups { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Cryptohistory> Cryptohistories { get; set; }
+        public DbSet<PaypalHistory> PaypalHistories { get; set; }
     }
 }

@@ -49,7 +49,6 @@ namespace Targetcom
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<TargetDbContext>();
 
-
             services.AddTransient<IEmailSender, MailJetSender>();
 
             services.AddSignalR();

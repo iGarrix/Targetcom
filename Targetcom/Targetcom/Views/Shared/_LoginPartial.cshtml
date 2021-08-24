@@ -3,7 +3,8 @@
 @inject UserManager<IdentityUser> UserManager
 @{ 
     Profile profile = await UserManager.GetUserAsync(User) as Profile;
-    string role = UserManager.GetRolesAsync(profile).Result.ToList()[0];
+    //string role = UserManager.GetRolesAsync(profile).Result.ToList()[0];
+    List<string> roles = UserManager.GetRolesAsync(profile).Result.ToList();
 }
 
 <style>
@@ -39,6 +40,7 @@
             <img src="@profile.UrlAvatar" alt="Avatar" class="img-card rounded-circle bg-dark d-inline-block ml-2 mr-1" style="height: 32px; width: 32px;" />
         }
     </button>
+
     <div class="dropdown-menu day_back_head" style="font-size: 14px; min-width: 13rem; z-index: 100;">
         <a class="dropdown-item day_back_default" asp-action="Index" asp-controller="Profile">
             <div class="d-flex align-items-center">
@@ -56,10 +58,20 @@
                 </div>
             </div>
         </a>
-        <div class="dropdown-divider"></div>
-        @if (role == Env.AdminRole)
+        <div class="dropdown-divider day_color_font"></div>
+        @if (roles.Contains(Env.AdminRole) && roles.Contains(Env.ModerRole))
         {
-            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Admin" asp-action="Index">Root panel</a>
+            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Admin" asp-action="Index">Admin panel</a>
+            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Moder" asp-action="Index">Moder panel</a>
+        }
+        else if (roles.Contains(Env.AdminRole))
+        {
+            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Admin" asp-action="Index">Admin panel</a>
+            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Moder" asp-action="Index">Moder panel</a>
+        }
+        else if (roles.Contains(Env.ModerRole))
+        {
+            <a class="dropdown-item day_color_font rounded-0 d-flex align-items-center" asp-controller="Moder" asp-action="Index">Moder panel</a>
         }
         <a class="dropdown-item rounded-0 day_color_font d-flex align-items-center" id="manage" asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a>
         <a class="dropdown-item rounded-0 day_color_font d-flex align-items-center" asp-controller="Help" asp-action="Index">Help</a>

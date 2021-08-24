@@ -85,6 +85,7 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
             var banned = _db.BannedProfiles.Where(w => w.ProfileId == myprofile.Id);
             var games = _db.ProfileGames.Where(w => w.ProfileId == myprofile.Id);
             var shareds = _db.SharedProfilePostages.Where(w => w.ProfileId == myprofile.Id);
+            var paypalhistory = _db.PaypalHistories.Where(w => w.ProfileId == myprofile.Id);
 
             _db.SharedProfilePostages.RemoveRange(shareds);
             _db.ProfileGames.RemoveRange(games);
@@ -97,6 +98,7 @@ namespace Targetcom.Areas.Identity.Pages.Account.Manage
             _db.MessageGroups.RemoveRange(rooms);
             _db.ProfilePostageComments.RemoveRange(_db.ProfilePostageComments.Where(i => i.ProfileCommentatorId == myprofile.Id));
             _db.ProfilePostages.RemoveRange(postages);
+            _db.PaypalHistories.RemoveRange(paypalhistory);
             _db.SaveChanges();
 
             var result = await _userManager.DeleteAsync(user);

@@ -92,8 +92,6 @@ namespace Targetcom.Areas.Identity.Pages.Account
                 try
                 {
                     var ban = _db.BannedProfiles.FirstOrDefault(f => f.ProfileId == user.Id);
-                    IdentityProfile = await _userManager.FindByEmailAsync(Input.Email) as Profile;
-                    IdentityProfile.Banned = ban;
                     if (ban is not null)
                     {
                         if (ban.IsPermanent)
@@ -103,9 +101,7 @@ namespace Targetcom.Areas.Identity.Pages.Account
                         }
                         else
                         {
-                            if (DateTime.Now.Year == ban.ReasonDate.Year && DateTime.Now.Month == ban.ReasonDate.Month
-                                && DateTime.Now.Day == ban.ReasonDate.Day && DateTime.Now.Hour == ban.ReasonDate.Hour 
-                                && DateTime.Now.Minute == ban.ReasonDate.Minute && DateTime.Now.Second > ban.ReasonDate.Second)
+                            if (DateTime.Now > ban.ReasonDate)
                             {
                                 _db.BannedProfiles.Remove(ban);
                                 _db.SaveChanges();

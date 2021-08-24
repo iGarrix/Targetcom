@@ -1,0 +1,419 @@
+﻿
+@{
+    ViewData["Title"] = "Users management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Targetcom.Models.ViewModels.UserManagement;
+
+<style>
+    .gap {
+        gap: 1rem;
+    }
+
+    .searcher {
+        border: 0;
+        background-color: transparent;
+        outline: 0 !important;
+        font-size: 15px;
+    }
+
+    .close:hover i {
+        color: #ff0000;
+    }
+
+    .effect {
+        transition: .3s;
+        padding: .6rem;
+    }
+
+        .effect:hover {
+            padding: 1.5rem .6rem;
+        }
+
+    .anim {
+        transition: 2s;
+        animation: ocean 10s ease-in-out alternate infinite;
+    }
+
+    @@keyframes ocean {
+        0% {
+            color: #ffd800;
+            text-shadow: 0 0 40px #ffd800;
+        }
+
+        100% {
+            color: #b3e536;
+            text-shadow: 0 0 40px #b3e536;
+        }
+    }
+
+    .container-checkbox {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Hide the browser's default checkbox */
+        .container-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 22px;
+        width: 22px;
+        background-color: #eee;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
+
+<div class="d-flex overflow-hidden" style="width: 100%; gap: 1rem; font-family: Roboto, sans-serif;">
+    <div class="d-flex flex-column rounded day_back_head" style="width: 30%; height: calc(100vh - 150px);">
+        <div class="day_back_head d-flex align-items-c p-3 border-bottom rounded">
+            <i class="fas fa-search day_color_font" style="font-size: 14px;"></i>
+            <input type="text" placeholder="Enter user name / surname / email" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
+        </div>
+        <div class="d-none flex-column align-items-c gap p-4 overflow-auto" id="finduser">
+            @foreach (var item in Model.ProfileManages)
+            {
+                <a class="d-flex day_back_default align-items-center day_color_font text-decoration-none effect @item.Profile.Name @item.Profile.Surname @item.Profile.Email @string.Join(" ", item.Roles)" asp-controller="Moder" asp-action="SelectUser" asp-route-id="@item.Profile.Id" style="width: 100%; cursor:pointer;">
+                    <img src="@item.Profile.UrlAvatar" class="bg-danger rounded-circle" style="width: 38px; height: 38px;" />
+                    <div class="d-flex flex-column justify-content-c day_color_font p-2">
+                        <p class="m-0 day_color_main d-flex align-items-c">
+                            @item.Profile.Name @item.Profile.Surname
+                            @if (item.Profile.IsVerify)
+                            {
+                                <i class="fas fa-check day_color_main ml-1 m-0" style="font-size: 13px;"></i>
+                            }
+                        </p>
+                        @if (item.Profile.IsPremium)
+                        {
+                            <span class="text-warning m-0">premium</span>
+                        }
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="d-flex flex-column align-items-c gap p-4 overflow-auto" id="alluser">
+            @if (!Model.ProfileManages.ToList().Any())
+            {
+                <h4 class="m-0 text-c day_color_font">Not found</h4>
+            }
+            @foreach (var item in Model.ProfileManages)
+            {
+                <a class="d-flex day_back_default align-items-center day_color_font text-decoration-none effect" asp-controller="Moder" asp-action="SelectUser" asp-route-id="@item.Profile.Id" style="width: 100%; cursor:pointer;">
+                    <img src="@item.Profile.UrlAvatar" class="bg-danger rounded-circle" style="width: 38px; height: 38px;" />
+                    <div class="d-flex flex-column justify-content-c day_color_font p-2">
+                        <p class="m-0 day_color_main d-flex align-items-center">
+                            @item.Profile.Name @item.Profile.Surname
+                            @if (item.Profile.IsVerify)
+                            {
+                                <i class="fas fa-check day_color_main ml-1 m-0" style="font-size: 13px;"></i>
+                            }
+                        </p>
+                    </div>
+                </a>
+            }
+        </div>
+        <script>
+            var findblock = document.getElementById("finduser").children;
+            document.getElementById("search").addEventListener("keyup", () => {
+                if (document.getElementById("search").value == "") {
+                    document.getElementById("alluser").classList.remove("d-none");
+                    document.getElementById("alluser").classList.add("d-flex");
+
+                    document.getElementById("finduser").classList.remove("d-flex");
+                    document.getElementById("finduser").classList.add("d-none");
+                }
+                else {
+                    document.getElementById("finduser").classList.remove("d-none");
+                    document.getElementById("finduser").classList.add("d-flex");
+
+                    document.getElementById("alluser").classList.remove("d-flex");
+                    document.getElementById("alluser").classList.add("d-none");
+
+                    console.log(1);
+
+                    for (var i = 0; i < findblock.length; ++i) {
+                        for (var j = 0; j < document.getElementById("search").value.split(" ").length; ++j) {
+                            if (findblock[i].classList.contains(document.getElementById("search").value.split(" ")[j])) {
+                                findblock[i].classList.remove("d-none");
+                                findblock[i].classList.add("d-flex");
+                            }
+                            else {
+                                findblock[i].classList.remove("d-flex");
+                                findblock[i].classList.add("d-none");
+                            }
+                        }
+                    }
+
+                }
+            });
+
+        </script>
+    </div>
+    <div style="width: 70%;">
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+
+            <div class="rounded d-flex flex-column" style="width: 100%; height: calc(100vh - 150px);">
+                <div class="d-flex p-3 align-items-start rounded day_back_head justify-content-end">
+                    @if (Model.SelectUser is not null)
+                    {
+                        if (Model.SelectUser.UserName == User.Identity.Name)
+                        {
+                            <a asp-controller="Profile" asp-action="Index" class="text-decoration-none m-0 mr-3"><i class="far fa-user d-flex justify-content-center day_color_main" style="width: 100%; font-size: 25px;"></i></a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Friends" asp-action="Viewprofile" asp-route-id="@Model.SelectUser.Id" class="text-decoration-none m-0 mr-3"><i class="far fa-user d-flex justify-content-center day_color_main" style="width: 100%; font-size: 25px;"></i></a>
+                        }
+                    }
+                    <a asp-controller="Moder" asp-action="Index" class="text-decoration-none m-0 mr-2 close"><i class="fas fa-times d-flex justify-content-c day_color_font" style="width: 100%; font-size: 25px;"></i></a>
+                </div>
+
+                @if (Model.SelectUser is not null)
+                {
+                    <input type="hidden" asp-for="SelectUser.Id" />
+                    <div class="p-3 d-flex justify-content-center gap border-bottom w-100">
+                        @if (Model.SelectUser.IsVerify)
+                        {
+                            <h4 class="badge badge-primary p-2 m-0" style="letter-spacing: 1px;">Verify</h4>
+                        }
+                        @if (Model.SelectUser.IsPremium)
+                        {
+                            <h4 class="badge badge-warning p-2 m-0" style="letter-spacing: 1px;">Premium</h4>
+                        }
+                        @if (Model.SelectRoles.Contains(Env.ModerRole))
+                        {
+                            <h4 class="badge badge-warning p-2 m-0" style="letter-spacing: 1px;">Moderator</h4>
+                        }
+                        @if (Model.SelectRoles.Contains(Env.AdminRole))
+                        {
+                            <h4 class="badge badge-danger p-2 m-0" style="letter-spacing: 1px;">Admin</h4>
+                        }
+                        @if (Model.SelectUser.Banned is not null)
+                        {
+                            <h4 class="badge badge-danger p-2 m-0" style="letter-spacing: 1px;">Banned</h4>
+                        }
+                    </div>
+                    <div class="border-0 day_back_head overflow-auto p-4 day_color_font">
+                        <h4 class="text-center">General</h4>
+                        <hr />
+                        <form method="post" asp-controller="Moder" class="d-flex flex-column">
+                            <div class="form-group">
+                                @*<label asp-for="Username" ></label>*@
+                                <input class="form-control day_back_default day_color_font border-0" name="email" asp-for="SelectUser.Email" placeholder="Email" style="font-size: 14px;" />
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" phone number" name="telephone" asp-for="SelectUser.PhoneNumber" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="d-flex gap">
+                                <div class="form-group" style="width: 50%">
+                                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                                    <input placeholder=" name" name="name" asp-for="SelectUser.Name" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                    <span class="text-danger" style="font-size: 14px;"></span>
+                                </div>
+                                <div class="form-group" style="width: 50%">
+                                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                                    <input placeholder=" surname" name="surname" asp-for="SelectUser.Surname" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                    <span class="text-danger" style="font-size: 14px;"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex gap">
+                                <div class="form-group" style="width: 60%">
+                                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                                    <input placeholder=" age" name="age" asp-for="SelectUser.Age" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                    <span class="text-danger" style="font-size: 14px;"></span>
+                                </div>
+                                <div class="form-group" style="width: 40%">
+                                    @*<label asp-for="Input.PhoneNumber"></label>*@
+                                    <select class="form-control day_back_default day_color_font border-0" name="gender" asp-for="SelectUser.Gender" style="font-size: 14px;">
+                                        <option disabled>Select Genger</option>
+                                        <option value="Female">Famale</option>
+                                        <option value="Male">Male</option>
+                                    </select>
+                                    <span class="text-danger" style="font-size: 14px;"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" asp-action="EditGeneral" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light day_back_main day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Save</button>
+                            </div>
+                            <h4 class="text-c mt-4 text-center">About me</h4>
+                            <hr />
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" ouote (Not necessary)" name="qouote" asp-for="SelectUser.Quote" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" status (Not necessary)" name="status" asp-for="SelectUser.Status" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" job place (Not necessary)" name="job" asp-for="SelectUser.JobGeoplace" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" study place (Not necessary)" name="study" asp-for="SelectUser.StudyGeoplace" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" hobbies (Not necessary)" name="hobby" asp-for="SelectUser.Hobbies" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder="https://www.cnet.com/images/yourimage.jpg (Not nessessary)" name="image" asp-for="SelectUser.UrlAvatar" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" asp-action="EditAbout" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light day_back_main day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Save</button>
+                            </div>
+                            <h4 class="text-c mt-4 text-center">Privacy</h4>
+                            <hr />
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <input placeholder=" Create time" value="@Model.SelectUser.CreateStamp.ToString("mm:HH dd.MM.yyyy")" disabled class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="form-group">
+                                @*<label asp-for="Input.PhoneNumber"></label>*@
+                                <select class="form-control day_back_default day_color_font border-0" name="privacy" asp-for="SelectUser.Privacy" style="font-size: 14px;">
+                                    <option value="@Targetcom.Env.PublicProfile">@Targetcom.Env.PublicProfile</option>
+                                    <option value="@Targetcom.Env.PrivateProfile">@Targetcom.Env.PrivateProfile</option>
+                                </select>
+                                <span class="text-danger" style="font-size: 14px;"></span>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" asp-action="EditPrivacy" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light day_back_main day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Save</button>
+                            </div>
+                            <h4 class="text-c mt-4 text-center">Balance</h4>
+                            <hr />
+                            <div class="d-flex gap">
+                                <div class="form-group" style="width: 50%">
+                                    <label>Coins</label>
+                                    <input placeholder=" Coins" asp-for="SelectUser.TargetCoins" disabled name="coin" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                    <span class="text-danger" style="font-size: 14px;"></span>
+                                </div>
+                                <div class="form-group" style="width: 50%">
+                                    <label>Crypt</label>
+                                    <input placeholder=" Crypto coins" asp-for="SelectUser.CryptCoins" disabled name="crypt" class="form-control day_back_default day_color_font border-0" style="font-size: 14px;" />
+                                    <span class="text-danger" style="font-size: 14px;"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" data-toggle="modal" data-target="#history" class="m-0 mt-auto mr-2 text-light day_back_main day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Paypal history</button>
+                               
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="d-flex day_back_head mt-2 p-3 justify-content-end w-100 mt-auto">
+                        <button type="submit" asp-action="SetPremium" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light bg-success day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">
+                            @if (!Model.SelectUser.IsPremium)
+                            {<span>Set</span> }
+                            else
+                            { <span>Unset</span>} premium
+                        </button>
+
+                    </div>
+
+                    @if (Model.SelectUser is not null)
+                    {
+                        <div class="modal fade" id="history" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content day_back_head day_color_font">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">PayPal History</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true" class="day_color_font">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body day_back_default">
+                                        @if (Model.SelectUser.PaypalHistories.ToList().Count == 0)
+                                        {
+                                            <h4 class="day_color_font m-0 text-center">Not found</h4>
+                                        }
+                                        @foreach (var item in Model.SelectUser.PaypalHistories.OrderByDescending(f => f.TransactionTime))
+                                        {
+                                            <div class="d-flex align-items-center justify-content-between p-2 day_color_font">
+                                                <strong style="width: 5rem;">@item.PaySummary @item.Currency</strong>
+                                                <strong style="width: 5rem;">@item.ValueCount @item.ValueName</strong>
+                                                <span>@item.TransactionTime.ToString("HH:mm dd.MM.yyyy")</span>
+                                                <p class="m-0 font-weight-bold">TRANSACTION : <span class="text-success">SUCCESS</span></p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                   
+                }
+                else
+                {
+                    <div class="rounded day_back_head d-flex p-3 justify-content-center align-items-center overflow-auto" style="height: 100%;">
+                        <h2 class="m-0 day_color_font">Select a user</h2>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+

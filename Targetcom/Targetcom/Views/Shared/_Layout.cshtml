@@ -17,17 +17,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @if (!User.Identity.IsAuthenticated)
     {
-        <title>@ViewData["Title"] - Target</title>
+        <title>@ViewData["Title"] - Tracelight</title>
 
     }
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="~/css/site.css" />
-    @*<link href="~/css/ThemeColors.css" rel="stylesheet" />*@
     <link href="~/css/Tabs.css" rel="stylesheet" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
@@ -68,7 +65,7 @@
         }
 
         .day_color_font {
-            color: #2a3036;
+            color: #363e46;
         }
 
         .cborder {
@@ -173,17 +170,17 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                            <ul class="navbar-nav d-flex gap" style="margin-left: 10%;">
+                            <ul class="navbar-nav d-flex gap align-items-center ml-2">
                                 <li class="nav-item">
-                                    <div class="input-group day_back_default rounded-pill pt-1 pb-1">
-                                        <div class="input-group-prepend ">
-                                            <span class="input-group-text bg-transparent p-2 border-0" id="basic-addon1"><i class="fas fa-search text-muted" style="font-size: 14px;"></i></span>
-                                        </div>
-                                        <input type="text" id="searcher" class="day_back_default day_color_font border-0 rounded-pill" placeholder="Search people, friends ..." aria-describedby="basic-addon1" style="font-size: 14px;">
-                                    </div>
+                                    <a class="navbar-brand d-flex align-items-center targetbar day_color_font" style="font-weight: 800; font-size: 18px; height: 54px; font-family: 'Montserrat', sans-serif;">
+                                        Verison @Env.WebVersion.ToUpper()
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Vip" asp-action="Coins" class="bars1 d-flex align-items-center pt-2" style="font-family: Poppins, sans-serif;">@profile.TargetCoins coins</a>
+                                    <a asp-controller="Vip" asp-action="Coins" class="bars1 d-flex align-items-center" style="font-family: Poppins, sans-serif;">@profile.TargetCoins coins</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Vip" asp-action="Cryptocoins" class="bars1 d-flex align-items-center" style="font-family: Poppins, sans-serif;">@profile.CryptCoins crypts</a>
                                 </li>
                             </ul>
                             <ul class="navbar-nav ml-auto">
@@ -296,14 +293,10 @@ else
                     <a class="navbar-brand d-flex align-items-center targetbar day_color_font" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: 800; font-size: 18px; height: 54px; font-family: 'Montserrat', sans-serif;">
                         <i class="fas fa-tenge day_color_main mr-2" style="font-size: 25px;"></i> @Env.WebName.ToUpper()
                     </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                            <ul class="navbar-nav d-flex gap" style="margin-left: 10%;">
+                            <ul class="navbar-nav d-flex gap" style="margin-left: 3%;">
                                 <li class="nav-item">
                                     <div class="input-group day_back_default rounded-pill pt-1 pb-1">
                                         <div class="input-group-prepend ">
@@ -314,6 +307,9 @@ else
                                 </li>
                                 <li class="nav-item">
                                     <a asp-controller="Vip" asp-action="Coins" class="bars1 d-flex align-items-center pt-2" style="font-family: Poppins, sans-serif;">@profile.TargetCoins coins</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Vip" asp-action="Cryptocoins" class="bars1 d-flex align-items-center pt-2" style="font-family: Poppins, sans-serif;">@profile.CryptCoins crypts</a>
                                 </li>
                             </ul>
                             <ul class="navbar-nav ml-auto">

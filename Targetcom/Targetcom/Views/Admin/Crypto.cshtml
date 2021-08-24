@@ -1,0 +1,232 @@
+﻿@{
+    ViewData["Title"] = "Management crypto rating";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Targetcom.Models.ViewModels.ManagementCrypto;
+
+<style>
+    .gap {
+        gap: 1rem;
+    }
+    .searcher {
+        border: 0;
+        background-color: transparent;
+        outline: 0 !important;
+        font-size: 15px;
+    }
+    .close:hover i {
+        border: 0;
+        outline: 0;
+        color: #ff0000;
+    }
+    .effect {
+        transition: .3s;
+        padding: .6rem;
+    }
+
+        .effect:hover {
+            padding: 1.5rem .6rem;
+        }
+    .anim {
+        transition: 2s;
+        animation: ocean 10s ease-in-out alternate infinite;
+    }
+
+    @@keyframes ocean {
+        0% {
+            color: #ffd800;
+            text-shadow: 0 0 40px #ffd800;
+        }
+
+        100% {
+            color: #b3e536;
+            text-shadow: 0 0 40px #b3e536;
+        }
+    }
+</style>
+
+<div class="d-flex overflow-hidden" style="width: 100%; gap: 1rem; font-family: Roboto, sans-serif;">
+    <div class="d-flex flex-column rounded day_back_head" style="width: 30%; height: calc(100vh - 150px);">
+        <div class="day_back_head d-flex align-items-center p-3 border-bottom rounded">
+            <i class="fas fa-search day_color_font" style="font-size: 14px;"></i>
+            <input type="text" placeholder="Enter user name / post" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
+        </div>
+        <div class="d-none flex-column align-items-center gap p-4 overflow-auto" id="findcrypt">
+            @foreach (var item in Model.Cryptohistories.OrderByDescending(i => i.CreateTime))
+            {
+                <a class="d-none w-100 gap day_back_default rounded text-decoration-none effect @item.Rate @item.CreateTime.ToString("HH:mm dd.MM.yyyy")" asp-controller="Admin" asp-action="Crypto" asp-route-id="@item.Id" style="cursor: pointer;">
+                    <i class="fab fa-bity d-flex justify-content-center text-success" style=" font-size: 50px;"></i>
+                    <div class="d-flex flex-column justify-content-center">
+                        <span class="day_color_font m-0" style="font-size: 15px;">@item.CreateTime.ToString("HH:mm dd.MM.yyyy")</span>
+                        <h5 class="day_color_font m-0">@item.Rate coins</h5>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="d-flex flex-column align-items-center gap p-4 overflow-auto" id="allcrypt">
+            @if (!Model.Cryptohistories.ToList().Any())
+            {
+                <h4 class="m-0 text-center day_color_font">Not found</h4>
+            }
+            @foreach (var item in Model.Cryptohistories.OrderByDescending(i => i.CreateTime))
+            {
+                <a class="d-flex w-100 gap day_back_default rounded text-decoration-none effect" asp-controller="Admin" asp-action="Crypto" asp-route-id="@item.Id" style="cursor: pointer;">
+                    <i class="fab fa-bity d-flex justify-content-center text-success" style=" font-size: 50px;"></i>
+                    <div class="d-flex flex-column justify-content-center">
+                        <span class="day_color_font m-0" style="font-size: 15px;">@item.CreateTime.ToString("HH:mm dd.MM.yyyy")</span>
+                        <h5 class="day_color_font m-0">@item.Rate coins</h5>
+                    </div>
+                </a>
+            }
+        </div>
+        <script>
+            var findblock = document.getElementById("findcrypt").children;
+            document.getElementById("search").addEventListener("keyup", () => {
+                if (document.getElementById("search").value == "") {
+                    document.getElementById("allcrypt").classList.remove("d-none");
+                    document.getElementById("allcrypt").classList.add("d-flex");
+
+                    document.getElementById("findcrypt").classList.remove("d-flex");
+                    document.getElementById("findcrypt").classList.add("d-none");
+                }
+                else {
+                    document.getElementById("findcrypt").classList.remove("d-none");
+                    document.getElementById("findcrypt").classList.add("d-flex");
+
+                    document.getElementById("allcrypt").classList.remove("d-flex");
+                    document.getElementById("allcrypt").classList.add("d-none");
+
+                    console.log(1);
+
+                    for (var i = 0; i < findblock.length; ++i) {
+                        for (var j = 0; j < document.getElementById("search").value.split(" ").length; ++j) {
+                            if (findblock[i].classList.contains(document.getElementById("search").value.split(" ")[j])) {
+                                findblock[i].classList.remove("d-none");
+                                findblock[i].classList.add("d-flex");
+                            }
+                            else {
+                                findblock[i].classList.remove("d-flex");
+                                findblock[i].classList.add("d-none");
+                            }
+                        }
+                    }
+
+                }
+            });
+
+        </script>
+    </div>
+    <div style="width: 70%;">
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+
+        <div class="rounded d-flex flex-column" style="width: 100%; height: calc(100vh - 150px);">
+            <div class="d-flex p-3 rounded day_back_head justify-content-end mb-3">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none m-0 mr-2 close"><i class="fas fa-times d-flex justify-content-center day_color_font" style="width: 100%; font-size: 25px;"></i></a>
+            </div>
+
+            @if (Model.SelectedCrypt is not null)
+            {
+                <div class="rounded p-3 day_back_head d-flex flex-column overflow-auto">
+                    <div class="d-flex align-items-center p-3 rounded container-fluid mb-4 mt-4">
+                        <div class="row w-100">
+                            <div class="col">
+                                <div class="d-flex">
+                                    <span class="d-flex align-items-center">
+                                        <i class="far fa-calendar-alt text-primary" style="font-size: 30px;"></i>
+                                        <span class="ml-4 text-primary">@Model.SelectedCrypt.CreateTime.ToString("H:mm dd.MM.yyyy")</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex justify-content-center">
+                                    <span class="d-flex align-items-center text-success">
+                                        <i class="far fa-star" style="font-size: 30px;"></i>
+                                        <span class="ml-2">@Model.SelectedCrypt.Rate</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex justify-content-center">
+                                    <span class="d-flex align-items-center">
+                                        <i class="fab fa-bity anim" style="font-size: 30px;"></i>
+                                        <span class="ml-4 anim">@Model.SelectedCrypt.SingleCrypt</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-auto">
+                        <button type="submit" asp-controller="Admin" asp-action="RemoveCrypt" asp-route-id="@Model.SelectedCrypt.Id" class="m-0 mt-auto mr-2 text-light bg-danger day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Remove</button>
+                        <button type="button" data-toggle="modal" data-target="#edit" class="m-0 mt-auto mr-2 text-light bg-warning day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Edit</button>
+                        <button type="button" data-toggle="modal" data-target="#add" class="m-0 mt-auto mr-2 text-light day_back_main day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Add</button>
+                    </div>
+                    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="font-family: Roboto,sans-serif;">
+                        <div class="modal-dialog modal-lg day_back_head day_color_font">
+                            <div class="modal-content">
+                                <div class="modal-header day_back_head day_color_font">
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit crypt</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class="day_color_font">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body day_back_head day_color_font">
+                                    <div class="d-flex gap">
+                                        <div class="d-flex flex-column justify-content-center gap" style="width: 100%;">
+                                            <input type="number" class="form-control day_back_default border-0 day_color_font" value="@Model.SelectedCrypt.Rate" name="rate" placeholder="Crypt rate" style="width: 100%;" />
+                                            <input type="number" class="form-control day_back_default border-0 day_color_font" value="@Model.SelectedCrypt.SingleCrypt" name="singlecrypt" placeholder="Crypt count" style="width: 100%;" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer day_back_head day_color_font">
+                                    <button type="submit" asp-controller="Admin" asp-action="EditCrypt" asp-route-id="@Model.SelectedCrypt.Id" class="text-decoration-none m-0 mr-2 text-light bg-warning m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <div class="rounded day_back_head d-flex flex-column p-3 justify-content-center align-items-center overflow-auto" style="height: 100%;">
+                    <h2 class="m-0 day_color_font mt-5">Select a crypt rating</h2>
+                    <div class="d-flex justify-content-end w-100 mt-auto">
+                        <button type="button" data-toggle="modal" data-target="#add" class="m-0 mt-auto mr-2 text-light day_back_main day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Add</button>
+                    </div>
+                </div>
+            }
+        </div>
+        }
+    </div>
+</div>
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="font-family: Roboto,sans-serif;">
+        <div class="modal-dialog modal-lg day_back_head day_color_font">
+            <div class="modal-content">
+                <div class="modal-header day_back_head day_color_font">
+                    <h5 class="modal-title" id="exampleModalLabel">Add crypt</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="day_color_font">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body day_back_head day_color_font">
+                    <div class="d-flex gap">
+                        <div class="d-flex flex-column justify-content-center gap" style="width: 100%;">
+                            <input type="number" class="form-control day_back_default border-0 day_color_font" min="@Env.LowRangeCryptoGenerated" max="@Env.UpperRangeCryptoGenerated" value="@Env.LowRangeCryptoGenerated" name="newrate" placeholder="Crypt rate" style="width: 100%;" />
+                            <input type="number" class="form-control day_back_default border-0 day_color_font" min="1" value="1" name="newsinglecrypt" placeholder="Crypt count" style="width: 100%;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer day_back_head day_color_font">
+                        <button type="submit" asp-controller="Admin" asp-action="GenerateCrypt" class="text-decoration-none m-0 mr-2 text-light bg-success m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Generate</button>
+                        <button type="submit" asp-controller="Admin" asp-action="AddCrypt" class="text-decoration-none m-0 mr-2 text-light bg-danger m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

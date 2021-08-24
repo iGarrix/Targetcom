@@ -1,8 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Targetcom.Data;
 using Targetcom.Models;
@@ -68,6 +74,8 @@ namespace Targetcom.Controllers
         [HttpPost]
         public async Task<IActionResult> PublishPost(string content)
         {
+
+
             if (content.Length > 0)
             {
                 var profile = await _userManager.GetUserAsync(User) as Profile;

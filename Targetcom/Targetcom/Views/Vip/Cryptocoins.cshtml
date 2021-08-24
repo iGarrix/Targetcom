@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = "Cryptocoins";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Targetcom.Models.ViewModels.CryptVM;
+
+<style>
+    #summernote {
+        font-size: 14px;
+        outline: 0 !important;
+        border: 0;
+    }
+
+    .activel {
+        border-left: 3px solid #0094ff;
+    }
+
+    .anim {
+        transition: 2s;
+        animation: ocean 10s ease-in-out alternate infinite;
+    }
+
+    @@keyframes ocean {
+        0% {
+            color: #ffd800;
+            text-shadow: 0 0 40px #ffd800;
+        }
+
+        100% {
+            color: #b3e536;
+            text-shadow: 0 0 40px #b3e536;
+        }
+    }
+
+    .down {
+        animation: loadDown 1s ease-in-out forwards;
+    }
+
+    @@keyframes loadDown {
+        0% {
+            opacity: 100%;
+        }
+
+        100% {
+            opacity: 0%;
+            visibility: hidden;
+        }
+    }
+
+    .buybtn {
+        outline: 0 !important;
+        border: 0;
+        transition: .2s;
+    }
+
+        .buybtn:hover {
+            transform: scale(1.050);
+        }
+</style>
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
+        <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityProfile.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityProfile.Id), 0)" />
+
+        <div style="width: 100%; gap:1rem;" class="d-flex flex-column">
+            <div class="d-flex align-items-center day_back_head p-4 rounded">
+                <i class="fab fa-bity anim ml-2" style="font-size: 40px;"></i>
+                @if (Model.Cryptohistories.Any())
+                {
+                    <h4 class="ml-4 m-0 d-flex gap">
+                        Cryptocoin :
+                        @{ var currency = Model.Cryptohistories.OrderByDescending(o => o.CreateTime).Take(2); }
+                        @if (currency.Count() == 1)
+                        {
+                            <span class="text-success">1 crypto = @currency.FirstOrDefault().Rate coins</span>
+                        }
+                        else
+                        {
+                            if (double.Parse(currency.ToList()[0].Rate) > double.Parse(currency.ToList()[1].Rate))
+                            {
+                                <span class="text-success">1 crypto = @currency.FirstOrDefault().Rate coins</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">1 crypto = @currency.FirstOrDefault().Rate coins</span>
+                            }
+                        }
+                        <span class="text-info">@currency.FirstOrDefault().SingleCrypt any</span>
+                    </h4>
+                }
+                else
+                {
+                    <h4 class="ml-4 m-0 d-flex gap">
+                        Not found crypt rate
+                    </h4>
+                }
+            </div>
+            @if (Model.Cryptohistories.Any())
+            {
+                var currency = Model.Cryptohistories.OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                int rate = (int)double.Parse(currency.Rate);
+                <input type="hidden" id="rate" value="@rate" />
+                <div class="d-flex align-items-center justify-content-center day_back_head p-4 rounded">
+                    <div class="d-flex flex-column w-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex justify-content-center align-items-center rounded day_back_default p-3 rounded">
+                                <input type="number" name="buycoins" min="@rate" id="youcoins" value="@rate" class="m-0 border-0 text-primary mr-2 bg-transparent font-weight-bold" style="outline: 0; width: 8rem;" />Counter coins
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center rounded day_back_default p-3 rounded">
+                                <input type="hidden" id="cryptbuyhidden" name="buycryptcoins" value="1" />
+                                <strong class="text-warning mr-2" id="cryptbuy">1</strong>Buying crypt
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center rounded day_back_default p-3 rounded">
+                                <strong class="text-warning mr-2" id="cryptcoins">@currency.SingleCrypt</strong>Any crypt
+                            </div>
+                        </div>
+                        <div class="form-group m-0 d-flex w-100">
+                            <input type="range" class="form-control-range" min="1" max="@currency.SingleCrypt" id="range" value="1">
+                        </div>
+                        <button asp-controller="Vip" asp-action="BuyCrypt" class="buybtn font-weight-bold bg-light day_color_main rounded pl-3 pr-3 p-2 mt-2 align-self-end">Buy</button>
+                    </div>
+                    <script>
+                        document.getElementById("range").addEventListener("input", () => {
+                            let counter = document.getElementById("youcoins");
+                            let crypt = document.getElementById("cryptcoins");
+                            let buycrypt = document.getElementById("cryptbuy");
+                            let range = document.getElementById("range");
+                            counter.value = range.value * document.getElementById("rate").value;
+                            buycrypt.innerHTML = range.value;
+                            document.getElementById("cryptbuyhidden").value = range.value;
+                            crypt.innerHTML = range.max - range.value;
+                        });
+                        document.getElementById("youcoins").addEventListener("keyup", () => {
+                            let counter = document.getElementById("youcoins");
+                            let crypt = document.getElementById("cryptcoins");
+                            let buycrypt = document.getElementById("cryptbuy");
+                            let range = document.getElementById("range");
+
+                            range.value = counter.value / document.getElementById("rate").value;
+                            buycrypt.innerHTML = range.value;
+                            document.getElementById("cryptbuyhidden").value = range.value;
+                            crypt.innerHTML = range.max - range.value;
+                        });
+                    </script>
+                </div>
+            }
+            @if (Model.Cryptohistories.Any())
+            {
+                var currency = Model.Cryptohistories.OrderByDescending(o => o.CreateTime).FirstOrDefault();
+                int rate = (int)double.Parse(currency.Rate);
+                <input type="hidden" id="ratesell" value="@rate" />
+                <div class="d-flex align-items-center justify-content-center day_back_head p-4 rounded">
+                    <div class="d-flex flex-column w-100">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex justify-content-center align-items-center rounded day_back_default p-3 rounded">
+                                <input type="number" name="countercrypts" min="1" id="countercrypt" value="1" class="m-0 border-0 text-warning mr-2 bg-transparent font-weight-bold" style="outline: 0; width: 8rem;" />Counter crypts
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center rounded day_back_default p-3 rounded">
+                                <input type="hidden" id="counterbuycoin" name="countercoins" value="@rate" />
+                                <strong class="text-primary mr-2" id="countercoin">@rate</strong>Counter coins
+                            </div>
+                        </div>
+                        <div class="form-group m-0 d-flex w-100">
+                            <input type="range" class="form-control-range" min="1" max="@Model.IdentityProfile.CryptCoins" id="rangeSell" value="1">
+                        </div>
+                        <button asp-controller="Vip" asp-action="SellCrypt" class="buybtn font-weight-bold bg-light day_color_main rounded pl-3 pr-3 p-2 mt-2 align-self-end">Sell</button>
+                    </div>
+                    <script>
+                        document.getElementById("rangeSell").addEventListener("input", () => {
+
+                            let counterCoin = document.getElementById("countercoin");
+                            let counterCrypt = document.getElementById("countercrypt");
+                            let rate = document.getElementById("ratesell");
+                            let range = document.getElementById("rangeSell");
+
+                            counterCrypt.value = range.value;
+                            counterCoin.innerHTML = range.value * rate.value;
+                            document.getElementById("counterbuycoin").value = range.value * rate.value;
+                        });
+                        document.getElementById("countercrypt").addEventListener("keyup", () => {
+
+                            let counterCoin = document.getElementById("countercoin");
+                            let counterCrypt = document.getElementById("countercrypt");
+                            let rate = document.getElementById("ratesell");
+                            let range = document.getElementById("rangeSell");
+
+                            document.getElementById("counterbuycoin").value = rate.value * counterCrypt.value;
+                            counterCoin.innerHTML = rate.value * counterCrypt.value;
+                            range.value = counterCrypt.value;
+                        });
+                    </script>
+                </div>
+            }
+            <div class="d-flex flex-column day_back_head p-4 rounded h-100 gap">
+                @for (int i = 0; i < Model.Cryptohistories.OrderByDescending(o => o.CreateTime).ToList().Count(); ++i)
+                {
+                    var current = Model.Cryptohistories.OrderByDescending(o => o.CreateTime).ToList()[i];
+                    Cryptohistory previous = new Cryptohistory();
+
+                    if (Model.Cryptohistories.OrderByDescending(o => o.CreateTime).ToList().Count > 1)
+                    {
+                        if (i != Model.Cryptohistories.Count - 1)
+                        {
+                            previous = Model.Cryptohistories.OrderByDescending(o => o.CreateTime).ToList()[i + 1];
+                        }
+                    }
+                    <div class="d-flex align-items-center p-3 rounded container-fluid">
+                        <div class="row w-100">
+                            <div class="col">
+                                <div class="d-flex">
+                                    <span class="d-flex align-items-center">
+                                        <i class="far fa-calendar-alt text-primary" style="font-size: 30px;"></i>
+                                        <span class="ml-4">@current.CreateTime.ToString("H:mm dd.MM.yyyy")</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex">
+                                    @if (previous.Rate is not null && current.Rate is not null)
+                                    {
+                                        if (double.Parse(current.Rate) > double.Parse(previous.Rate))
+                                        {
+                                            <span class="d-flex align-items-center text-success">
+                                                <i class="far fa-star" style="font-size: 30px;"></i>
+                                                <span class="ml-4">+ @current.Rate</span>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="d-flex align-items-center text-danger">
+                                                <i class="far fa-star" style="font-size: 30px;"></i>
+                                                <span class="ml-4">- @current.Rate</span>
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="d-flex align-items-center text-success">
+                                            <i class="far fa-star" style="font-size: 30px;"></i>
+                                            <span class="ml-4">+ @current.Rate</span>
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex">
+                                    <span class="d-flex align-items-center">
+                                        <i class="fab fa-bity anim" style="font-size: 30px;"></i>
+                                        <span class="ml-4">@current.SingleCrypt</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+    <div class="position-fixed" id="downid" style="top: 0; left:0; width: 100vw; height: 100vh; z-index: 999;">
+        <div class="d-flex justify-content-center align-items-center flex-column day_back_head w-100 h-100">
+            <i class="fab fa-bity d-flex justify-content-center anim" style="width: 100%; font-size: 10vw;"></i>
+            <h2 class="day_color_font mt-4 font-weight-bold" style="letter-spacing: 2px; font-family: Montserrat, sans-serif;">Cryptocoins</h2>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            var before_loadtime = new Date().getTime();
+            window.onload = Pageloadtime;
+            function Pageloadtime() {
+                var aftr_loadtime = new Date().getTime();
+                pgloadtime = (aftr_loadtime - before_loadtime) / 1000
+                setTimeout(() => {
+                    var loadscreen = document.getElementById("downid");
+                    loadscreen.classList.add("down");
+                }, pgloadtime);
+            }
+        </script>
+    }
+

@@ -8,6 +8,7 @@ namespace Targetcom
     public class Env
     {
         public static string WebName = "Trace lighter";
+        public static string WebVersion = "1.0";
 
         /* Roles */
         public static string UserRole = "DefaultUser";
@@ -17,6 +18,10 @@ namespace Targetcom
         /* Gmail */
         public static string Gmail = "targetweb.commerce@gmail.com";
         public static string GmailPassword = "Helloworld123";
+
+        public static string QuestionGmail = "tracelighters @gmail.com";
+        public static string QuestionPassword = "cb16da90cb16da90";
+        
 
         /* MailJet */
         public static string MailJetPassword = "Helloworld123)";
@@ -96,6 +101,11 @@ namespace Targetcom
         public static int PremiumLvl4PrizeCoin = 70;
         public static int PremiumRangeGamePrice = 100;
 
+        /* Admin managements */
+
+        public static string DeletePersonalAccountPassword = "123";
+        public static string ToggleAdminPassword = "321";
+        public static string BannedPassword = "321";
 
         /* Avatar Grid */
 
@@ -126,6 +136,14 @@ namespace Targetcom
         public static string GridHeartUrl = "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/527230/18ec71cb7da1182d32164890bac8411a09e26e46.png";
 
         public static string GridExclusive = "Exclusive";
-        public static string GridExclusiveUrl = "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/788100/63abe72f9ea57defcf13b125cb91dcf692bf7b6e.png";    
+        public static string GridExclusiveUrl = "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/788100/63abe72f9ea57defcf13b125cb91dcf692bf7b6e.png";
+
+        /* Cryptodata */
+
+        public static int FrequencyGenerateCryptRate = 3;
+        public static int CRYPTRATE_LIMIT = 100;
+
+        public static int LowRangeCryptoGenerated = 5;
+        public static int UpperRangeCryptoGenerated = 9;
     }
 }
