@@ -7,7 +7,7 @@ namespace Targetcom
 {
     public class Env
     {
-        public static string WebName = "Trace lighter";
+        public static string WebName = "Havecome";
         public static string WebVersion = "1.0";
 
         /* Roles */
@@ -19,7 +19,7 @@ namespace Targetcom
         public static string Gmail = "targetweb.commerce@gmail.com";
         public static string GmailPassword = "Helloworld123";
 
-        public static string QuestionGmail = "tracelighters @gmail.com";
+        public static string QuestionGmail = "tracelighters@gmail.com";
         public static string QuestionPassword = "cb16da90cb16da90";
         
 
@@ -103,9 +103,9 @@ namespace Targetcom
 
         /* Admin managements */
 
-        public static string DeletePersonalAccountPassword = "123";
-        public static string ToggleAdminPassword = "321";
-        public static string BannedPassword = "321";
+        public static string DeletePersonalAccountPassword = "delete--rootwebpersonal--acc";
+        public static string ToggleAdminPassword = "toggle--rootwebtoggleadmin--acc";
+        public static string BannedPassword = "block--rootbannedwebpersonal--acc";
 
         /* Avatar Grid */
 

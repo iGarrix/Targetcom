@@ -21,64 +21,6 @@ namespace Targetcom.Controllers
             _userManager = userManager;
             _db = db;
         }
-        //public async Task<IActionResult> Index()
-        //{
-        //    ProfileVM profileVM = new ProfileVM()
-        //    {
-        //        IdentityProfile = new Profile(),
-        //    };
-
-        //    IEnumerable<Profile> profiles = _db.Profiles;
-        //    var user = await _userManager.GetUserAsync(User);
-        //    var profile = profiles.FirstOrDefault(i => i.Id == user.Id);
-
-        //    if (profile.AfkStatus == Env.Offline)
-        //    {
-        //        profile.AfkStatus = Env.Online;
-        //    }
-        //    var ProfilePostages = _db.ProfilePostages;
-        //    var ProfilePostageComments = _db.ProfilePostageComments;
-        //    var LikedProfilePostages = _db.LikedProfilePostages;
-        //    var SharedProfilePostages = _db.SharedProfilePostages;
-        //    var Profiles = _db.Profiles;
-
-        //    var postage = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
-        //    postage.ForEach(i =>
-        //    {
-        //        var list = ProfilePostageComments.Where(s => s.PostageId == i.Id).ToList();
-        //        list.ForEach(j =>
-        //        {
-        //            j.ProfileCommentator = Profiles.FirstOrDefault(f => f.Id == j.ProfileCommentatorId);
-        //        });
-        //        i.ProfilePostageComments = list;
-        //    });
-        //    postage.ForEach(i =>
-        //    {
-        //        i.LikedProfiles = LikedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
-        //    });
-        //    postage.ForEach(i =>
-        //    {
-        //        i.SharedProfiles = SharedProfilePostages.Where(s => s.ProfilePostageId == i.Id).ToList();
-        //    });
-        //    profile.ProfilePostages = postage;
-        //    profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
-
-        //    var sharedpostage = SharedProfilePostages.ToList();
-        //    sharedpostage.ForEach(i =>
-        //    {
-        //        i.Postage = ProfilePostages.FirstOrDefault(f => f.Id == i.ProfilePostageId);
-        //        i.Postage.LikedProfiles = LikedProfilePostages.Where(w => w.ProfilePostageId == i.Postage.Id).ToList();
-        //        i.Postage.ProfilePostageComments = ProfilePostageComments.Where(s => s.PostageId == i.Postage.Id).ToList();
-        //    });
-        //    sharedpostage.ForEach(i =>
-        //    {
-        //        i.Profile = Profiles.FirstOrDefault(f => f.Id == i.ProfileId);
-        //    });
-        //    profile.SharedProfilePostages = sharedpostage;
-
-        //    profileVM.IdentityProfile = profile;
-        //    return View(profileVM);
-        //}
         public async Task<IActionResult> Index()
         {
             ProfileVM profileVM = new ProfileVM()
