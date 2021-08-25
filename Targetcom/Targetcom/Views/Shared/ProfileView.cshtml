@@ -358,7 +358,7 @@
                                 else
                                 {
                                     <div class="border-0 rounded day_back_head p-3 overflow-hidden" style="position: sticky; top: 70px;">
-                                        <a asp-controller="Friends" asp-action="Subscribers" class="m-0 day_color_main middletabbtn">Subscribers: <span class="day_color_font">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span></a>
+                                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="m-0 day_color_main middletabbtn">Subscribers: <span class="day_color_font">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span></a>
                                         <hr />
                                         <div class="d-flex flex-wrap" style="gap: .8rem;">
                                             @foreach (var item in Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Take(6))
@@ -427,7 +427,7 @@
                             else
                             {
                                 <div class="border-0 rounded day_back_head p-3 overflow-hidden">
-                                    <a asp-controller="Friends" asp-action="Subscribers" class="m-0 day_color_main middletabbtn">Subscribers: <span class="day_color_font">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span></a>
+                                    <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="m-0 day_color_main middletabbtn">Subscribers: <span class="day_color_font">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span></a>
                                     <hr />
                                     <div class="d-flex flex-wrap" style="gap: .8rem;">
                                         @foreach (var item in Model.FindedProfile.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Take(6))
