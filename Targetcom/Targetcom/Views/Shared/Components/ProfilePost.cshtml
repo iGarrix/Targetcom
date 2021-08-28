@@ -1,0 +1,539 @@
+﻿@model Targetcom.Models.ViewModels.ProfilePostComponentVM;
+
+@{ var id = $"{Model.Guid}"; }
+<style>
+    .gap {
+        gap: 1rem;
+    }
+
+
+    .activel {
+        border-left: 3px solid #0094ff;
+    }
+
+    .dropbtn {
+        color: white;
+        border: none;
+        cursor: pointer;
+        background-color: transparent;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        transition: .2s;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        transition: .2s;
+    }
+
+        .dropdown-content button {
+            display: block;
+            white-space:nowrap;
+        }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .btnlike:hover {
+        text-decoration: none;
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    .hover {
+        transition: .2s;
+        filter: brightness(100%);
+    }
+
+        .hover:hover {
+            filter: brightness(90%);
+        }
+
+    .night .hover:hover {
+        filter: brightness(150%);
+    }
+
+    .crd .foot {
+        height: 0;
+        opacity: 0%;
+        padding: 0;
+        transition: .2s;
+    }
+
+    .crd:hover .foot {
+        height: auto;
+        opacity: 100%;
+        padding: 1rem;
+    }
+    .post .likes {
+        display: none;
+    }
+    .post:hover .likes {
+        display: flex;
+    }
+</style>
+<div class="card border-0 day_back_head rounded crd" style="font-size: 14px;">
+    <div class="card-body p-3 d-flex flex-column position-relative">
+        <div class="d-flex align-items-center">
+            <img src="@Model.Postage.Writter.UrlAvatar" alt="Avatar" class="img-card rounded-circle" style="width: 38px; height: 38px; object-fit: cover;" />
+            <div class="d-flex flex-column ml-2">
+                <div class="d-flex">
+                    @if (Model.Postage.WritterId == Model.IdentityProfile.Id)
+                    {
+                        <a class="day_color_main" asp-controller="Profile" asp-action="Index" style="white-space:nowrap; cursor:pointer;">
+                            @Model.Postage.Writter.Name @Model.Postage.Writter.Surname
+                            @if (Model.Postage.Profile.IsVerify || (Model.Postage.WritterId == Model.IdentityProfile.Id && Model.Postage.Writter.IsVerify))
+                            {
+                                <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
+                            }
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="day_color_main" asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.Postage.WritterId" style="white-space:nowrap; cursor:pointer;">
+                            @Model.Postage.Writter.Name @Model.Postage.Writter.Surname
+                            @if (Model.Postage.Profile.IsVerify || (Model.Postage.WritterId == Model.IdentityProfile.Id && Model.Postage.Writter.IsVerify))
+                            {
+                                <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
+                            }
+                        </a>
+                    }
+                    <p class="m-0 ml-2 text-muted">@Model.Postage.Alert</p>
+                    @if (Model.IdentityProfile.SharedProfilePostages.FirstOrDefault(f => f.ProfilePostageId == Model.Postage.Id) is not null)
+                    {
+                        <p class="m-0 ml-2 text-muted">Shared with <a asp-controller="Friends" asp-action="ViewProfile" asp-route-Id="@Model.Postage.Profile.Id"><strong class="text-primary">@Model.Postage.Profile.Name</strong></a></p>
+                    }
+                </div>
+                <p class="m-0 text-muted">@Model.Postage.TimeStamp.ToString("dd.MM.yyyy")</p>
+            </div>
+            <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 16px;">
+                @if (Model.Postage.ProfileId == Model.IdentityProfile.Id || Model.Postage.WritterId == Model.IdentityProfile.Id)
+                {
+                    <div class="dropdown">
+                        <button class="dropbtn" style="outline:0!important;"><i class="fas p-2 fa-chevron-down text-muted ml-auto" style="font-size: 16px;"></i></button>
+                        <div class="dropdown-content day_back_head rounded p-2 shadow">
+                            @using (Html.BeginForm(FormMethod.Post))
+                            {
+                                <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="DeletePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Delete post</button>
+                            }
+                            <hr class="m-1" />
+                            @using (Html.BeginForm(FormMethod.Post))
+                            {
+                                @if (Model.Postage.IsNessessaredLikedPost)
+                                {
+                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="AllowLikePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Allow liked</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="AllowLikePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Disallow liked</button>
+                                }
+                                @if (Model.Postage.IsNessessaredSharedPost)
+                                {
+                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="AllowSharePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Allow shared</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="AllowSharePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Disallow shared</button>
+                                }
+                                @if (Model.Postage.IsNessessaredCommentedPost)
+                                {
+                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="AllowCommentPostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Allow comment</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="AllowCommentPostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">Disallow comment</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Model.Postage.IsObject)
+        {
+            <img src="@Model.Postage.Content" alt="Avatar" class="rounded mb-3 mt-3" style="max-width: 300px; max-height: 300px;" />
+        }
+        else
+        {
+            <p class="mb-2 mt-2">@Model.Postage.Content</p>
+        }
+        @using (Html.BeginForm(FormMethod.Post))
+        {
+            <div class="d-flex mt-3 align-items-center gap">
+                @if (!Model.Postage.IsNessessaredLikedPost)
+                {
+                    if (Model.Postage.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
+                    {
+                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover position-relative post" style="height: 40px; min-width: 60px">
+                            <button type="submit" class="btn-link border-0 m-0 bg-transparent text-danger d-flex justify-content-center align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@Model.Postage.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
+                                <i class="fas fa-heart d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                @if (Model.Postage.LikedProfiles.Count != 0)
+                                {
+                                    <strong class="ml-1 m-0 text-danger">@Model.Postage.LikedProfiles.Count</strong>
+                                    <div class="position-absolute rounded-pill day_back_headlight pt-2 pb-2 pr-3 pl-3 likes gap shadow" style="top: -60px; left:0;">
+                                        @foreach (var item in Model.Postage.LikedProfiles.Take(3))
+                                        {
+                                            <img src="@item.Profile.UrlAvatar" class="rounded-circle" style="width: 38px; height: 38px;" />
+                                        }
+                                    </div>
+                                }
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover position-relative post" style="height: 40px; min-width: 60px">
+                            <button type="submit" class="btn-link border-0 bg-transparent d-flex justify-content-center align-items-center text-decoration-none" asp-action="LikePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">
+                                <i class="far fa-heart text-primary d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                @if (Model.Postage.LikedProfiles.Count != 0)
+                                {
+                                    <strong class="ml-1 m-0 text-muted">@Model.Postage.LikedProfiles.Count</strong>
+                                    <div class="position-absolute rounded-pill day_back_headlight pt-2 pb-2 pr-3 pl-3 likes gap shadow" style="top: -60px; left:0;">
+                                        @foreach (var item in Model.Postage.LikedProfiles.Take(3))
+                                        {
+                                            <img src="@item.Profile.UrlAvatar" class="rounded-circle" style="width: 38px; height: 38px;" />
+                                        }
+                                    </div>
+                                }
+                            </button>           
+                        </div>
+                    }
+                }
+                @if (!Model.Postage.IsNessessaredCommentedPost)
+                {
+                    @if (Model.Postage.IsObject)
+                    {
+                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover"
+                             data-toggle="modal" data-target="#tips-@Model.Guid.ToString()"
+                             style="height: 40px; min-width: 60px">
+                            <a class="btn-link border-0 day_color_main bg-transparent d-flex justify-content-center align-items-center text-decoration-none"
+                               style="outline:0!important; cursor:pointer;">
+                                <i class="far fa-comment-alt text-muted d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                @if (@Model.Postage.ProfilePostageComments.Count > 0)
+                                {
+                                    <strong class="ml-1 m-0 text-muted">@Model.Postage.ProfilePostageComments.Count</strong>
+                                }
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2"
+                             style="height: 40px; min-width: 60px">
+                            <a class="btn-link border-0 day_color_main bg-transparent d-flex justify-content-center align-items-center text-decoration-none"
+                               style="outline:0!important;">
+                                <i class="far fa-comment-alt text-muted d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                @if (@Model.Postage.ProfilePostageComments.Count > 0)
+                                {
+                                    <strong class="ml-1 m-0 text-muted">@Model.Postage.ProfilePostageComments.Count</strong>
+                                }
+                            </a>
+                        </div>
+                    }
+                    <div class="modal fade" id="tips-@Model.Guid.ToString()" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body p-0 d-flex" style="height: 400px;">
+                                    <img src="@Model.Postage.Content" alt="Post" style="width:400px; height:400px;" />
+                                    <div class="d-flex flex-column p-3 day_back_head" style="white-space: nowrap; width: 100%;">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@Model.Postage.Profile.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                <div class="d-flex flex-column ml-2 justify-content-center">
+                                                    <a class="m-0 d-flex align-items-center day_color_main" style="cursor: pointer;">
+                                                        @Model.Postage.Profile.Name @Model.Postage.Profile.Surname
+                                                        @if (Model.Postage.Profile.IsVerify)
+                                                        {
+                                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
+                                                        }
+                                                        <span class="text-muted ml-2">@Model.Postage.Alert</span>
+                                                    </a>
+                                                    <p class="m-0 text-muted">@Model.Postage.TimeStamp.ToString("dd.MM.yyyy")</p>
+                                                </div>
+                                            </div>
+                                            <a class="text-decoration-none" data-dismiss="modal" aria-label="Close">
+                                                <i class="fas fa-times text-muted" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                        <hr class="mt-3 mb-3 ml-0 mr-0" />
+                                        <div class="d-flex flex-column gap overflow-auto" style="height: 15.5rem;">
+                                            @for (int comment = 0; comment < Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).Count(); ++comment)
+                                            {
+                                                <div class="d-flex" style="width: 100%;">
+                                                    <img src="@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
+                                                    <div class="d-flex flex-column ml-2" style="width: 100%;">
+                                                        <div class="d-flex">
+                                                            <a class="m-0 day_color_main" style="cursor: pointer;">
+                                                                @Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
+                                                                @if (Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
+                                                                {
+                                                                    <i class="fas fa-check day_color_main ml-1" style="font-size: 10px;"></i>
+                                                                }
+                                                            </a>
+                                                            @if (Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
+                                                            {
+                                                                <p class="m-0 text-muted">@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="m-0 ml-2 text-muted">@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
+                                                            }
+                                                            <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 16px;">
+                                                                @if (Model.Postage.ProfileId == Model.IdentityProfile.Id)
+                                                                {
+                                                                    <div class="dropdown">
+                                                                        <a class="dropbtn day_color_main" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
+                                                                        <div class="dropdown-content day_back_head rounded p-2 shadow">
+                                                                            <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                                else if (Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id)
+                                                                {
+                                                                    <div class="dropdown">
+                                                                        <a class="dropbtn day_color_main" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
+                                                                        <div class="dropdown-content day_back_head rounded p-2 shadow">
+                                                                            <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <p class="m-0">@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Comment</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <hr class="mt-2 mb-3 ml-0 mr-0" />
+                                        <div class="d-flex gap">
+                                            @if (!Model.Postage.IsNessessaredLikedPost)
+                                            {
+                                                if (Model.Postage.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
+                                                {
+                                                    <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover" style="height: 40px; min-width: 60px">
+                                                        <button type="submit" class="btn-link border-0 m-0 bg-transparent text-danger d-flex justify-content-center align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@Model.Postage.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
+                                                            <i class="fas fa-heart d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                                            @if (Model.Postage.LikedProfiles.Count != 0)
+                                                            {
+                                                                <strong class="ml-1 m-0 text-danger">@Model.Postage.LikedProfiles.Count</strong>
+                                                            }
+                                                        </button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover" style="height: 40px; min-width: 60px">
+                                                        <button type="submit" class="btn-link border-0 bg-transparent d-flex justify-content-center align-items-center text-decoration-none" asp-action="LikePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">
+                                                            <i class="far fa-heart text-muted d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                                            @if (Model.Postage.LikedProfiles.Count != 0)
+                                                            {
+                                                                <strong class="ml-1 m-0 text-muted">@Model.Postage.LikedProfiles.Count</strong>
+                                                            }
+                                                        </button>
+                                                    </div>
+                                                }
+                                            }
+                                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover"
+                                             style="height: 40px; min-width: 60px">
+                                            <a class="btn-link border-0 day_color_main bg-transparent d-flex justify-content-center align-items-center text-decoration-none"
+                                               style="outline:0!important;">
+                                                <i class="far fa-comment-alt text-muted d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                                @if (@Model.Postage.ProfilePostageComments.Count > 0)
+                                                {
+                                                    <strong class="ml-1 m-0 text-muted">@Model.Postage.ProfilePostageComments.Count</strong>
+                                                }
+                                            </a>
+                                        </div>
+                                            @if (!Model.Postage.IsNessessaredSharedPost)
+                                            {
+                                                if (Model.Postage.ProfileId == Model.IdentityProfile.Id)
+                                                {
+                                                    <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover" style="height: 40px; min-width: 60px">
+                                                        <a class="btn-link border-0 bg-transparent d-flex justify-content-center align-items-center text-decoration-none day_color_main" style="outline:0!important;">
+                                                            <i class="fas fa-share-alt text-muted d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                                            @if (Model.Postage.SharedProfiles.Count != 0)
+                                                            {
+                                                                <strong class="ml-1 text-muted">@Model.Postage.SharedProfiles.Count</strong>
+                                                            }
+                                                        </a>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (Model.Postage.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
+                                                    {
+                                                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover" style="height: 40px; min-width: 60px">
+                                                            <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-controller="Home" asp-action="DissharePostagePost" asp-route-id="@Model.Postage.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
+                                                                <i class="fas fa-share-alt"></i>
+                                                                @if (Model.Postage.SharedProfiles.Count != 0)
+                                                                {
+                                                                    <strong class="ml-1">@Model.Postage.SharedProfiles.Count</strong>
+                                                                }
+                                                            </button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover" style="height: 40px; min-width: 60px">
+                                                            <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none" asp-controller="Home" asp-action="SharePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">
+                                                                <i class="fas fa-share-alt"></i>
+                                                                @if (Model.Postage.SharedProfiles.Count != 0)
+                                                                {
+                                                                    <strong class="ml-1">@Model.Postage.SharedProfiles.Count</strong>
+                                                                }
+                                                            </button>
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (!Model.Postage.IsNessessaredSharedPost)
+                {
+                    if (Model.Postage.ProfileId == Model.IdentityProfile.Id)
+                    {
+                        <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 position-relative post" style="height: 40px; min-width: 60px">
+                            <a class="btn-link border-0 bg-transparent d-flex justify-content-center align-items-center text-decoration-none day_color_main" style="outline:0!important;">
+                                <i class="fas fa-share-alt text-muted d-flex justify-content-center align-items-center m-0" style="font-size: 18px;"></i>
+                                @if (Model.Postage.SharedProfiles.Count != 0)
+                                {
+                                    <strong class="ml-1 text-muted">@Model.Postage.SharedProfiles.Count</strong>
+                                    <div class="position-absolute rounded-pill day_back_headlight pt-2 pb-2 pr-3 pl-3 likes gap shadow" style="top: -60px; left:0;">
+                                        @foreach (var item in Model.Postage.SharedProfiles.Take(3))
+                                        {
+                                            <img src="@item.Profile.UrlAvatar" class="rounded-circle" style="width: 38px; height: 38px;" />
+                                        }
+                                    </div>
+                                }
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        if (Model.Postage.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
+                        {
+                            <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover position-relative post" style="height: 40px; min-width: 60px">
+                                <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-controller="Home" asp-action="DissharePostagePost" asp-route-id="@Model.Postage.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
+                                    <i class="fas fa-share-alt"></i>
+                                    @if (Model.Postage.SharedProfiles.Count != 0)
+                                    {
+                                        <strong class="ml-1">@Model.Postage.SharedProfiles.Count</strong>
+                                        <div class="position-absolute rounded-pill day_back_headlight pt-2 pb-2 pr-3 pl-3 likes gap shadow" style="top: -60px; left:0;">
+                                            @foreach (var item in Model.Postage.SharedProfiles.Take(3))
+                                            {
+                                                <img src="@item.Profile.UrlAvatar" class="rounded-circle" style="width: 38px; height: 38px;" />
+                                            }
+                                        </div>                       
+                                    }
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="rounded-pill day_back_headlight d-flex justify-content-center align-items-center p-2 hover position-relative post" style="height: 40px; min-width: 60px">
+                                <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none" asp-controller="Home" asp-action="SharePostagePost" asp-route-id="@Model.Postage.Id" style="outline:0!important;">
+                                    <i class="fas fa-share-alt"></i>
+                                    @if (Model.Postage.SharedProfiles.Count != 0)
+                                    {
+                                        <strong class="ml-1">@Model.Postage.SharedProfiles.Count</strong>
+                                        <div class="position-absolute rounded-pill day_back_headlight pt-2 pb-2 pr-3 pl-3 likes gap shadow" style="top: -60px; left:0;">
+                                            @foreach (var item in Model.Postage.SharedProfiles.Take(3))
+                                            {
+                                                <img src="@item.Profile.UrlAvatar" class="rounded-circle" style="width: 38px; height: 38px;" />
+                                            }
+                                        </div>
+                                    }
+                                </button>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        }
+    </div>
+    @if (!Model.Postage.IsNessessaredCommentedPost)
+    {
+        <div class="card-footer foot overflow-hidden">
+            @using (Html.BeginForm(FormMethod.Post))
+            {
+                <div class="d-flex flex-column gap">
+                    @for (int comment = 0; comment < Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).Take(2).Count(); ++comment)
+                    {
+                        <div class="d-flex" style="width: 100%;">
+                            <img src="@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
+                            <div class="d-flex flex-column ml-2" style="width: 100%;">
+                                <div class="d-flex">
+                                    <a class="m-0 day_color_main" style="cursor: pointer;">
+                                        @Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
+                                        @if (Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
+                                        {
+                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
+                                        }
+                                    </a>
+                                    <p class="m-0 ml-2 text-muted">@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
+                                    <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 16px;">
+                                        @if (Model.Postage.ProfileId == Model.IdentityProfile.Id)
+                                        {
+                                            <div class="dropdown">
+                                                <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
+                                                <div class="dropdown-content day_back_head rounded p-2 shadow">
+                                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-controller="Home" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id)
+                                        {
+                                            <div class="dropdown">
+                                                <a class="dropbtn" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
+                                                <div class="dropdown-content day_back_head rounded p-2 shadow">
+                                                    <button type="submit" class="btn-link day_color_font border-0 bg-transparent" asp-controller="Home" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <p class="m-0">@Model.Postage.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Comment</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.Postage.ProfilePostageComments.Count > 0)
+            {
+                <hr class="mt-3 mb-3" style="width: 100%;" />
+            }
+            @using (Html.BeginForm(FormMethod.Post))
+            {
+                <div class="d-flex align-items-center">
+                    <img src="@Model.IdentityProfile.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
+                    <input name="youcomment" class="ml-2 day_color_font bg-transparent border-0" placeholder="Enter your commentaries" style="outline: 0!important; width: 100%;" />
+                    <button type="submit" class="btn day_back_main text-light ml-auto" style="font-size: 14px; max-height: 2.5rem;" asp-action="CommentPublishPost" asp-route-id="@Model.Postage.Id">Comment</button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    var arr = document.getElementsByClassName("hover");
+    for (var i = 0; i < arr.length; i++) {
+        arr[i].addEventListener("click", () => {
+            arr[i].classList.remove("d-flex");
+            arr[i].classList.add("d-none");
+        });
+    }
+</script>

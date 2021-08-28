@@ -21,12 +21,24 @@ namespace Targetcom.Controllers
             _userManager = userManager;
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string listitem = "All", int postpage = 0, int sharepage = 0)
         {
             ProfileVM profileVM = new ProfileVM()
             {
                 IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                ListItem = listitem,
+                Current_AllPost_Page = postpage,
+                Current_SharedPost_Page = sharepage,
             };
+
+            if (listitem == Env.AllPost)
+            {
+                profileVM.IsAllable = true;
+            }
+            else
+            {
+                profileVM.IsAllable = false;
+            }
 
             if (profileVM.IdentityProfile.AfkStatus == Env.Offline)
             {
@@ -35,6 +47,7 @@ namespace Targetcom.Controllers
 
             var Profiles = _db.Profiles;
             var SharedProfilePostages = _db.SharedProfilePostages;
+            
 
             var LikedProfilePostages = _db.LikedProfilePostages;
 
@@ -78,9 +91,31 @@ namespace Targetcom.Controllers
                 i.Admin = _db.Profiles.Find(i.AdminId);
             });
 
-            profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
+            SharedProfilePostages.ToList().ForEach(i =>
+            {
+                i.Postage = ProfilePostages.FirstOrDefault(f => f.Id == i.ProfilePostageId);
+                i.Profile = Profiles.FirstOrDefault(f => f.Id == i.ProfileId);
+            });
+
+            profileVM.Current_AllPost_Lenght = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).Count() - 1;
+            profileVM.Current_SharedPost_Lenght = SharedProfilePostages.Count(i => i.ProfileId == profileVM.IdentityProfile.Id) - 1;
+
+            if (listitem == Env.AllPost)
+            {
+                profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).OrderByDescending(o => o.TimeStamp).ToList().Skip(postpage * Env.PROFILE_NEWS_LOADING_LIMIT).Take(Env.PROFILE_NEWS_LOADING_LIMIT).ToList();
+            }
+            else if (listitem == Env.SharedPost)
+            {
+                profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).OrderByDescending(o => o.Postage.TimeStamp).ToList().Skip(sharepage * Env.PROFILE_NEWS_LOADING_LIMIT).Take(Env.PROFILE_NEWS_LOADING_LIMIT).ToList();
+            }
+            else
+            {
+                profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).OrderByDescending(o => o.TimeStamp).ToList().Skip(postpage * Env.PROFILE_NEWS_LOADING_LIMIT).Take(Env.PROFILE_NEWS_LOADING_LIMIT).ToList();            
+            }
+
+            //profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
-            profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
+            //profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == profileVM.IdentityProfile.Id || w.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.BannedProfiles = ProfileBanned.Where(w => w.AdminId == profileVM.IdentityProfile.Id).ToList();

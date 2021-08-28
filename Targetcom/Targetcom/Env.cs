@@ -145,5 +145,26 @@ namespace Targetcom
 
         public static int LowRangeCryptoGenerated = 5;
         public static int UpperRangeCryptoGenerated = 9;
+
+        /* Loading limits */
+
+        public static int GAME_LOADING_LIMIT = 9;
+        public static int NEWS_LOADING_LIMIT = 10;
+        public static int PROFILE_NEWS_LOADING_LIMIT = 10;
+        public static int FRIENDPEOPLE_LOADING_LIMIT = 20;
+        public static int IMAGE_LOADING_LIMIT = 9;
+        public static int MANAGEPANEL_PEOPLES_LOADING_LIMIT = 20;
+        public static int MANAGEPANEL_NEWS_LOADING_LIMIT = 20;
+        public static int MANAGEPANEL_GAMES_LOADING_LIMIT = 9;
+
+        /* Others */
+
+        public static string AllFeeds = "All";
+        public static string Post = "textpost";
+        public static string Updates = "updates";
+        public static string ApiFeeds = "apifeeds";
+
+        public static string AllPost = "All";
+        public static string SharedPost = "sharedpost";
     }
 }

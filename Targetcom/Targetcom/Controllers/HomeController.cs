@@ -25,14 +25,18 @@ namespace Targetcom.Controllers
             _logger = logger;
             _userManager = userManager;
             _db = db;
-        }      
-        public async Task<IActionResult> Index()
+        }
+        public async Task<IActionResult> Index(string listitem = "All", int page = 0, int textpage = 0, int updatepage = 0)
         {
             NewsVM newsVM = new NewsVM()
             {
                 IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
                 AllUsers = _db.Profiles,
                 ProfilePostages = new List<ProfilePostage>(),
+                ListItem = listitem,
+                Current_AllPost_Page = page,
+                Current_TextPost_Page = textpage,
+                Current_Updates_Page = updatepage,
             };
 
             var Profiles = _db.Profiles;
@@ -104,13 +108,30 @@ namespace Targetcom.Controllers
 
                 f.Banned = ProfileBanned.FirstOrDefault(g => g.ProfileId == f.Id);
             });
-
-            newsVM.ProfilePostages = ProfilePostages;
+            newsVM.Current_AllPost_Lenght = ProfilePostages.Count(w => w.Alert != "Pinned post") - 1;
+            newsVM.Current_TextPost_Lenght = ProfilePostages.Where(w => w.Alert == "" || w.Alert == null && w.Alert != "Pinned post").Count() - 1;
+            newsVM.Current_Updates_Lenght = ProfilePostages.Where(w => w.Alert != null && w.Alert != "Pinned post").Count() - 1;
+            if (listitem == Env.AllFeeds)
+            {
+                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+            }
+            else if (listitem == Env.Post)
+            {
+                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(textpage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+            }
+            else if (listitem == Env.Updates)
+            {
+                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(updatepage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+            }
+            else
+            {
+                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+            }
+            
 
             return View(newsVM);
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Rules()
         {
             var Profiles = _db.Profiles;
@@ -131,10 +152,13 @@ namespace Targetcom.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         [HttpPost]
         public async Task<IActionResult> PublishPost(string content)
         {
+            if (content is null)
+            {
+                return NoContent();
+            }
             if (content.Length > 0)
             {
                 var profile = await _userManager.GetUserAsync(User) as Profile;
@@ -148,15 +172,16 @@ namespace Targetcom.Controllers
                 });
                 _db.SaveChanges();
                 //await _userManager.UpdateAsync(profile);
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return NoContent();
         }
         [HttpPost]
         public async Task<IActionResult> CommentPublishPost(string youcomment, int? id)
         {
             if (youcomment is null || id is null)
             {
-                return RedirectToAction(nameof(Index));
+                return NoContent();
             }
 
             var finderPostage = _db.ProfilePostages.Find(id);
@@ -183,6 +208,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult AllowLikePostagePost(int? id)
         {
@@ -202,6 +228,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult AllowSharePostagePost(int? id)
         {
@@ -221,6 +248,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult AllowCommentPostagePost(int? id)
         {
@@ -240,6 +268,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public async Task<IActionResult> LikePostagePost(int? id)
         {
@@ -263,6 +292,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult DislikePostagePost(string id)
         {
@@ -281,6 +311,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult DeleteProfilePostageCommentPost(int? id)
         {
@@ -292,6 +323,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult UnsharePostagePost(string id)
         {
@@ -307,6 +339,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public async Task<IActionResult> SharePostagePost(int? id)
         {
@@ -331,6 +364,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult DissharePostagePost(string id)
         {
