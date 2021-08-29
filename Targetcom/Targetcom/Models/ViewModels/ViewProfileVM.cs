@@ -13,5 +13,15 @@ namespace Targetcom.Models.ViewModels
         public Profile FindedProfile { get; set; }
         public string Role { get; set; }
         public string MyRole { get; set; }
+
+        public string ListItem { get; set; }
+
+        public int Current_AllPost_Page { get; set; }
+        public int Current_AllPost_Lenght { get; set; }
+
+        public int Current_SharedPost_Page { get; set; }
+        public int Current_SharedPost_Lenght { get; set; }
+
+        public bool IsAllable { get; set; }
     }
 }

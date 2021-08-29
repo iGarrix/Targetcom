@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @if (!User.Identity.IsAuthenticated)
     {
-        <title>@ViewData["Title"] - Tracelight</title>
+        <title>@ViewData["Title"] - @Env.WebName</title>
 
     }
     <title>@ViewData["Title"]</title>
