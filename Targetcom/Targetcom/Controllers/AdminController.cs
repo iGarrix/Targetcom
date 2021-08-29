@@ -33,7 +33,7 @@ namespace Targetcom.Controllers
 
         #region Profile
        
-        public async Task<IActionResult> Users(string id)
+        public async Task<IActionResult> Users(string id, int page = 0)
         {
             Profile select = null;
             if (id is not null)
@@ -48,9 +48,11 @@ namespace Targetcom.Controllers
             {
                 ProfileManages = _db.Profiles.Select(s => new ProfileManage()
                 {
-                    Profile = s
-                }).ToList(),
+                    Profile = s,
+                    
+                }).ToList().Skip(page * Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT).Take(Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT).ToList(),
                 SelectUser = select,
+                Current_User_Page = page,
             };
             userManagement.ProfileManages.ToList().ForEach(i =>
             {
@@ -62,7 +64,7 @@ namespace Targetcom.Controllers
                 userManagement.SelectUser.PaypalHistories = _db.PaypalHistories.Where(w => w.ProfileId == userManagement.SelectUser.Id).ToList();
                 userManagement.SelectUser.Banned = _db.BannedProfiles.FirstOrDefault(f => f.ProfileId == userManagement.SelectUser.Id);
             }
-
+            userManagement.Current_User_Lenght = _db.Profiles.Count() - 1;
             return View(userManagement);
         }
 
