@@ -107,7 +107,7 @@
     <div style="width: 100%" class="d-flex flex-column">
         <div class="border-0 rounded">
             <div class="d-flex flex-wrap" style="gap: 1.2rem;">
-                @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Reverse())
+                @foreach (var item in Model.FindedProfile.ProfilePostages.Reverse())
                 {
                     var id = $"item{item.Id}";
                     <div class="d-flex flex-column rounded">
@@ -323,6 +323,16 @@
                     </div>
                 }
             </div>
+        </div>
+        <div class="p-2 d-flex justify-content-center mt-auto">
+            @if (Model.Current_AllPost_Page > 0)
+            {
+                <a asp-controller="Friends" asp-action="Images" asp-route-id="@Model.FindedProfile.Id" asp-route-page="@(Model.Current_AllPost_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Current_AllPost_Lenght / Env.IMAGE_LOADING_LIMIT) > Model.Current_AllPost_Page)
+            {
+                <a asp-controller="Friends" asp-action="Images" asp-route-id="@Model.FindedProfile.Id" asp-route-page="@(Model.Current_AllPost_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
         </div>
     </div>
 </div>

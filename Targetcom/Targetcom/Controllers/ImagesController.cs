@@ -25,12 +25,14 @@ namespace Targetcom.Controllers
             _userManager = userManager;
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 0)
         {
             ProfileVM profileVM = new ProfileVM()
             {
                 IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
+                Current_AllPost_Page = page,
             };
+
 
             var Profiles = _db.Profiles;
             var SharedProfilePostages = _db.SharedProfilePostages;
@@ -61,8 +63,11 @@ namespace Targetcom.Controllers
                 i.Friend = Profiles.Find(i.FriendId);
             });
 
+            profileVM.Current_AllPost_Lenght = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id && i.IsObject).Count() - 1;
 
-            profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
+            profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id && i.IsObject).OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.IMAGE_LOADING_LIMIT).Take(Env.IMAGE_LOADING_LIMIT).ToList();
+
+            //profileVM.IdentityProfile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profileVM.IdentityProfile.Id).ToList();
             profileVM.IdentityProfile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profileVM.IdentityProfile.Id).ToList();

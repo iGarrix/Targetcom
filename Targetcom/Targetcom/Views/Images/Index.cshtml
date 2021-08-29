@@ -22,6 +22,36 @@
             text-decoration: none;
         }
 
+    .dropbtn {
+        color: white;
+        border: none;
+        cursor: pointer;
+        background-color: transparent;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        transition: .2s;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        transition: .2s;
+    }
+
+        .dropdown-content button {
+            display: block;
+            white-space: nowrap;
+        }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
     .disable {
         display: none;
     }
@@ -49,47 +79,6 @@
             background-color: #eeeeee;
             text-decoration: none;
         }
-
-    #summernote {
-        font-size: 14px;
-        outline: 0 !important;
-        border: 0;
-    }
-
-
-    .dropbtn {
-        color: white;
-        border: none;
-        cursor: pointer;
-        background-color: transparent;
-    }
-
-    /* The container <div> - needed to position the dropdown content */
-    .dropdown {
-        position: relative;
-        display: inline-block;
-        transition: .2s;
-    }
-
-    /* Dropdown Content (Hidden by Default) */
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        min-width: 160px;
-        z-index: 1;
-        right: 0;
-        transition: .2s;
-    }
-
-        /* Links inside the dropdown */
-        .dropdown-content button {
-            display: block;
-        }
-
-    /* Show the dropdown menu on hover */
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
 
     .btnlike:hover {
         text-decoration: none;
@@ -145,7 +134,7 @@
     <div style="width: 100%" class="d-flex flex-column">
         <div class="border-0 rounded">
             <div class="d-flex flex-wrap" style="gap: 1.2rem;">
-                @foreach (var item in Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.IdentityProfile.Id).Reverse())
+                @foreach (var item in Model.IdentityProfile.ProfilePostages.Reverse())
                 {
                     var id = $"item{item.Id}";
                     <div class="d-flex flex-column rounded">
@@ -343,6 +332,8 @@
                     <i class="fas fa-plus-circle text-muted p-0 m-0" style="font-size:69px; transform: translateX(-90%);"></i>
                 </a>
 
+                
+
                 @using (Html.BeginForm(FormMethod.Post))
                 {
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -367,6 +358,16 @@
                     </div>
                 }
             </div>
+        </div>
+        <div class="p-2 d-flex justify-content-center mt-auto">
+            @if (Model.Current_AllPost_Page > 0)
+            {
+                <a asp-controller="Images" asp-action="Index" asp-route-page="@(Model.Current_AllPost_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Current_AllPost_Lenght / Env.IMAGE_LOADING_LIMIT) > Model.Current_AllPost_Page)
+            {
+                <a asp-controller="Images" asp-action="Index" asp-route-page="@(Model.Current_AllPost_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
         </div>
     </div>
 </div>

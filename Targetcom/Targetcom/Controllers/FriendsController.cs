@@ -277,7 +277,7 @@ namespace Targetcom.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Images(string id)
+        public async Task<IActionResult> Images(string id, int page = 0)
         {
             if (id is null)
             {
@@ -289,6 +289,7 @@ namespace Targetcom.Controllers
             {
                 FindedProfile = new Profile(),
                 IdentityProfile = _db.Profiles.Find(myid),
+                Current_AllPost_Page = page,
             };
 
             var Profiles = _db.Profiles;
@@ -327,7 +328,11 @@ namespace Targetcom.Controllers
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
             viewProfileVM.MyRole = _userManager.GetRolesAsync(viewProfileVM.IdentityProfile as IdentityUser).Result.ToList()[0];
 
-            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            viewProfileVM.Current_AllPost_Lenght = ProfilePostages.Where(i => i.ProfileId == profile.Id && i.IsObject).Count() - 1;
+
+            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id && i.IsObject).OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.IMAGE_LOADING_LIMIT).Take(Env.IMAGE_LOADING_LIMIT).ToList();
+
+            //profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
