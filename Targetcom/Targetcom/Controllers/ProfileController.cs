@@ -127,9 +127,20 @@ namespace Targetcom.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PublishPost(string content)
+        public async Task<IActionResult> PublishPost(string content, string urlimg1, string urlimg2, string urlimg3)
         {
-            if (content.Length > 0)
+            string uploadfiles = $"{urlimg1} {urlimg2} {urlimg3}";
+
+            bool IsValid = true;
+
+            if (content is null)
+            {
+                if (urlimg1 is null && urlimg2 is null & urlimg3 is null)
+                {
+                    IsValid = false;
+                }
+            }
+            if (IsValid)
             {
                 var profile = await _userManager.GetUserAsync(User) as Profile;
                 _db.ProfilePostages.Add(new ProfilePostage()
@@ -139,6 +150,7 @@ namespace Targetcom.Controllers
                     Writter = profile,
                     IsObject = false,
                     Content = content,
+                    UploadingUrlFiles = uploadfiles,
                 });
                 _db.SaveChanges();
                 //await _userManager.UpdateAsync(profile);

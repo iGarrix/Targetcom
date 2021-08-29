@@ -581,17 +581,24 @@ namespace Targetcom.Controllers
             return RedirectToAction(nameof(ViewProfile), new { id = returnid });
         }
         [HttpPost]
-        public async Task<IActionResult> PublishPost(string content, string id)
+        public async Task<IActionResult> PublishPost(string content, string id, string urlimg1, string urlimg2, string urlimg3)
         {
-            if (content is null)
-            {
-                return NotFound("Content null");
-            }
+            string uploadfiles = $"{urlimg1} {urlimg2} {urlimg3}";
+
+            bool IsValid = true;
             if (id is null)
             {
-                return NotFound("Id null");
+                IsValid = false;
             }
-            if (content.Length > 0)
+
+            if (content is null)
+            {
+                if (urlimg1 is null && urlimg2 is null & urlimg3 is null)
+                {
+                    IsValid = false;
+                }
+            }
+            if (IsValid)
             {
                 var myprofile = await _userManager.GetUserAsync(User) as Profile;
                 var profile = await _userManager.FindByIdAsync(id) as Profile;
@@ -602,6 +609,7 @@ namespace Targetcom.Controllers
                     Writter = myprofile,
                     IsObject = false,
                     Content = content,
+                    UploadingUrlFiles = uploadfiles,
                 });
                 await _userManager.UpdateAsync(profile);
                 return RedirectToAction(nameof(ViewProfile), new { id = profile.Id });

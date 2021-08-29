@@ -157,6 +157,8 @@ namespace Targetcom
         public static int MANAGEPANEL_NEWS_LOADING_LIMIT = 20;
         public static int MANAGEPANEL_GAMES_LOADING_LIMIT = 9;
 
+        public static int UPLOAD_FILES_LIMIT = 9;
+
         /* Others */
 
         public static string AllFeeds = "All";

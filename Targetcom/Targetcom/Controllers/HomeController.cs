@@ -44,7 +44,7 @@ namespace Targetcom.Controllers
 
             var LikedProfilePostages = _db.LikedProfilePostages;           
 
-            var ProfilePostages = _db.ProfilePostages;
+            var ProfilePostages = _db.ProfilePostages.OrderByDescending(o => o.TimeStamp);
             ProfilePostages.ToList().ForEach(i =>
             {
                 i.Profile = Profiles.Find(i.ProfileId);
@@ -108,26 +108,33 @@ namespace Targetcom.Controllers
 
                 f.Banned = ProfileBanned.FirstOrDefault(g => g.ProfileId == f.Id);
             });
-            newsVM.Current_AllPost_Lenght = ProfilePostages.Count(w => w.Alert != "Pinned post") - 1;
-            newsVM.Current_TextPost_Lenght = ProfilePostages.Where(w => w.Alert == "" || w.Alert == null && w.Alert != "Pinned post").Count() - 1;
-            newsVM.Current_Updates_Lenght = ProfilePostages.Where(w => w.Alert != null && w.Alert != "Pinned post").Count() - 1;
+            newsVM.Current_AllPost_Lenght = ProfilePostages.Count(w => !w.IsPinned) - 1;
+            newsVM.Current_TextPost_Lenght = ProfilePostages.Count(w => !w.IsObject && !w.IsPinned) - 1;
+            newsVM.Current_Updates_Lenght = ProfilePostages.Count(w => w.IsObject && !w.IsPinned) - 1;
+
+            List<ProfilePostage> news = new List<ProfilePostage>();
+
             if (listitem == Env.AllFeeds)
             {
-                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+                news = ProfilePostages.Where(w => !w.IsPinned).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
             }
             else if (listitem == Env.Post)
             {
-                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(textpage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+                news = ProfilePostages.Where(w => !w.IsObject && !w.IsPinned).ToList().Skip(textpage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
             }
             else if (listitem == Env.Updates)
             {
-                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(updatepage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+                news = ProfilePostages.Where(w => w.IsObject && !w.IsPinned).ToList().Skip(updatepage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
             }
             else
             {
-                newsVM.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT);
+                news = ProfilePostages.Where(w => !w.IsPinned).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
             }
-            
+
+            news.AddRange(ProfilePostages.Where(w => w.IsPinned));
+            newsVM.ProfilePostages = news;
+
+            //return NotFound($"{string.Join("\n", ProfilePostages.Where(w => w.IsObject).Select(s => $"[{s.TimeStamp}] O{s.IsObject} P{s.IsPinned} --> {s.Content}" ))}");
 
             return View(newsVM);
         }
@@ -153,13 +160,20 @@ namespace Targetcom.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PublishPost(string content)
+        public async Task<IActionResult> PublishPost(string content, string urlimg1, string urlimg2, string urlimg3)
         {
+            string uploadfiles = $"{urlimg1} {urlimg2} {urlimg3}";
+
+            bool IsValid = true;
+
             if (content is null)
             {
-                return NoContent();
+                if (urlimg1 is null && urlimg2 is null & urlimg3 is null)
+                {
+                    IsValid = false;
+                }
             }
-            if (content.Length > 0)
+            if (IsValid)
             {
                 var profile = await _userManager.GetUserAsync(User) as Profile;
                 _db.ProfilePostages.Add(new ProfilePostage()
@@ -169,6 +183,7 @@ namespace Targetcom.Controllers
                     Writter = profile,
                     IsObject = false,
                     Content = content,
+                    UploadingUrlFiles = uploadfiles,
                 });
                 _db.SaveChanges();
                 //await _userManager.UpdateAsync(profile);

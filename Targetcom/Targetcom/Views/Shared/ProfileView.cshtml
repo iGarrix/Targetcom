@@ -435,9 +435,9 @@
             <div style="width: 100%" class="gap d-flex flex-column overflow-hidden">
 
                 @if (Model.IdentityProfile.Friendships
-                     .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
-                     (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id))
-                     is not null)
+                   .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
+                   (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id))
+                   is not null)
                 {
                     if (Model.IdentityProfile.Friendships
                         .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id) ||
@@ -466,9 +466,9 @@
                                     }
                                 </div>
                                 @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
-                                     Model.IdentityProfile.Friendships
-                       .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
-                       (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
+                                   Model.IdentityProfile.Friendships
+                     .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                     (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                                 {
                                     <hr style="height: 2px; width: 100%;" />
                                     @if (Model.FindedProfile.IsPremium)
@@ -609,8 +609,8 @@
                                         <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="Subscribers" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.Friendships.Where(w => w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Subscribe).Count()</span> <span class="text-muted">Subscribers</span></a>
                                     }
                                     @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.IdentityProfile.Friendships
-                       .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
-                       (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
+                     .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                     (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                                     {
                                         @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                         {
@@ -622,9 +622,9 @@
 
                         </div>
                         @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
-                                    Model.IdentityProfile.Friendships
-                      .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
-                      (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
+                                  Model.IdentityProfile.Friendships
+                    .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                    (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                         {
                             if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
@@ -648,17 +648,22 @@
                             }
                         }
                         @if (Model.FindedProfile.Privacy == Env.PublicProfile || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole ||
-                                     Model.IdentityProfile.Friendships
-                       .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
-                       (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
+                                   Model.IdentityProfile.Friendships
+                     .FirstOrDefault(w => (w.FriendId == Model.IdentityProfile.Id && w.ProfileId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend) ||
+                     (w.ProfileId == Model.IdentityProfile.Id && w.FriendId == Model.FindedProfile.Id && w.FriendStatus == Env.Friend)) is not null)
                         {
                             if (!Model.FindedProfile.IsNessessaredPublishPost || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                             {
                                 @using (Html.BeginForm(FormMethod.Post))
-                                {
+                                {                                  
                                     <div class="card border-0 day_back_head overflow-auto rounded">
                                         <div class="card-body p-2">
                                             <textarea class="form-control day_back_head day_color_font item-font m-0 rounded-0 border-0" id="summer" name="content" placeholder="Tell us what's new?"></textarea>
+                                        </div>
+                                        <div class="p-2 day_back_head" id="badgefiles">
+                                            <div class="badge badge-success disable" id="file1"><h6 class="m-0">Firstfile</h6></div>
+                                            <div class="badge badge-success disable" id="file2"><h6 class="m-0">Secondfile</h6></div>
+                                            <div class="badge badge-success disable" id="file3"><h6 class="m-0">Thirdfile</h6></div>
                                         </div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
@@ -681,17 +686,89 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div>
+                                            <div class="d-flex align-items-center">
+                                                <a class="text-decoration-none day_color_font mr-2" data-toggle="modal" data-target="#upload"><i class="fas fa-upload"></i></a>
                                                 <button type="submit" class="btn day_back_main text-light pl-4 pr-4 disable" style="font-size: 14px;" id="publishpost" asp-controller="Friends" asp-action="PublishPost" asp-route-Id="@Model.FindedProfile.Id">Publish</button>
+                                                <div class="modal fade" id="upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content day_back_head">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Pinned files</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body d-flex flex-column gap">
+                                                                <div class="form-group m-0">
+                                                                    <input placeholder="Enter url image 1" name="urlimg1" id="urlimges1" class="form-control border-0 day_back_default day_color_font" style="font-size: 14px;" />
+                                                                </div>
+                                                                <div class="form-group m-0">
+                                                                    <input placeholder="Enter url image 2" name="urlimg2" id="urlimges2" class="form-control border-0 day_back_default day_color_font" style="font-size: 14px;" />
+                                                                </div>
+                                                                <div class="form-group m-0">
+                                                                    <input placeholder="Enter url image 3" name="urlimg3" id="urlimges3" class="form-control border-0 day_back_default day_color_font" style="font-size: 14px;" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn day_back_main text-light" id="upload" data-dismiss="modal" aria-label="Close" asp-controller="Images" asp-action="PublishPost">Upload</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <script>
                                                     document.getElementById("summer").addEventListener("keyup", () => {
+
+                                                        let file1 = document.getElementById("urlimges1").value;
+                                                        let file2 = document.getElementById("urlimges2").value;
+                                                        let file3 = document.getElementById("urlimges3").value;
+
                                                         if (document.getElementById("summer").value.length > 0) {
                                                             document.getElementById("publishpost").classList.remove("disable");
                                                         }
                                                         else {
                                                             document.getElementById("publishpost").classList.add("disable");
                                                         }
+
+                                                        if (file1 != "" || file2 != "" || file3 != "") {
+                                                            document.getElementById("publishpost").classList.remove("disable");
+                                                        }
                                                     });
+                                                    document.getElementById("upload").addEventListener("click", () => {
+                                                        let file1 = document.getElementById("urlimges1").value;
+                                                        let file2 = document.getElementById("urlimges2").value;
+                                                        let file3 = document.getElementById("urlimges3").value;
+
+                                                        let badge1 = document.getElementById("file1");
+                                                        let badge2 = document.getElementById("file2");
+                                                        let badge3 = document.getElementById("file3");
+
+                                                        if (file1 != "") {
+                                                            badge1.classList.remove("disable");
+                                                        }
+                                                        else {
+                                                            badge1.classList.add("disable");
+                                                        }
+                                                        if (file2 != "") {
+                                                            badge2.classList.remove("disable");
+                                                        }
+                                                        else {
+                                                            badge2.classList.add("disable");
+                                                        }
+                                                        if (file3 != "") {
+                                                            badge3.classList.remove("disable");
+                                                        }
+                                                        else {
+                                                            badge3.classList.add("disable");
+                                                        }
+
+                                                        if (file1 != "" || file2 != "" || file3 != "") {
+                                                            document.getElementById("publishpost").classList.remove("disable");
+                                                        }
+                                                        else {
+                                                            document.getElementById("publishpost").classList.add("disable");
+                                                        }
+                                                    });
+
                                                 </script>
                                             </div>
                                         </div>
@@ -786,23 +863,23 @@
                                                 }
                                                 else
                                                 {
-                                            <div class="d-flex flex-column gap">
-                                                @foreach (var item in Model.FindedProfile.SharedProfilePostages.Where(w => w.ProfileId == Model.FindedProfile.Id).OrderByDescending(i => i.Postage.TimeStamp).Select(s => s.Postage))
-                                                {
-                                                    var id = Guid.NewGuid();
-                                                    <partial name="Components/ProfilePost" model="new Targetcom.Models.ViewModels.ProfilePostComponentVM() { IdentityProfile = Model.IdentityProfile, Postage = item, Guid = id, IsViewedProfile = true, ViewProfileId = Model.FindedProfile.Id }" />
-                                                }
-                                                <div class="p-2 d-flex justify-content-center">
-                                                    @if (Model.Current_SharedPost_Page > 0)
-                                                    {
-                                                        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.FindedProfile.Id" asp-route-listitem="@Env.SharedPost" asp-route-sharepage="@(Model.Current_SharedPost_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
-                                                    }
-                                                    @if ((Model.Current_SharedPost_Lenght / Env.PROFILE_NEWS_LOADING_LIMIT) > Model.Current_SharedPost_Page)
-                                                    {
-                                                        <a asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.FindedProfile.Id" asp-route-listitem="@Env.SharedPost" asp-route-sharepage="@(Model.Current_SharedPost_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
-                                                    }
-                                                </div>
-                                            </div>
+                                                    <div class="d-flex flex-column gap">
+                                                        @foreach (var item in Model.FindedProfile.SharedProfilePostages.Where(w => w.ProfileId == Model.FindedProfile.Id).OrderByDescending(i => i.Postage.TimeStamp).Select(s => s.Postage))
+                                                        {
+                                                            var id = Guid.NewGuid();
+                                                            <partial name="Components/ProfilePost" model="new Targetcom.Models.ViewModels.ProfilePostComponentVM() { IdentityProfile = Model.IdentityProfile, Postage = item, Guid = id, IsViewedProfile = true, ViewProfileId = Model.FindedProfile.Id }" />
+                                                        }
+                                                        <div class="p-2 d-flex justify-content-center">
+                                                            @if (Model.Current_SharedPost_Page > 0)
+                                                            {
+                                                                <a asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.FindedProfile.Id" asp-route-listitem="@Env.SharedPost" asp-route-sharepage="@(Model.Current_SharedPost_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+                                                            }
+                                                            @if ((Model.Current_SharedPost_Lenght / Env.PROFILE_NEWS_LOADING_LIMIT) > Model.Current_SharedPost_Page)
+                                                            {
+                                                                <a asp-controller="Friends" asp-action="ViewProfile" asp-route-id="@Model.FindedProfile.Id" asp-route-listitem="@Env.SharedPost" asp-route-sharepage="@(Model.Current_SharedPost_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+                                                            }
+                                                        </div>
+                                                    </div>
                                                 }
                                             </section>
                                         }
