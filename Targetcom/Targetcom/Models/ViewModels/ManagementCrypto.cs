@@ -9,5 +9,8 @@ namespace Targetcom.Models.ViewModels
     {
         public List<Cryptohistory> Cryptohistories { get; set; }
         public Cryptohistory SelectedCrypt { get; set; }
+
+        public int Current_Crypto_Page { get; set; }
+        public int Current_Crypto_Lenght { get; set; }
     }
 }

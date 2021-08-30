@@ -157,6 +157,7 @@ namespace Targetcom
         public static int MANAGEPANEL_NEWS_LOADING_LIMIT = 5;
         public static int MANAGEPANEL_MESSENGER_LOADING_LIMIT = 5;
         public static int MANAGEPANEL_GAMES_LOADING_LIMIT = 5;
+        public static int MANAGEPANEL_CRYPTO_LOADING_LIMIT = 5;
 
         /* Others */
 

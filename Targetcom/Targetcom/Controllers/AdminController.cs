@@ -385,7 +385,7 @@ namespace Targetcom.Controllers
 
         #region Crypto Rating
 
-        public IActionResult Crypto(int? id)
+        public IActionResult Crypto(int? id, int page = 0)
         {
             Cryptohistory select = null;
             if (id is not null)
@@ -400,7 +400,12 @@ namespace Targetcom.Controllers
             {
                 Cryptohistories = _db.Cryptohistories.ToList(),
                 SelectedCrypt = select,
+                Current_Crypto_Page = page
             };
+
+            managementCrypto.Current_Crypto_Lenght = _db.Cryptohistories.Count() - 1;
+            managementCrypto.Cryptohistories = _db.Cryptohistories.ToList().Skip(page * Env.MANAGEPANEL_CRYPTO_LOADING_LIMIT).Take(Env.MANAGEPANEL_CRYPTO_LOADING_LIMIT).ToList();
+
             return View(managementCrypto);
         }
 
