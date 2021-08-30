@@ -583,7 +583,7 @@ namespace Targetcom.Controllers
         #endregion
         
         #region News
-        public IActionResult News(int? id)
+        public IActionResult News(int? id, int page = 0)
         {
 
             var Profiles = _db.Profiles;
@@ -626,7 +626,13 @@ namespace Targetcom.Controllers
             {
                 ProfilePostages = ProfilePostages.ToList(),
                 SelectedProfilePostage = select,
+                Current_News_Page = page
             };
+
+
+            managementNews.Current_News_Lenght = _db.ProfilePostages.Count() - 1;
+            managementNews.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.MANAGEPANEL_NEWS_LOADING_LIMIT).Take(Env.MANAGEPANEL_NEWS_LOADING_LIMIT);
+
 
             return View(managementNews);
         }

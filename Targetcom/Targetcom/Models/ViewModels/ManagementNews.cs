@@ -9,5 +9,8 @@ namespace Targetcom.Models.ViewModels
     {
         public IEnumerable<ProfilePostage> ProfilePostages { get; set; }
         public ProfilePostage SelectedProfilePostage { get; set; }
+
+        public int Current_News_Page { get; set; }
+        public int Current_News_Lenght { get; set; }
     }
 }

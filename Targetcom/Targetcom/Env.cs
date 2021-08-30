@@ -154,7 +154,7 @@ namespace Targetcom
         public static int FRIENDPEOPLE_LOADING_LIMIT = 20;
         public static int IMAGE_LOADING_LIMIT = 8;
         public static int MANAGEPANEL_PEOPLES_LOADING_LIMIT = 5;
-        public static int MANAGEPANEL_NEWS_LOADING_LIMIT = 20;
+        public static int MANAGEPANEL_NEWS_LOADING_LIMIT = 5;
         public static int MANAGEPANEL_GAMES_LOADING_LIMIT = 9;
 
         /* Others */
