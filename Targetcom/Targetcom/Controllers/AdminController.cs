@@ -32,7 +32,7 @@ namespace Targetcom.Controllers
         }
 
         #region Profile
-       
+
         public async Task<IActionResult> Users(string id, int page = 0)
         {
             Profile select = null;
@@ -49,7 +49,7 @@ namespace Targetcom.Controllers
                 ProfileManages = _db.Profiles.Select(s => new ProfileManage()
                 {
                     Profile = s,
-                    
+
                 }).ToList().Skip(page * Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT).Take(Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT).ToList(),
                 SelectUser = select,
                 Current_User_Page = page,
@@ -348,7 +348,7 @@ namespace Targetcom.Controllers
                                     _db.SaveChanges();
                                 }
                             }
-                    
+
                             return RedirectToAction(nameof(Users), new { id = find.Id });
                             //return NotFound($"{reason} {ReasonTime.ToShortDateString()} {ispermanent} 11111111");
                         }
@@ -385,7 +385,7 @@ namespace Targetcom.Controllers
 
         #region Crypto Rating
 
-        public IActionResult Crypto(int ? id)
+        public IActionResult Crypto(int? id)
         {
             Cryptohistory select = null;
             if (id is not null)
@@ -404,7 +404,7 @@ namespace Targetcom.Controllers
             return View(managementCrypto);
         }
 
-        public IActionResult RemoveCrypt(int ? id)
+        public IActionResult RemoveCrypt(int? id)
         {
             if (id is not null)
             {
@@ -531,7 +531,7 @@ namespace Targetcom.Controllers
             return View(managementMessenger);
         }
 
-        public IActionResult Savelog(int ? id)
+        public IActionResult Savelog(int? id)
         {
             if (id is not null)
             {
@@ -582,7 +582,7 @@ namespace Targetcom.Controllers
             return RedirectToAction(nameof(Messenger), new { user1id = string.Empty, user2id = string.Empty, state = "Fail donwloading" });
         }
         #endregion
-        
+
         #region News
         public IActionResult News(int? id, int page = 0)
         {
@@ -637,10 +637,11 @@ namespace Targetcom.Controllers
 
             return View(managementNews);
         }
-        
+
         [HttpPost]
         public IActionResult DeletePostagePost(int? id)
-        {;
+        {
+            ;
             if (id is not null)
             {
                 var findedPostage = _db.ProfilePostages.Find(id);
@@ -668,7 +669,7 @@ namespace Targetcom.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteProfilePostageCommentPost(int? id, int ? post)
+        public IActionResult DeleteProfilePostageCommentPost(int? id, int? post)
         {
             if (id != null)
             {
@@ -685,104 +686,109 @@ namespace Targetcom.Controllers
         #endregion
 
         #region Games
-        public IActionResult Games(string alert = null)
+        public IActionResult Games(string alert = null, int page = 0)
+        {
+            var games = _db.Games.ToList();
+            string tryalert = "Select a game";
+            if (alert is not null)
             {
-                var games = _db.Games.ToList();
-                string tryalert = "Select a game";
-                if (alert is not null)
-                {
-                    tryalert = alert;
-                }
-
-                ManagementGames managementGames = new ManagementGames()
-                {
-                    Games = _db.Games.ToList(),
-                    Alert = tryalert,
-                };
-                return View(managementGames);
+                tryalert = alert;
             }
-        
-            [HttpPost]
-            public IActionResult SaveSelectedGame(string gameid, string gameurlimage, string gameurlgame, string gamename, string gamedesc, string gameprice)
+
+            ManagementGames managementGames = new ManagementGames()
             {
-                if (gameid is not null)
+                Games = _db.Games.ToList(),
+                Alert = tryalert,
+                Current_Games_Page = page
+            };
+
+            managementGames.Current_Games_Lenght = _db.Games.Count() - 1;
+            managementGames.Games = _db.Games.ToList().Skip(page * Env.MANAGEPANEL_GAMES_LOADING_LIMIT).Take(Env.MANAGEPANEL_GAMES_LOADING_LIMIT);
+
+            return View(managementGames);
+        }
+
+        [HttpPost]
+        public IActionResult SaveSelectedGame(string gameid, string gameurlimage, string gameurlgame, string gamename, string gamedesc, string gameprice)
+        {
+            if (gameid is not null)
+            {
+                var findgame = _db.Games.Find(int.Parse(gameid));
+                bool ischange = false;
+                if (findgame is not null)
                 {
-                    var findgame = _db.Games.Find(int.Parse(gameid));
-                    bool ischange = false;
-                    if (findgame is not null)
+                    if (gameurlgame is not null && gameurlimage is not null && gamename is not null && gamedesc is not null && gameprice is not null)
                     {
-                        if (gameurlgame is not null && gameurlimage is not null && gamename is not null && gamedesc is not null && gameprice is not null)
+                        if (gameurlgame != findgame.GameUrl)
                         {
-                            if (gameurlgame != findgame.GameUrl)
-                            {
-                                findgame.GameUrl = gameurlgame;
-                                ischange = true;
-                            }
-                            if (gameurlimage != findgame.ImageUrl)
-                            {
-                                findgame.ImageUrl = gameurlimage;
-                                ischange = true;
-                            }
-                            if (gamename != findgame.Name)
-                            {
-                                findgame.Name = gamename;
-                                ischange = true;
-                            }
-                            if (gamedesc != findgame.Description)
-                            {
-                                findgame.Description = gamedesc;
-                                ischange = true;
-                            }
-                            if (gameprice != findgame.TargetPrice.ToString())
-                            {
-                                findgame.TargetPrice = int.Parse(gameprice);
-                                ischange = true;
-                            }
-                            if (ischange)
-                            {
-                                _db.Games.Update(findgame);
-                                _db.SaveChanges();
-                                return RedirectToAction(nameof(Games), new { alert = "Game is changed" });
-                            }
+                            findgame.GameUrl = gameurlgame;
+                            ischange = true;
+                        }
+                        if (gameurlimage != findgame.ImageUrl)
+                        {
+                            findgame.ImageUrl = gameurlimage;
+                            ischange = true;
+                        }
+                        if (gamename != findgame.Name)
+                        {
+                            findgame.Name = gamename;
+                            ischange = true;
+                        }
+                        if (gamedesc != findgame.Description)
+                        {
+                            findgame.Description = gamedesc;
+                            ischange = true;
+                        }
+                        if (gameprice != findgame.TargetPrice.ToString())
+                        {
+                            findgame.TargetPrice = int.Parse(gameprice);
+                            ischange = true;
+                        }
+                        if (ischange)
+                        {
+                            _db.Games.Update(findgame);
+                            _db.SaveChanges();
+                            return RedirectToAction(nameof(Games), new { alert = "Game is changed" });
                         }
                     }
                 }
-                return NoContent();
             }
-    
-            [HttpPost]
-            public IActionResult RemoveSelectedGame(string gameid)
-            {
-                if (gameid is not null)
-                {
-                    var findgame = _db.Games.Find(int.Parse(gameid));
-                    _db.Games.Remove(findgame);
-                    _db.SaveChanges();
-                    return RedirectToAction(nameof(Games), new { alert = "Game is deleted" });
-                }
-                return NoContent();
-            }
+            return NoContent();
+        }
 
-            [HttpPost]
-            public IActionResult Addnewgame(string newurlimage, string newurlgame, string newname, string newdesc, string newprice)
+        [HttpPost]
+        public IActionResult RemoveSelectedGame(string gameid)
+        {
+            if (gameid is not null)
             {
-                if (newurlimage is not null && newurlgame is not null && newname is not null && newdesc is not null && newprice is not null)
-                {
-                    int price = 0;
-                    int.TryParse(newprice, out price);
-                    _db.Games.Add(new Game()
-                    {
-                        Name = newname,
-                        Description = newdesc,
-                        TargetPrice = price,
-                        GameUrl = newurlgame,
-                        ImageUrl = newurlimage,
-                    });
-                    _db.SaveChanges();
-                    return RedirectToAction(nameof(Games), new { alert = "Game is added" });
-                }
-                return NoContent();
+                var findgame = _db.Games.Find(int.Parse(gameid));
+                _db.Games.Remove(findgame);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Games), new { alert = "Game is deleted" });
             }
+            return NoContent();
+        }
+
+        [HttpPost]
+        public IActionResult Addnewgame(string newurlimage, string newurlgame, string newname, string newdesc, string newprice)
+        {
+            if (newurlimage is not null && newurlgame is not null && newname is not null && newdesc is not null && newprice is not null)
+            {
+                int price = 0;
+                int.TryParse(newprice, out price);
+                _db.Games.Add(new Game()
+                {
+                    Name = newname,
+                    Description = newdesc,
+                    TargetPrice = price,
+                    GameUrl = newurlgame,
+                    ImageUrl = newurlimage,
+                });
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Games), new { alert = "Game is added" });
+            }
+            return NoContent();
+        }
 
         #endregion
     }
