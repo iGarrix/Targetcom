@@ -476,7 +476,7 @@ namespace Targetcom.Controllers
         #endregion
 
         #region Messanger
-        public IActionResult Messenger(string user1id = null, string user2id = null, string state = null)
+        public IActionResult Messenger(string user1id = null, string user2id = null, string state = null, int page = 0)
         {
             var Profiles = _db.Profiles;
 
@@ -526,6 +526,7 @@ namespace Targetcom.Controllers
                 Profiles = Profiles.ToList(),
                 SelectRoom = room,
                 State = allowstate,
+                Current_Messanger_Page = page
             };
             return View(managementMessenger);
         }

@@ -10,5 +10,8 @@ namespace Targetcom.Models.ViewModels
         public IEnumerable<Profile> Profiles { get; set; }
         public MessageGroup SelectRoom { get; set; }
         public string State { get; set; }
+
+        public int Current_Messanger_Page { get; set; }
+        public int Current_Messanger_Lenght { get; set; }
     }
 }
