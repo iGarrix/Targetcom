@@ -159,6 +159,8 @@ namespace Targetcom
         public static int MANAGEPANEL_GAMES_LOADING_LIMIT = 5;
         public static int MANAGEPANEL_CRYPTO_LOADING_LIMIT = 5;
 
+        public static int UPLOAD_FILES_LIMIT = 9;
+
         /* Others */
 
         public static string AllFeeds = "All";
@@ -168,5 +170,11 @@ namespace Targetcom
 
         public static string AllPost = "All";
         public static string SharedPost = "sharedpost";
+
+        public static string FriendPag = "friendpag";
+        public static string Invitepag = "invitepag";
+        public static string Blacklistpag = "blacklistpag";
+        public static string Subscribepag = "subscribepag";
+        public static string Allpag = "allpag";
     }
 }

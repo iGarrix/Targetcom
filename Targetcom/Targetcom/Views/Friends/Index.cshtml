@@ -121,6 +121,16 @@
                             <hr class="m-0" />
                         }
                     }
+                    <div class="p-2 d-flex justify-content-center">
+                        @if (Model.Current_Friend_Page > 0)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="friendpag" asp-route-friendpage="@(Model.Current_Friend_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+                        }
+                        @if ((Model.Current_Friend_Lenght / Env.FRIENDPEOPLE_LOADING_LIMIT) > Model.Current_Friend_Page)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="friendpag" asp-route-friendpage="@(Model.Current_Friend_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+                        }
+                    </div>
                 </div>
                 <div id="Invites">
                     @if (Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Invite && w.ProfileId != Model.IdentityUser.Id).Count() == 0)
@@ -152,6 +162,16 @@
                             <hr class="m-0" />
                         }
                     }
+                    <div class="p-2 d-flex justify-content-center">
+                        @if (Model.Current_Invite_Page > 0)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="invitepag" asp-route-invitepage="@(Model.Current_Invite_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+                        }
+                        @if ((Model.Current_Invite_Lenght / Env.FRIENDPEOPLE_LOADING_LIMIT) > Model.Current_Invite_Page)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="invitepag" asp-route-invitepage="@(Model.Current_Invite_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+                        }
+                    </div>
                 </div>
                 <div id="Newfriends">
                     @if (Model.AllUsers.Count() == 0)
@@ -160,7 +180,7 @@
                             Doesn't not exists users
                         </div>
                     }
-                    @foreach (var item in Model.AllUsers)
+                    @foreach (var item in Model.AllUsers.Where(w => w.Id != Model.IdentityUser.Id).Skip(Model.Current_All_Page * Env.FRIENDPEOPLE_LOADING_LIMIT).Take(Env.FRIENDPEOPLE_LOADING_LIMIT).ToList())
                     {
                         if (item.Id != Model.IdentityUser.Id)
                         {
@@ -173,6 +193,16 @@
                             <hr class="m-0" />
                         }
                     }
+                    <div class="p-2 d-flex justify-content-center">
+                        @if (Model.Current_All_Page > 0)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="allpag" asp-route-allpage="@(Model.Current_All_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+                        }
+                        @if ((Model.Current_All_Lenght / Env.FRIENDPEOPLE_LOADING_LIMIT) > Model.Current_All_Page)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="allpag" asp-route-allpage="@(Model.Current_All_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+                        }
+                    </div>
                 </div>
                 <div id="Subscribers">
                     @if (Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Subscribe).Count() == 0)
@@ -204,6 +234,16 @@
                             <hr class="m-0" />
                         }
                     }
+                    <div class="p-2 d-flex justify-content-center">
+                        @if (Model.Current_Subscribe_Page > 0)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="subscribepag" asp-route-subscribepage="@(Model.Current_Subscribe_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+                        }
+                        @if ((Model.Current_Subscribe_Lenght / Env.FRIENDPEOPLE_LOADING_LIMIT) > Model.Current_Subscribe_Page)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="subscribepag" asp-route-subscribepage="@(Model.Current_Subscribe_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+                        }
+                    </div>
                 </div>
                 <div id="Blacklist">
                     @if (Model.IdentityUser.Friendships.Where(w => w.FriendStatus == Env.Blacklist).Count() == 0)
@@ -225,6 +265,16 @@
                             <hr class="m-0" />
                         }
                     }
+                    <div class="p-2 d-flex justify-content-center">
+                        @if (Model.Current_Blacklist_Page > 0)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="blacklistpag" asp-route-blacklistpage="@(Model.Current_Blacklist_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+                        }
+                        @if ((Model.Current_Blacklist_Lenght / Env.FRIENDPEOPLE_LOADING_LIMIT) > Model.Current_Blacklist_Page)
+                        {
+                            <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="blacklistpag" asp-route-blacklistpage="@(Model.Current_Blacklist_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,13 +282,13 @@
             <div class="card border-0 day_back_head overflow-auto rounded" style="position: sticky; top: 70px;">
                 <div class="card-body pt-2 pb-2 pr-0 pl-0">
                     <nav class="left-navtabs" style="width: 100%;">
-                        <a href="#" class="navtabs-item is-active">Friends</a>
-                        <a href="#" class="navtabs-item">Invite to friends</a>
+                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="friendpag" asp-route-friendpage="@Model.Current_Friend_Page" class="navtabs-item is-active">Friends</a>
+                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="invitepag" asp-route-invitepage="@Model.Current_Invite_Page" class="navtabs-item">Invite to friends</a>
                         <hr class="m-0 p-1" />
-                        <a href="#" class="navtabs-item">New friens</a>
-                        <a href="#" class="navtabs-item">Subscribers</a>
+                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="allpag" asp-route-allpage="@Model.Current_All_Page" class="navtabs-item">New friens</a>
+                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="subscribepag" asp-route-subscribepage="@Model.Current_Subscribe_Page" class="navtabs-item">Subscribers</a>
                         <hr class="m-0 p-1" />
-                        <a href="#" class="navtabs-item">Blacklist</a>
+                        <a asp-controller="Friends" asp-action="Index" asp-route-eventSelector="blacklistpag" asp-route-blacklistpage="@Model.Current_Blacklist_Page" class="navtabs-item">Blacklist</a>
                         <span class="navtabs-indicator"></span>
                     </nav>
                     <script>
@@ -264,16 +314,29 @@
                             document.getElementById("Subscribers"),
                             document.getElementById("Blacklist"));
                         Adding();
-                        if (eventor.value == "Blacklist") {
-                            dives[dives.length - 1].classList.remove("d-none");
-                            handleIndicator(items[dives.length - 1]);
+                        if (eventor.value == "friendpag") {
+                            dives[0].classList.remove("d-none");
+                            handleIndicator(items[0]);
                         }
-                        else if (eventor.value == "Subscribers") {
+                        else if (eventor.value == "invitepag") {
+                            dives[1].classList.remove("d-none");
+                            handleIndicator(items[1]);
+                        }
+                        else if (eventor.value == "allpag") {
+                            dives[2].classList.remove("d-none");
+                            handleIndicator(items[2]);
+                        }
+                        else if (eventor.value == "subscribepag") {
                             dives[3].classList.remove("d-none");
                             handleIndicator(items[3]);
                         }
+                        else if (eventor.value == "blacklistpag") {
+                            dives[4].classList.remove("d-none");
+                            handleIndicator(items[4]);
+                        }
                         else {
                             dives[0].classList.remove("d-none");
+                            handleIndicator(items[0]);
                         }
                         function handleIndicator(el) {
                             items.forEach(item => {
@@ -294,14 +357,14 @@
                                 dives[i].classList.add("d-none");
                             }
                         }
-                        for (let i = 0; i < items.length; ++i) {
-                            items[i].addEventListener("click", e => {
-                                Adding();
-                                dives[i].classList.remove("d-none");
-                                handleIndicator(e.target);
-                            });
-                            items[i].classList.contains("is-active") && handleIndicator(items[i]);
-                        }
+                        //for (let i = 0; i < items.length; ++i) {
+                        //    items[i].addEventListener("click", e => {
+                        //        Adding();
+                        //        dives[i].classList.remove("d-none");
+                        //        handleIndicator(e.target);
+                        //    });
+                        //    items[i].classList.contains("is-active") && handleIndicator(items[i]);
+                        //}
                         //items.forEach((item, index) => {
                         //    item.addEventListener("click", e => {
                         //        handleIndicator(e.target);

@@ -10,6 +10,7 @@ namespace Targetcom.Models.ViewModels
         public Profile IdentityProfile { get; set; }
         public IEnumerable<Profile> AllUsers { get; set; }
         public IEnumerable<ProfilePostage> ProfilePostages { get; set; }
+        public IEnumerable<Game> LatestGames { get; set; }
         public string ListItem { get; set; }
 
         public int Current_AllPost_Page { get; set; }
