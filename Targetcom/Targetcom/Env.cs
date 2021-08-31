@@ -168,5 +168,11 @@ namespace Targetcom
 
         public static string AllPost = "All";
         public static string SharedPost = "sharedpost";
+
+        public static string FriendPag = "friendpag";
+        public static string Invitepag = "invitepag";
+        public static string Blacklistpag = "blacklistpag";
+        public static string Subscribepag = "subscribepag";
+        public static string Allpag = "allpag";
     }
 }

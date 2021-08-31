@@ -614,7 +614,7 @@
                                     {
                                         @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                         {
-                                            <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
+                                            <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Count(w => w.IsObject && w.Alert is not null)</span> <span class="text-muted">Images</span></a>
                                         }
                                     }
                                 </div>
@@ -1064,7 +1064,7 @@
                                 {
                                     @if (Model.FindedProfile.VisibilityImages || Model.MyRole == Env.AdminRole || Model.MyRole == Env.ModerRole)
                                     {
-                                        <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
+                                        <a asp-controller="Friends" asp-action="Images" asp-route-Id="@Model.FindedProfile.Id" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.FindedProfile.ProfilePostages.Count(w => w.IsObject && w.Alert is not null)</span> <span class="text-muted">Images</span></a>
                                     }
                                 }
                             </div>

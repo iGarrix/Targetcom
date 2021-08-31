@@ -155,7 +155,7 @@
     <div style="width: 100%" class="d-flex flex-column">
         <div class="border-0 rounded">
             <div class="d-flex flex-wrap" style="gap: 1.2rem;">
-                @foreach (var item in Model.IdentityProfile.ProfilePostages.Reverse())
+                @foreach (var item in Model.IdentityProfile.ProfilePostages.OrderByDescending(i => i.TimeStamp))
                 {
                     var id = $"item{item.Id}";
                     <div class="d-flex flex-column rounded day_back_default" style="width:240px;">
@@ -263,6 +263,10 @@
                                                     </div>
                                                     <hr class="mt-3 mb-3 ml-0 mr-0"/>
                                                     <div class="d-flex flex-column gap overflow-auto" style="height: 15.5rem;">
+                                                        @if (!item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).Any())
+                                                        {
+                                                            <h4 class="text-center day_color_font">Write first comment</h4>
+                                                        }
                                                         @for (int comment = 0; comment < item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).Count(); ++comment)
                                                         {
                                                             <div class="d-flex" style="width: 100%;">

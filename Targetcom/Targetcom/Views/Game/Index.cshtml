@@ -143,9 +143,9 @@
             <div class="pt-4 pr-4 pl-4 pb-2">
                 <h4>New games</h4>
             </div>
-            @if (Model.Games.Reverse().Count() > 0)
+            @if (Model.Games.OrderByDescending(d => d.TimeStamp).Count() > 0)
             {
-                @for (int item = 0; item < Model.Games.Reverse().Count(); ++item)
+                @for (int item = 0; item < Model.Games.OrderByDescending(d => d.TimeStamp).Count(); ++item)
                 {
                     @if (item < 3)
                     {
@@ -267,7 +267,7 @@
                                 {
                                     @if (Model.IdentityProfile.TargetCoins >= item.TargetPrice)
                                     {
-                                        <button class="btn rounded-0 pointer" style="width: 100%;" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@item.Id">Buy game for @item.TargetPrice target coins</button>
+                                        <button class="btn btn-outline-light rounded-0 pointer" style="width: 100%;" asp-controller="Game" asp-action="IndexPost" asp-route-Id="@item.Id">Buy game for @item.TargetPrice target coins</button>
                                     }
                                     else
                                     {

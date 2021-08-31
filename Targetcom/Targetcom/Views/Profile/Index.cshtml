@@ -344,27 +344,29 @@
                             <p class="m-0" style="font-family: Poppins, sans-serif;">@Model.IdentityProfile.Quote</p>
                         </div>
                         <hr style="height: 2px; width: 100%;" />
-                        <div class="d-flex gap">
-                            @if (User.IsInRole(Env.AdminRole))
-                            {
-                                <div class="text-light bg-danger rounded p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
-                                    <p class="m-0">Admin <i class="fas fa-code" style="font-size: 13px;"></i></p>
-                                </div>
-                            }
-                            @if (User.IsInRole(Env.ModerRole))
-                            {
-                                <div class="text-light bg-info rounded p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
-                                    <p class="m-0">Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
-                                </div>
-                            }
-                            @if (Model.IdentityProfile.IsPremium)
-                            {
-                                <div class="text-light bg-warning rounded p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
-                                    <p class="m-0">Premium <i class="fas fa-crown" style="font-size: 13px;"></i></p>
-                                </div>
-                            }
-                            else
-                            {
+                        <div class="d-flex flex-column gap">
+                            <div class="d-flex gap">
+                                @if (User.IsInRole(Env.AdminRole))
+                                {
+                                    <div class="text-light bg-danger rounded p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
+                                        <p class="m-0">Admin <i class="fas fa-code" style="font-size: 13px;"></i></p>
+                                    </div>
+                                }
+                                @if (User.IsInRole(Env.ModerRole))
+                                {
+                                    <div class="text-light bg-info rounded p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
+                                        <p class="m-0">Moderator <i class="fas fa-glasses" style="font-size: 13px;"></i></p>
+                                    </div>
+                                }
+                                @if (Model.IdentityProfile.IsPremium)
+                                {
+                                    <div class="text-light bg-warning rounded p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
+                                        <p class="m-0">Premium <i class="fas fa-crown" style="font-size: 13px;"></i></p>
+                                    </div>
+                                }
+                            </div>
+                            @if (!Model.IdentityProfile.IsPremium)
+                            {                              
                                 <a asp-controller="Vip" asp-action="Index" class="alert middletabbtn1 border-0 p-2 d-flex justify-content-center align-items-center flex-grow-1" style="font-family: Poppins, sans-serif;">
                                     <p class="m-0">Buy premium plan for @Env.PremiumPrice coins</p>
                                 </a>
@@ -465,7 +467,7 @@
                                 </span>
                                 <span class="text-muted">Subscribers</span>
                             </a>
-                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.IdentityProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.IdentityProfile.Id).Count()</span> <span class="text-muted">Images</span></a>
+                            <a asp-controller="Images" asp-action="Index" class="d-flex flex-column align-items-center"><span class="day_color_main" style="font-size: 18px;">@Model.IdentityProfile.ProfilePostages.Count(w => w.IsObject && w.Alert is not null)</span> <span class="text-muted">Images</span></a>
                         </div>
                     </div>
                 </div>

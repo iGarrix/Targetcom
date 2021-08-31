@@ -63,6 +63,21 @@
     .navbtn:hover {
         transform: scale(1.040);
     }
+    .btngame:hover {
+        text-decoration: none;
+    }
+
+    .pointer {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 2px solid white;
+    }
+
+    .borders {
+        border: 0;
+        background-repeat: no-repeat;
+    }
 </style>
 <input type="Hidden" id="Item" value="@Model.ListItem" />
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
@@ -193,11 +208,11 @@
         <div class="rounded d-flex flex-column gap">
             @if (Model.ProfilePostages.Where(w => w.IsPinned).Any())
             {
-            <div class="d-flex align-items-center">
-                <hr class="m-0 w-100 bg-light" />
-                <h4 class="day_color_font ml-3 mr-3">Advertisement</h4>
-                <hr class="m-0 w-100 bg-light" />
-            </div>
+                <div class="d-flex align-items-center">
+                    <hr class="m-0 w-100 bg-light" />
+                    <h4 class="day_color_font ml-3 mr-3">Advertisement</h4>
+                    <hr class="m-0 w-100 bg-light" />
+                </div>
                 <div class="d-flex flex-column gap">
                     @foreach (var item in Model.ProfilePostages.Where(w => w.IsPinned))
                     {
@@ -207,6 +222,28 @@
                 </div>
                 <hr class="m-0 w-100 bg-light" />
             }
+        <div class="d-flex flex-column gap">
+            <div class="rounded overflow-hidden day_back_head d-flex flex-column">
+                @foreach (var item in Model.LatestGames.OrderByDescending(d => d.TimeStamp))
+            {
+                <a class="position-relative bg-dark btngame" asp-controller="Game" asp-action="Index" style="width: 100%; height: 30vh;">
+                    <img src="@item.ImageUrl" class="rounded d-flex position-absolute" style="height: 30vh; width:100%; object-fit: cover; filter: opacity(20%) blur(2px)" alt="game" />
+                    <div class="d-flex align-items-center" style="height: 100%;">
+                        <div class="ml-5">
+                            <img src="@item.ImageUrl" class="rounded d-flex" style="height: 128px; width:128px; object-fit: cover;" alt="game" />
+                        </div>
+                        <div class="ml-4 d-flex flex-column">
+                            <h5 class="text-light">@item.Name</h5>
+                            <p class="text-light">@item.Description</p>
+                        </div>
+                    </div>
+                </a>
+                <div class="day_back_head">
+                    <a asp-controller="Game" asp-action="Index"  class="btn btn-outline-light rounded-0 pointer ml-5">Go to play games</a>
+                </div>
+            }
+            </div>
+        </div>
             <div id="Allpost">
                 <div class="d-flex flex-column gap">
                     @foreach (var item in Model.ProfilePostages.Where(w => !w.IsPinned))

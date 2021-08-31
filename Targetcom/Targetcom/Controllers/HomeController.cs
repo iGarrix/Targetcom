@@ -37,6 +37,7 @@ namespace Targetcom.Controllers
                 Current_AllPost_Page = page,
                 Current_TextPost_Page = textpage,
                 Current_Updates_Page = updatepage,
+                LatestGames = _db.Games.OrderByDescending(o => o.TimeStamp).Take(3).ToList(),
             };
 
             var Profiles = _db.Profiles;
