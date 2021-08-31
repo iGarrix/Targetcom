@@ -125,22 +125,40 @@
         <div class="d-none flex-column align-items-c gap p-4 overflow-auto" id="finduser">
             @foreach (var item in Model.ProfileManages)
             {
-                <a class="d-flex day_back_default align-items-center day_color_font text-decoration-none effect @item.Profile.Name @item.Profile.Surname @item.Profile.Email @string.Join(" ", item.Roles)" asp-controller="Admin" asp-action="SelectUser" asp-route-id="@item.Profile.Id" style="width: 100%; cursor:pointer;">
-                    <img src="@item.Profile.UrlAvatar" class="bg-danger rounded-circle" style="width: 38px; height: 38px;" />
-                    <div class="d-flex flex-column justify-content-c day_color_font p-2">
-                        <p class="m-0 day_color_main d-flex align-items-c">
-                            @item.Profile.Name @item.Profile.Surname
-                            @if (item.Profile.IsVerify)
-                            {
-                                <i class="fas fa-check day_color_main ml-1 m-0" style="font-size: 13px;"></i>
-                            }
-                        </p>
+            <a class="d-flex day_back_default align-items-center day_color_font text-decoration-none effect @item.Profile.Name @item.Profile.Surname @item.Profile.Email @string.Join(" ", item.Roles)" asp-controller="Admin" asp-action="SelectUser" asp-route-id="@item.Profile.Id" style="width: 100%; cursor:pointer;">
+                <img src="@item.Profile.UrlAvatar" class="bg-danger rounded-circle" style="width: 38px; height: 38px;" />
+                <div class="d-flex flex-column justify-content-c day_color_font p-2">
+                    <p class="m-0 day_color_main d-flex align-items-c">
+                        @item.Profile.Name @item.Profile.Surname
+                        @if (item.Profile.IsVerify)
+                        {
+                            <i class="fas fa-check day_color_main ml-1 m-0" style="font-size: 13px;"></i>
+                        }
+                    </p>
+                    <div class="d-flex" style="gap: 5px;">
+                        @if (item.Profile.IsVerify)
+                        {
+                            <div class="rounded-circle bg-primary" style="width: 10px; height:10px;"></div>
+                        }
                         @if (item.Profile.IsPremium)
                         {
-                            <span class="text-warning m-0">premium</span>
+                            <div class="rounded-circle bg-success" style="width: 10px; height:10px;"></div>
+                        }
+                        @if (item.Roles.Contains(Env.ModerRole))
+                        {
+                            <div class="rounded-circle bg-info" style="width: 10px; height:10px;"></div>
+                        }
+                        @if (item.Roles.Contains(Env.AdminRole))
+                        {
+                            <div class="rounded-circle bg-danger" style="width: 10px; height:10px;"></div>
+                        }
+                        @if (item.Profile.Banned is not null)
+                        {
+                            <i class="fas fa-ban text-danger" style="width: 10px; height:10px; font-size: 10px;"></i>
                         }
                     </div>
-                </a>
+                </div>
+            </a>
             }
 
         </div>
@@ -161,6 +179,28 @@
                                 <i class="fas fa-check day_color_main ml-1 m-0" style="font-size: 13px;"></i>
                             }
                         </p>
+                        <div class="d-flex" style="gap: 5px;">
+                            @if (item.Profile.IsVerify)
+	                        {	
+                                <div class="rounded-circle bg-primary" style="width: 10px; height:10px;"></div>
+	                        }
+                            @if (item.Profile.IsPremium)
+                            {
+                                <div class="rounded-circle bg-success" style="width: 10px; height:10px;"></div>
+                            }
+                            @if (item.Roles.Contains(Env.ModerRole))
+                            {
+                                <div class="rounded-circle bg-info" style="width: 10px; height:10px;"></div>
+                            }
+                            @if (item.Roles.Contains(Env.AdminRole))
+                            {
+                                <div class="rounded-circle bg-danger" style="width: 10px; height:10px;"></div>
+                            }
+                            @if (item.Profile.Banned is not null)
+	                        {
+                                <i class="fas fa-ban text-danger" style="width: 10px; height:10px; font-size: 10px;"></i>
+	                        }
+                        </div>
                     </div>
                 </a>
             }
@@ -246,11 +286,11 @@
                         }
                         @if (Model.SelectUser.IsPremium)
                         {
-                            <h4 class="badge badge-warning p-2 m-0" style="letter-spacing: 1px;">Premium</h4>
+                            <h4 class="badge badge-success p-2 m-0" style="letter-spacing: 1px;">Premium</h4>
                         }
                         @if (Model.SelectRoles.Contains(Env.ModerRole))
                         {
-                            <h4 class="badge badge-warning p-2 m-0" style="letter-spacing: 1px;">Moderator</h4>
+                            <h4 class="badge badge-info p-2 m-0" style="letter-spacing: 1px;">Moderator</h4>
                         }
                         @if (Model.SelectRoles.Contains(Env.AdminRole))
                         {
@@ -386,7 +426,7 @@
                             <button type="button" data-toggle="modal" data-target="#banned" class="m-0 mt-auto mr-2 text-light bg-danger day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;"><i class="fas fa-ban text-light"></i> Ban</button>
                         }
                         <button type="button" data-toggle="modal" data-target="#toggleadmin" class="m-0 mt-auto mr-2 text-light bg-danger day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;"><i class="fas fa-code text-light"></i> Admin</button>
-                        <button type="submit" asp-action="SetModer" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light bg-warning day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;"><i class="fas fa-glasses text-light"></i> Moder</button>
+                        <button type="submit" asp-action="SetModer" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light bg-info day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;"><i class="fas fa-glasses text-light"></i> Moder</button>
                         <button type="submit" asp-action="SetPremium" asp-route-id="@Model.SelectUser.Id" class="m-0 mt-auto mr-2 text-light bg-success day_color_font m-0 rounded pr-3 pl-3 pt-2 pb-2 border-0" style="outline:0;">
                             <i class="fas fa-crown text-light"></i> Premium
                         </button>
