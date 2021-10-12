@@ -126,6 +126,16 @@
             });
 
         </script>
+        <div class="d-flex mt-auto justify-content-center day_back_default p-3">
+            @if (Model.Current_Games_Page > 0)
+            {
+                <a asp-controller="Admin" asp-action="Games" asp-route-page="@(Model.Current_Games_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Current_Games_Lenght / Env.MANAGEPANEL_GAMES_LOADING_LIMIT) > Model.Current_Games_Page)
+            {
+                <a asp-controller="Admin" asp-action="Games" asp-route-page="@(Model.Current_Games_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
+        </div>
     </div>
     @using (Html.BeginForm(FormMethod.Post))
     {

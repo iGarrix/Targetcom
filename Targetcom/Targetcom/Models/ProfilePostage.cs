@@ -21,7 +21,8 @@ namespace Targetcom.Models
         public bool IsObject { get; set; } = false;
         public string Content { get; set; }
         public string Alert { get; set; }
-
+        public string UploadingUrlFiles { get; set; }
+        public bool IsPinned { get; set; } = false;
 
         public bool IsNessessaredLikedPost { get; set; } = false;
         public bool IsNessessaredSharedPost { get; set; } = false;

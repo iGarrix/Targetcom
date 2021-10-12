@@ -106,7 +106,7 @@
             {
                 <h4 class="m-0 text-center day_color_font">Not found</h4>
             }
-            @foreach (var item in Model.Profiles.Where(w => w.ToMessageGroups.Count > 0).OrderByDescending(o => o.CreateStamp))
+            @foreach (var item in Model.Profiles.Where(w => w.ToMessageGroups.Count > 0).OrderByDescending(o => o.CreateStamp).Skip(Model.Current_Messanger_Page * Env.MANAGEPANEL_MESSENGER_LOADING_LIMIT).Take(Env.MANAGEPANEL_MESSENGER_LOADING_LIMIT).ToList())
             {
                 <div class="d-flex pt-2 pb-2 flex-column day_back_default justify-content-center day_color_font text-decoration-none effect" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
                     <div class="d-flex align-items-center">
@@ -172,6 +172,16 @@
                 }
             });
         </script>
+        <div class="d-flex mt-auto justify-content-center day_back_default p-3">
+            @if (Model.Current_Messanger_Page > 0)
+            {
+                <a asp-controller="Admin" asp-action="Messenger" asp-route-page="@(Model.Current_Messanger_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Profiles.SkipLast(2).Count(w => w.ToMessageGroups.Count > 0) / Env.MANAGEPANEL_MESSENGER_LOADING_LIMIT) > Model.Current_Messanger_Page)
+            {
+                <a asp-controller="Admin" asp-action="Messenger" asp-route-page="@(Model.Current_Messanger_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
+        </div>
     </div>
     <div style="width: 70%;">
         @using (Html.BeginForm(FormMethod.Post))

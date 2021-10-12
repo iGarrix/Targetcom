@@ -79,7 +79,7 @@
             <input type="text" placeholder="Enter user name / post" class="day_back_head day_color_font searcher ml-2" id="search" style="width: 100%;" />
         </div>
         <div class="d-none flex-column align-items-center gap p-4 overflow-auto" id="findpost">
-           
+
             @foreach (var item in Model.ProfilePostages.OrderByDescending(o => o.TimeStamp))
             {
                 <a class="d-none day_back_default align-items-center day_color_font text-decoration-none effect @item.Content @item.Profile.Name @item.Profile.Surname" asp-controller="Admin" asp-action="SelectPost" asp-route-id="@item.Id" style="width: 100%; cursor:pointer;">
@@ -187,6 +187,16 @@
             });
 
         </script>
+        <div class="d-flex mt-auto justify-content-center day_back_default p-3">
+            @if (Model.Current_News_Page > 0)
+            {
+                <a asp-controller="Admin" asp-action="News" asp-route-page="@(Model.Current_News_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Current_News_Lenght / Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT) > Model.Current_News_Page)
+            {
+                <a asp-controller="Admin" asp-action="News" asp-route-page="@(Model.Current_News_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
+        </div>
     </div>
     <div style="width: 70%;">
         @using (Html.BeginForm(FormMethod.Post))

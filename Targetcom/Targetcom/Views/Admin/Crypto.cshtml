@@ -116,6 +116,16 @@
             });
 
         </script>
+        <div class="d-flex mt-auto justify-content-center day_back_default p-3">
+            @if (Model.Current_Crypto_Page > 0)
+            {
+                <a asp-controller="Admin" asp-action="Crypto" asp-route-page="@(Model.Current_Crypto_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Current_Crypto_Lenght / Env.MANAGEPANEL_CRYPTO_LOADING_LIMIT) > Model.Current_Crypto_Page)
+            {
+                <a asp-controller="Admin" asp-action="Crypto" asp-route-page="@(Model.Current_Crypto_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
+        </div>
     </div>
     <div style="width: 70%;">
         @using (Html.BeginForm(FormMethod.Post))

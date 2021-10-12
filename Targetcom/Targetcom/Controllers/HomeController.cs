@@ -25,14 +25,19 @@ namespace Targetcom.Controllers
             _logger = logger;
             _userManager = userManager;
             _db = db;
-        }      
-        public async Task<IActionResult> Index()
+        }
+        public async Task<IActionResult> Index(string listitem = "All", int page = 0, int textpage = 0, int updatepage = 0)
         {
             NewsVM newsVM = new NewsVM()
             {
                 IdentityProfile = await _userManager.GetUserAsync(User) as Profile,
                 AllUsers = _db.Profiles,
                 ProfilePostages = new List<ProfilePostage>(),
+                ListItem = listitem,
+                Current_AllPost_Page = page,
+                Current_TextPost_Page = textpage,
+                Current_Updates_Page = updatepage,
+                LatestGames = _db.Games.OrderByDescending(o => o.TimeStamp).Take(3).ToList(),
             };
 
             var Profiles = _db.Profiles;
@@ -40,7 +45,7 @@ namespace Targetcom.Controllers
 
             var LikedProfilePostages = _db.LikedProfilePostages;           
 
-            var ProfilePostages = _db.ProfilePostages;
+            var ProfilePostages = _db.ProfilePostages.OrderByDescending(o => o.TimeStamp);
             ProfilePostages.ToList().ForEach(i =>
             {
                 i.Profile = Profiles.Find(i.ProfileId);
@@ -104,13 +109,37 @@ namespace Targetcom.Controllers
 
                 f.Banned = ProfileBanned.FirstOrDefault(g => g.ProfileId == f.Id);
             });
+            newsVM.Current_AllPost_Lenght = ProfilePostages.Count(w => !w.IsPinned) - 1;
+            newsVM.Current_TextPost_Lenght = ProfilePostages.Count(w => !w.IsObject && !w.IsPinned) - 1;
+            newsVM.Current_Updates_Lenght = ProfilePostages.Count(w => w.IsObject && !w.IsPinned) - 1;
 
-            newsVM.ProfilePostages = ProfilePostages;
+            List<ProfilePostage> news = new List<ProfilePostage>();
+
+            if (listitem == Env.AllFeeds)
+            {
+                news = ProfilePostages.Where(w => !w.IsPinned).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
+            }
+            else if (listitem == Env.Post)
+            {
+                news = ProfilePostages.Where(w => !w.IsObject && !w.IsPinned).ToList().Skip(textpage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
+            }
+            else if (listitem == Env.Updates)
+            {
+                news = ProfilePostages.Where(w => w.IsObject && !w.IsPinned).ToList().Skip(updatepage * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
+            }
+            else
+            {
+                news = ProfilePostages.Where(w => !w.IsPinned).ToList().Skip(page * Env.NEWS_LOADING_LIMIT).Take(Env.NEWS_LOADING_LIMIT).ToList();
+            }
+
+            news.AddRange(ProfilePostages.Where(w => w.IsPinned));
+            newsVM.ProfilePostages = news;
+
+            //return NotFound($"{string.Join("\n", ProfilePostages.Where(w => w.IsObject).Select(s => $"[{s.TimeStamp}] O{s.IsObject} P{s.IsPinned} --> {s.Content}" ))}");
 
             return View(newsVM);
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Rules()
         {
             var Profiles = _db.Profiles;
@@ -131,11 +160,21 @@ namespace Targetcom.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> PublishPost(string content)
+        public async Task<IActionResult> PublishPost(string content, string urlimg1, string urlimg2, string urlimg3)
         {
-            if (content.Length > 0)
+            string uploadfiles = $"{urlimg1} {urlimg2} {urlimg3}";
+
+            bool IsValid = true;
+
+            if (content is null)
+            {
+                if (urlimg1 is null && urlimg2 is null & urlimg3 is null)
+                {
+                    IsValid = false;
+                }
+            }
+            if (IsValid)
             {
                 var profile = await _userManager.GetUserAsync(User) as Profile;
                 _db.ProfilePostages.Add(new ProfilePostage()
@@ -145,18 +184,20 @@ namespace Targetcom.Controllers
                     Writter = profile,
                     IsObject = false,
                     Content = content,
+                    UploadingUrlFiles = uploadfiles,
                 });
                 _db.SaveChanges();
                 //await _userManager.UpdateAsync(profile);
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return NoContent();
         }
         [HttpPost]
         public async Task<IActionResult> CommentPublishPost(string youcomment, int? id)
         {
             if (youcomment is null || id is null)
             {
-                return RedirectToAction(nameof(Index));
+                return NoContent();
             }
 
             var finderPostage = _db.ProfilePostages.Find(id);
@@ -183,6 +224,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult AllowLikePostagePost(int? id)
         {
@@ -202,6 +244,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult AllowSharePostagePost(int? id)
         {
@@ -221,6 +264,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult AllowCommentPostagePost(int? id)
         {
@@ -240,6 +284,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public async Task<IActionResult> LikePostagePost(int? id)
         {
@@ -263,6 +308,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult DislikePostagePost(string id)
         {
@@ -281,6 +327,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult DeleteProfilePostageCommentPost(int? id)
         {
@@ -292,6 +339,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult UnsharePostagePost(string id)
         {
@@ -307,6 +355,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public async Task<IActionResult> SharePostagePost(int? id)
         {
@@ -331,6 +380,7 @@ namespace Targetcom.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
         [HttpPost]
         public IActionResult DissharePostagePost(string id)
         {

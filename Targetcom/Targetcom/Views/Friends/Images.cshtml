@@ -99,7 +99,28 @@
 
     img {
         object-fit: cover;
-    }    
+    }
+
+    .hover {
+        transition: .2s;
+        filter: brightness(100%);
+    }
+
+        .hover:hover {
+            filter: brightness(90%);
+        }
+
+    .night .hover:hover {
+        filter: brightness(150%);
+    }
+
+    .post .likes {
+        display: none;
+    }
+
+    .post:hover .likes {
+        display: flex;
+    }
 </style>
 <div class="gap d-flex gap day_color_font" style="font-family: Poppins, sans-serif;">
     <partial name="SideBar" model="new Tuple<int, int>(Model.IdentityProfile.Friendships.Count(w => w.FriendStatus == Env.Invite && w.FriendId == Model.IdentityProfile.Id),0)" />
@@ -107,222 +128,21 @@
     <div style="width: 100%" class="d-flex flex-column">
         <div class="border-0 rounded">
             <div class="d-flex flex-wrap" style="gap: 1.2rem;">
-                @foreach (var item in Model.FindedProfile.ProfilePostages.Where(w => w.IsObject && w.ProfileId == Model.FindedProfile.Id).Reverse())
+                @foreach (var item in Model.FindedProfile.ProfilePostages.OrderByDescending(i => i.TimeStamp))
                 {
-                    var id = $"item{item.Id}";
-                    <div class="d-flex flex-column rounded">
-                        <img src="@item.Content" class="rounded" style="width:216px; height:216px;" />
-                        <div class="p-3 d-flex justify-content-between border-bottom">
-                            @using (Html.BeginForm(FormMethod.Post))
-                            {
-                                @if (!item.Profile.IsNessessaredLikedPost)
-                                {
-                                    if (!item.IsNessessaredLikedPost)
-                                    {
-                                        @if (!item.IsNessessaredLikedPost)
-                                        {
-                                            if (item.LikedProfiles.FirstOrDefault(i => i.ProfileId == Model.FindedProfile.Id) != null)
-                                            {
-                                                <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@item.LikedProfiles.FirstOrDefault(i => i.ProfileId == item.ProfileId).ProfileId" style="outline:0!important;">
-                                                    <i class="fas fa-heart"></i>
-                                                    @if (item.LikedProfiles.Count != 0)
-                                                    {
-                                                        <strong class="ml-1">@item.LikedProfiles.Count</strong>
-                                                    }
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none" asp-action="LikePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
-                                                    <i class="far fa-heart"></i>
-                                                    @if (item.LikedProfiles.Count != 0)
-                                                    {
-                                                        <strong class="ml-1">@item.LikedProfiles.Count</strong>
-                                                    }
-                                                </button>
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            @if (!item.IsNessessaredCommentedPost)
-                            {
-                                @if (item.IsObject)
-                                {
-                                    <a class="btn-link border-0 day_color_main bg-transparent d-flex align-items-center text-decoration-none ml-4"
-                                       style="outline:0!important;"
-                                       data-toggle="modal" data-target="#@id">
-                                        <i class="far fa-comment-alt"></i>
-                                        @if (@item.ProfilePostageComments.Count > 0)
-                                        {
-                                            <strong class="ml-1">@item.ProfilePostageComments.Count</strong>
-                                        }
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn-link border-0 day_color_main bg-transparent d-flex align-items-center text-decoration-none ml-4"
-                                       style="outline:0!important;">
-                                        <i class="far fa-comment-alt"></i>
-                                        @if (@item.ProfilePostageComments.Count > 0)
-                                        {
-                                            <strong class="ml-1">@item.ProfilePostageComments.Count</strong>
-                                        }
-                                    </a>
-                                }
-                                <div class="modal fade" id="@id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-0 d-flex">
-                                                <img src="@item.Content" alt="Post" style="width:400px; height:400px;" />
-                                                <div class="d-flex flex-column justify-content-between p-3 day_back_head rounded" style="white-space: nowrap; width: 100%;">
-                                                    <div>
-                                                        <div class="d-flex justify-content-between">
-                                                            <div class="d-flex align-items-center">
-                                                                <img src="@item.Profile.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
-                                                                <div class="d-flex flex-column ml-2 justify-content-center">
-                                                                    <a class="m-0 d-flex align-items-center day_color_main" style="cursor: pointer;">
-                                                                        @item.Profile.Name @item.Profile.Surname
-                                                                        @if (item.Profile.IsVerify)
-                                                                        {
-                                                                            <i class="fas fa-check day_color_main ml-1" style="font-size: 11px;"></i>
-                                                                        }
-                                                                        <span class="text-muted ml-2">@item.Alert</span>
-                                                                    </a>
-                                                                    <p class="m-0 text-muted">@item.TimeStamp.ToString("dd.MM.yyyy")</p>
-                                                                </div>
-                                                            </div>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <hr class="mt-3 mb-3 ml-0 mr-0" />
-                                                        <div class="d-flex flex-column gap overflow-auto">
-                                                            @for (int comment = 0; comment < item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).Count(); ++comment)
-                                                            {
-                                                                <div class="d-flex" style="width: 100%;">
-                                                                    <img src="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.UrlAvatar" class="rounded-circle border-0" alt="Avatar" style="width: 38px; height: 38px;" />
-                                                                    <div class="d-flex flex-column ml-2" style="width: 100%;">
-                                                                        <div class="d-flex">
-                                                                            <a class="m-0 day_color_main" style="cursor: pointer;">
-                                                                                @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Name @item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.Surname
-                                                                                @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
-                                                                                {
-                                                                                    <i class="fas fa-check day_color_main ml-1" style="font-size: 10px;"></i>
-                                                                                }
-                                                                            </a>
-                                                                            @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentator.IsVerify)
-                                                                            {
-                                                                                <p class="m-0 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <p class="m-0 ml-2 text-muted">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].TimeStamp.ToString("dd.MM.yyyy")</p>
-                                                                            }
-                                                                            <div class="ml-auto" style="font-family:Poppins, sans-serif; font-size: 14px;">
-                                                                                @if (item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].ProfileCommentatorId == Model.IdentityProfile.Id)
-                                                                                {
-                                                                                    <div class="dropdown">
-                                                                                        <a class="dropbtn day_color_main" style="outline:0!important;"><i class="fas fa-ellipsis-h text-muted ml-auto" style="font-size: 16px;"></i></a>
-                                                                                        <div class="dropdown-content day_back_head rounded p-2 shadow">
-                                                                                            <button type="submit" class="btn-link border-0 bg-transparent" asp-action="DeleteProfilePostageCommentPost" asp-route-id="@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Id" style="outline:0!important;">Delete comment</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                }
-                                                                            </div>
-                                                                        </div>
-                                                                        <p class="m-0">@item.ProfilePostageComments.OrderByDescending(e => e.TimeStamp).ToList()[comment].Comment</p>
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <hr class="mt-2 mb-3 ml-0 mr-0" />
-                                                        <div class="d-flex">
-                                                            @if (!item.IsNessessaredLikedPost)
-                                                            {
-                                                                if (item.LikedProfiles.FirstOrDefault(i => i.ProfileId == item.ProfileId) != null)
-                                                                {
-                                                                    <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none" asp-action="DislikePostagePost" asp-route-id="@item.LikedProfiles.FirstOrDefault(i => i.ProfileId == item.ProfileId).ProfileId" style="outline:0!important;">
-                                                                        <i class="fas fa-heart"></i>
-                                                                        @if (item.LikedProfiles.Count != 0)
-                                                                        {
-                                                                            <strong class="ml-1">@item.LikedProfiles.Count</strong>
-                                                                        }
-                                                                    </button>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none" asp-action="LikePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
-                                                                        <i class="far fa-heart"></i>
-                                                                        @if (item.LikedProfiles.Count != 0)
-                                                                        {
-                                                                            <strong class="ml-1">@item.LikedProfiles.Count</strong>
-                                                                        }
-                                                                    </button>
-                                                                }
-                                                            }
-                                                            <a class="btn-link border-0 day_color_main bg-transparent d-flex align-items-center text-decoration-none ml-4"
-                                                               style="outline:0!important;">
-                                                                <i class="far fa-comment-alt"></i>
-                                                                @if (@item.ProfilePostageComments.Count > 0)
-                                                                {
-                                                                    <strong class="ml-1">@item.ProfilePostageComments.Count</strong>
-                                                                }
-                                                            </a>
-                                                            <a class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none ml-4 day_color_main"
-                                                               style="outline:0!important;">
-                                                                <i class="fas fa-share-alt"></i>
-                                                                @if (item.SharedProfiles.Count != 0)
-                                                                {
-                                                                    <strong class="ml-1">@item.SharedProfiles.Count</strong>
-                                                                }
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            @using (Html.BeginForm(FormMethod.Post))
-                            {
-                                @if (!item.Profile.IsNessessaredSharedPost)
-                                {
-                                    if (!item.IsNessessaredSharedPost)
-                                    {
-                                        @if (!item.IsNessessaredSharedPost)
-                                        {
-                                            if (item.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id) != null)
-                                            {
-                                                <button type="submit" class="btn-link border-0 bg-transparent text-danger d-flex align-items-center text-decoration-none ml-4" asp-controller="Friends" asp-action="DissharePostagePost" asp-route-id="@item.SharedProfiles.FirstOrDefault(i => i.ProfileId == Model.IdentityProfile.Id).ProfileId" style="outline:0!important;">
-                                                    <i class="fas fa-share-alt"></i>
-                                                    @if (item.SharedProfiles.Count != 0)
-                                                    {
-                                                        <strong class="ml-1">@item.SharedProfiles.Count</strong>
-                                                    }
-                                                </button>
-                                            }
-                                            else
-                                            {
-                                                <button type="submit" class="btn-link border-0 bg-transparent d-flex align-items-center text-decoration-none ml-4" asp-controller="Friends" asp-action="SharePostagePost" asp-route-id="@item.Id" style="outline:0!important;">
-                                                    <i class="fas fa-share-alt"></i>
-                                                    @if (item.SharedProfiles.Count != 0)
-                                                    {
-                                                        <strong class="ml-1">@item.SharedProfiles.Count</strong>
-                                                    }
-                                                </button>
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        </div>
-                    </div>
+                    <partial name="Components/ImagePost" model="new Targetcom.Models.ViewModels.ImagePostComponentVM() { IdentityProfile = Model.IdentityProfile, ImageModel = item, Guid = new Guid() }" />                   
                 }
             </div>
+        </div>
+        <div class="p-2 d-flex justify-content-center mt-auto">
+            @if (Model.Current_AllPost_Page > 0)
+            {
+                <a asp-controller="Friends" asp-action="Images" asp-route-id="@Model.FindedProfile.Id" asp-route-page="@(Model.Current_AllPost_Page - 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 navbtn"><i class="fas fa-arrow-left m-0 mr-2"></i>Prev</a>
+            }
+            @if ((Model.Current_AllPost_Lenght / Env.IMAGE_LOADING_LIMIT) > Model.Current_AllPost_Page)
+            {
+                <a asp-controller="Friends" asp-action="Images" asp-route-id="@Model.FindedProfile.Id" asp-route-page="@(Model.Current_AllPost_Page + 1)" class="p-3 d-flex align-items-center text-decoration-none text-light day_back_main rounded border-0 ml-3 navbtn">Next <i class="fas fa-arrow-right m-0 ml-2"></i></a>
+            }
         </div>
     </div>
 </div>

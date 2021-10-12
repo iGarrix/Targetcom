@@ -21,15 +21,21 @@ namespace Targetcom.Controllers
             _db = db;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(string eventSelector = "None")
+        public async Task<IActionResult> Index(string eventSelector = "friendpag", int allpage = 0, int friendpage = 0, int invitepage = 0, int subscribepage = 0, int blacklistpage = 0)
         {
             string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
             FriendVM friendVM = new FriendVM()
             {
                 IdentityUser = _db.Profiles.Find(myid),
-                AllUsers = _db.Profiles,
+                //AllUsers = _db.Profiles.Where(w => w.Id != IdentityUser.Id),
                 EventSetter = eventSelector,
+                Current_All_Page = allpage,
+                Current_Blacklist_Page = blacklistpage,
+                Current_Friend_Page = friendpage,
+                Current_Subscribe_Page = subscribepage,
+                Current_Invite_Page = invitepage,
             };
+            friendVM.AllUsers = _db.Profiles.Where(w => w.Id != friendVM.IdentityUser.Id);
             var Profiles = _db.Profiles;
             var ProfileFriendship = _db.Friendships;
             ProfileFriendship.ToList().ForEach(i =>
@@ -47,23 +53,68 @@ namespace Targetcom.Controllers
             friendVM.IdentityUser.BannedProfiles = ProfileBanned.Where(w => w.AdminId == friendVM.IdentityUser.Id).ToList();
             friendVM.IdentityUser.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == friendVM.IdentityUser.Id);
 
-            friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList();
+            //friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList();
             friendVM.AllUsers.ToList().ForEach(i =>
             {
                 i.Friendships = ProfileFriendship.Where(w => w.FriendId == i.Id || w.ProfileId == i.Id).ToList();
                 i.BannedProfiles = ProfileBanned.Where(w => w.AdminId == i.Id).ToList();
                 i.Banned = ProfileBanned.FirstOrDefault(f => f.ProfileId == i.Id);
             });
+
+            friendVM.Current_Friend_Lenght = ProfileFriendship.Count(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id && w.FriendStatus == Env.Friend) - 1;
+            friendVM.Current_Invite_Lenght = ProfileFriendship.Count(w => w.FriendId == friendVM.IdentityUser.Id && w.FriendStatus == Env.Invite) - 1;
+            friendVM.Current_All_Lenght = friendVM.AllUsers.Count() - 1;
+            friendVM.Current_Subscribe_Lenght = ProfileFriendship.Count(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id && w.FriendStatus == Env.Subscribe) - 1;
+            friendVM.Current_Blacklist_Lenght = ProfileFriendship.Count(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id && w.FriendStatus == Env.Blacklist) - 1;
+
+            if (eventSelector == Env.FriendPag)
+            {
+                friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList().Skip(friendpage * Env.FRIENDPEOPLE_LOADING_LIMIT).Take(Env.FRIENDPEOPLE_LOADING_LIMIT).ToList();
+            }
+            else if (eventSelector == Env.Invitepag)
+            {
+                friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList().Skip(invitepage * Env.FRIENDPEOPLE_LOADING_LIMIT).Take(Env.FRIENDPEOPLE_LOADING_LIMIT).ToList();
+            }
+            else if (eventSelector == Env.Subscribepag)
+            {
+                friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList().Skip(subscribepage * Env.FRIENDPEOPLE_LOADING_LIMIT).Take(Env.FRIENDPEOPLE_LOADING_LIMIT).ToList();
+            }
+            else if (eventSelector == Env.Blacklistpag)
+            {
+                friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList().Skip(blacklistpage * Env.FRIENDPEOPLE_LOADING_LIMIT).Take(Env.FRIENDPEOPLE_LOADING_LIMIT).ToList();
+            }
+            else
+            {
+                friendVM.IdentityUser.Friendships = ProfileFriendship.Where(w => w.FriendId == friendVM.IdentityUser.Id || w.ProfileId == friendVM.IdentityUser.Id).ToList().Skip(friendpage * Env.FRIENDPEOPLE_LOADING_LIMIT).Take(Env.FRIENDPEOPLE_LOADING_LIMIT).ToList();
+            }
+
+
             return View(friendVM);
         }
-        public async Task<IActionResult> ViewProfile(string id)
+        public async Task<IActionResult> ViewProfile(string id, string listitem = "All", int postpage = 0, int sharepage = 0)
         {
             string myid = (await _userManager.GetUserAsync(User) as Profile).Id;
+            if (myid == id)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             ViewProfileVM viewProfileVM = new ViewProfileVM()
             {
                 FindedProfile = new Profile(),
                 IdentityProfile = _db.Profiles.Find(myid),
+                ListItem = listitem,
+                Current_AllPost_Page = postpage,
+                Current_SharedPost_Page = sharepage,
             };
+
+            if (listitem == Env.AllPost)
+            {
+                viewProfileVM.IsAllable = true;
+            }
+            else
+            {
+                viewProfileVM.IsAllable = false;
+            }
 
             var Profiles = _db.Profiles;
             var SharedProfilePostages = _db.SharedProfilePostages;
@@ -108,9 +159,25 @@ namespace Targetcom.Controllers
                 i.Admin = _db.Profiles.Find(i.AdminId);
             });
 
-            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            viewProfileVM.Current_AllPost_Lenght = ProfilePostages.Where(i => i.ProfileId == profile.Id).Count() - 1;
+            viewProfileVM.Current_SharedPost_Lenght = SharedProfilePostages.Count(i => i.ProfileId == profile.Id) - 1;
+
+            if (listitem == Env.AllPost)
+            {
+                profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).OrderByDescending(o => o.TimeStamp).ToList().Skip(postpage * Env.PROFILE_NEWS_LOADING_LIMIT).Take(Env.PROFILE_NEWS_LOADING_LIMIT).ToList();
+            }
+            else if (listitem == Env.SharedPost)
+            {
+                profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).OrderByDescending(o => o.Postage.TimeStamp).ToList().Skip(sharepage * Env.PROFILE_NEWS_LOADING_LIMIT).Take(Env.PROFILE_NEWS_LOADING_LIMIT).ToList();
+            }
+            else
+            {
+                profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).OrderByDescending(o => o.TimeStamp).ToList().Skip(postpage * Env.PROFILE_NEWS_LOADING_LIMIT).Take(Env.PROFILE_NEWS_LOADING_LIMIT).ToList();
+            }
+
+            //profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
-            profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            //profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
 
             viewProfileVM.IdentityProfile.Friendships = ProfileFriendship.Where(w => w.FriendId == viewProfileVM.IdentityProfile.Id || w.ProfileId == viewProfileVM.IdentityProfile.Id).ToList();
@@ -249,7 +316,7 @@ namespace Targetcom.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Images(string id)
+        public async Task<IActionResult> Images(string id, int page = 0)
         {
             if (id is null)
             {
@@ -261,6 +328,7 @@ namespace Targetcom.Controllers
             {
                 FindedProfile = new Profile(),
                 IdentityProfile = _db.Profiles.Find(myid),
+                Current_AllPost_Page = page,
             };
 
             var Profiles = _db.Profiles;
@@ -299,7 +367,11 @@ namespace Targetcom.Controllers
             viewProfileVM.Role = _userManager.GetRolesAsync(profile as IdentityUser).Result.ToList()[0];
             viewProfileVM.MyRole = _userManager.GetRolesAsync(viewProfileVM.IdentityProfile as IdentityUser).Result.ToList()[0];
 
-            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
+            viewProfileVM.Current_AllPost_Lenght = ProfilePostages.Where(i => i.ProfileId == profile.Id && i.IsObject).Count() - 1;
+
+            profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id && i.IsObject).OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.IMAGE_LOADING_LIMIT).Take(Env.IMAGE_LOADING_LIMIT).ToList();
+
+            //profile.ProfilePostages = ProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.LikedProfilePostages = LikedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.SharedProfilePostages = SharedProfilePostages.Where(i => i.ProfileId == profile.Id).ToList();
             profile.ProfilePostageComments = ProfilePostageComments.Where(i => i.Postage.ProfileId == profile.Id).ToList();
@@ -515,15 +587,27 @@ namespace Targetcom.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CommentPublishPost(string youcomment, int? id)
+        public async Task<IActionResult> CommentPublishPost(string youcomment, int? id, string viewprofileid)
         {
             if (youcomment is null || id is null)
             {
                 return RedirectToAction(nameof(Index));
             }
-
             var finderPostage = _db.ProfilePostages.Find(id);
-            //finderPostage.LikedProfiles = _db.LikedProfilePostages.Where(i => i.ProfilePostageId == finderPostage.Id).ToList();
+            string returnid = null;
+            if (viewprofileid is not null)
+            {
+                var viewprofile = _db.Profiles.FirstOrDefault(f => f.Id == viewprofileid);
+                if (viewprofile is not null)
+                {
+                    returnid = viewprofileid;
+                }
+            }
+            else
+            {
+                returnid = finderPostage.ProfileId;
+            }
+            
             _db.ProfilePostageComments.Add(new ProfilePostageComment()
             {
                 Comment = youcomment,
@@ -533,20 +617,27 @@ namespace Targetcom.Controllers
             });
             _db.SaveChanges();
 
-            return RedirectToAction(nameof(ViewProfile), new { id = finderPostage.ProfileId });
+            return RedirectToAction(nameof(ViewProfile), new { id = returnid });
         }
         [HttpPost]
-        public async Task<IActionResult> PublishPost(string content, string id)
+        public async Task<IActionResult> PublishPost(string content, string id, string urlimg1, string urlimg2, string urlimg3)
         {
-            if (content is null)
-            {
-                return NotFound("Content null");
-            }
+            string uploadfiles = $"{urlimg1} {urlimg2} {urlimg3}";
+
+            bool IsValid = true;
             if (id is null)
             {
-                return NotFound("Id null");
+                IsValid = false;
             }
-            if (content.Length > 0)
+
+            if (content is null)
+            {
+                if (urlimg1 is null && urlimg2 is null & urlimg3 is null)
+                {
+                    IsValid = false;
+                }
+            }
+            if (IsValid)
             {
                 var myprofile = await _userManager.GetUserAsync(User) as Profile;
                 var profile = await _userManager.FindByIdAsync(id) as Profile;
@@ -557,6 +648,7 @@ namespace Targetcom.Controllers
                     Writter = myprofile,
                     IsObject = false,
                     Content = content,
+                    UploadingUrlFiles = uploadfiles,
                 });
                 await _userManager.UpdateAsync(profile);
                 return RedirectToAction(nameof(ViewProfile), new { id = profile.Id });

@@ -9,5 +9,8 @@ namespace Targetcom.Models.ViewModels
     {
         public IEnumerable<Game> Games { get; set; }
         public string Alert { get; set; } = "Select a game";
+
+        public int Current_Games_Page { get; set; }
+        public int Current_Games_Lenght { get; set; }
     }
 }

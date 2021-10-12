@@ -32,7 +32,7 @@ namespace Targetcom.Controllers
 
         #region Profile
 
-        public async Task<IActionResult> Users(string id)
+        public async Task<IActionResult> Users(string id, int page = 0)
         {
             Profile select = null;
             if (id is not null)
@@ -48,8 +48,9 @@ namespace Targetcom.Controllers
                 ProfileManages = _db.Profiles.Select(s => new ProfileManage()
                 {
                     Profile = s
-                }).ToList(),
+                }).ToList().Skip(page * Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT).Take(Env.MANAGEPANEL_PEOPLES_LOADING_LIMIT).ToList(),
                 SelectUser = select,
+                Current_User_Page = page,
             };
             userManagement.ProfileManages.ToList().ForEach(i =>
             {
@@ -61,7 +62,7 @@ namespace Targetcom.Controllers
                 userManagement.SelectUser.PaypalHistories = _db.PaypalHistories.Where(w => w.ProfileId == userManagement.SelectUser.Id).ToList();
                 userManagement.SelectUser.Banned = _db.BannedProfiles.FirstOrDefault(f => f.ProfileId == userManagement.SelectUser.Id);
             }
-
+            userManagement.Current_User_Lenght = _db.Profiles.Count() - 1;
             return View(userManagement);
         }
 
@@ -169,7 +170,7 @@ namespace Targetcom.Controllers
         #endregion
 
         #region News
-        public IActionResult News(int? id)
+        public IActionResult News(int? id, int page = 0)
         {
 
             var Profiles = _db.Profiles;
@@ -212,7 +213,11 @@ namespace Targetcom.Controllers
             {
                 ProfilePostages = ProfilePostages.ToList(),
                 SelectedProfilePostage = select,
+                Current_News_Page = page
             };
+
+            managementNews.Current_News_Lenght = _db.ProfilePostages.Count() - 1;
+            managementNews.ProfilePostages = ProfilePostages.OrderByDescending(o => o.TimeStamp).ToList().Skip(page * Env.MANAGEPANEL_NEWS_LOADING_LIMIT).Take(Env.MANAGEPANEL_NEWS_LOADING_LIMIT);
 
             return View(managementNews);
         }
@@ -265,7 +270,7 @@ namespace Targetcom.Controllers
         #endregion
 
         #region Games
-        public IActionResult Games(string alert = null)
+        public IActionResult Games(string alert = null, int page = 0)
         {
             var games = _db.Games.ToList();
             string tryalert = "Select a game";
@@ -278,7 +283,12 @@ namespace Targetcom.Controllers
             {
                 Games = _db.Games.ToList(),
                 Alert = tryalert,
+                Current_Games_Page = page
             };
+
+            managementGames.Current_Games_Lenght = _db.Games.Count() - 1;
+            managementGames.Games = _db.Games.ToList().Skip(page * Env.MANAGEPANEL_GAMES_LOADING_LIMIT).Take(Env.MANAGEPANEL_GAMES_LOADING_LIMIT);
+
             return View(managementGames);
         }
 

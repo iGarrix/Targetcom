@@ -23,6 +23,7 @@ namespace Targetcom.Models
         [Required]
         public string Description { get; set; }
         public int TargetPrice { get; set; } = 0;
+        public DateTime TimeStamp { get; set; } = DateTime.Now;
 
         public ICollection<ProfileGame> ProfileGames { get; set; }
     }
